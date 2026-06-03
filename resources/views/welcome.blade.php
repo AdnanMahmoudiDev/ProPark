@@ -12,7 +12,7 @@
     <nav class="bg-gray-950/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <x-application-logo class="block h-9 w-auto fill-current text-violet-500" />
+                <x-application-logo class="block h-16 w-16 fill-current text-violet-500" />
                 <span class="text-2xl font-bold text-white tracking-tight">ProPark</span>
             </div>
             <div class="flex gap-4">

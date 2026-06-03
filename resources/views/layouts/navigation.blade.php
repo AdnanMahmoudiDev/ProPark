@@ -43,7 +43,7 @@
 
                         <div class="bg-gray-900">
                             <x-dropdown-link :href="route('profile.edit')" class="text-gray-300 hover:text-white hover:bg-gray-800">
-                                {{ __('پروفایل') }}
+                                {{ __('ویرایش حساب کاربری') }}
                             </x-dropdown-link>
 
                             <form method="POST" action="{{ route('logout') }}">
@@ -51,7 +51,7 @@
 
                                 <x-dropdown-link
                                     :href="route('logout')"
-                                    class="text-red-400 hover:text-red-300 hover:bg-gray-800"
+                                    class="text-red-500 hover:text-red-400 hover:bg-red-950/30 transition-colors duration-200"
                                     onclick="event.preventDefault(); this.closest('form').submit();"
                                 >
                                     {{ __('خروج از حساب کاربری') }}
@@ -104,26 +104,27 @@
         </div>
 
         
-        <div class="pt-4 pb-4 border-t border-gray-800 px-4">
+        <div class="pt-4 pb-4 border-t border-gray-800 px-4 ">
             <div class="mb-3">
                 <div class="text-sm font-semibold text-white">{{ Auth::user()->name }}</div>
                 <div class="text-xs text-gray-400 mt-1">{{ Auth::user()->email }}</div>
             </div>
-
-            <div class="space-y-2">
+            
+            <div class="space-y-2 ">
                 <x-responsive-nav-link
                     :href="route('profile.edit')"
-                    class="text-gray-300 hover:text-white hover:bg-gray-900 rounded-xl"
+                    class="text-gray-300 hover:text-white hover:bg-gray-900 rounded-xl mb-6"
                 >
-                    {{ __('پروفایل') }}
+                    {{ __('ویرایش پروفایل') }}
                 </x-responsive-nav-link>
-
+                
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
                     <x-responsive-nav-link
+                        color="red"
                         :href="route('logout')"
-                        class="text-red-400 hover:text-red-300 hover:bg-gray-900 rounded-xl"
+                        class="text-red-500 hover:text-red-400 hover:bg-red-950/30 transition-colors duration-200"
                         onclick="event.preventDefault(); this.closest('form').submit();"
                     >
                         {{ __('خروج از حساب کاربری') }}
