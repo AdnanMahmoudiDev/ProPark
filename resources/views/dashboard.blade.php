@@ -39,29 +39,29 @@
                 </div>
             </div>
 
-            {{-- اطلاعات اشتراک و لایسن فعال و ... --}}
+            {{-- اطلاعات اشتراک و لایسنس فعال و ... --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                 <div class="bg-gray-900 border border-gray-800 shadow-sm sm:rounded-lg p-5">
-                    <p class="text-xs text-gray-400">اشتراک فعال</p>
+                    <p class="text-xs text-gray-300">اشتراک فعال</p>
                     <p class="mt-2 text-2xl font-bold text-white">—</p>
                     <p class="mt-2 text-xs text-gray-500">به زودی متصل به دیتابیس</p>
                 </div>
 
                 <div class="bg-gray-900 border border-gray-800 shadow-sm sm:rounded-lg p-5">
-                    <p class="text-xs text-gray-400">تعداد لایسنس‌ها</p>
+                    <p class="text-xs text-gray-300">تعداد لایسنس‌ها</p>
                     <p class="mt-2 text-2xl font-bold text-white">—</p>
                     <p class="mt-2 text-xs text-gray-500">به زودی</p>
                 </div>
 
                 <div class="bg-gray-900 border border-gray-800 shadow-sm sm:rounded-lg p-5">
-                    <p class="text-xs text-gray-400">درخواست‌های API امروز</p>
+                    <p class="text-xs text-gray-300">درخواست‌های API امروز</p>
                     <p class="mt-2 text-2xl font-bold text-white">—</p>
                     <p class="mt-2 text-xs text-gray-500">به زودی</p>
                 </div>
 
                 <div class="bg-gray-900 border border-gray-800 shadow-sm sm:rounded-lg p-5">
-                    <p class="text-xs text-gray-400">نقش کاربر</p>
+                    <p class="text-xs text-gray-300">نقش کاربر</p>
                     <p class="mt-2 text-2xl font-bold text-white">
                         {{ auth()->user()->role ?? '—' }}
                     </p>
@@ -79,12 +79,12 @@
 
                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-                        <a href="#"
+                        <a href="shop"
                            class="block rounded-lg border border-gray-800 p-4
                                   bg-gray-950 hover:border-violet-900/60
                                   hover:bg-gray-900 transition">
                             <p class="font-medium text-white">خرید اشتراک</p>
-                            <p class="mt-1 text-sm text-gray-400">به زودی</p>
+                            <p class="mt-1 text-sm text-gray-400">برای خرید اشتراک کلیک کنید</p>
                         </a>
 
                         <a href="#"

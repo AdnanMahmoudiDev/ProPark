@@ -10,10 +10,10 @@
 
     {{-- نوبار   --}}
     <nav class="bg-gray-950/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between h-16">
             <div class="flex items-center gap-3">
                 <x-application-logo class="block h-16 w-16 fill-current text-violet-500" />
-                <span class="text-2xl font-bold text-white tracking-tight">ProPark</span>
+                <span class="text-xl font-bold tracking-tight text-violet-400">ProPark</span>
             </div>
             <div class="flex gap-4">
                 @auth
@@ -40,7 +40,7 @@
             </p>
             <div class="flex gap-4 justify-center">
                 <a href="{{ route('register') }}" class="bg-violet-600 text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-violet-500 transition shadow-lg shadow-violet-900/50">شروع کار</a>
-                <a href="#" class="bg-gray-900 text-gray-300 px-8 py-4 rounded-2xl text-lg font-semibold border border-gray-800 hover:bg-gray-800 transition">مستندات API</a>
+                <a href="{{ route('shop') }}" class="bg-gray-900 text-gray-300 px-8 py-4 rounded-2xl text-lg font-semibold border border-gray-800 hover:bg-gray-800 transition">فروشگاه</a>
             </div>
         </div>
     </main>

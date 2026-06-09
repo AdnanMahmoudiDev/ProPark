@@ -1,0 +1,39 @@
+[33mcommit 70e0d451b9d27726367b545ab526ceb744e3db6f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: AdnanMahmoudiDev <adnan.mahmoudi.dev@gmail.com>
+Date:   Mon Jun 8 21:09:23 2026 +0330
+
+    feat: implement shop page and polish UI
+    
+    - Added shop page layout with packages
+    - Fixed login/authentication related bugs
+    - Improved navbar responsiveness
+    - Enhanced visual styling across pages
+
+[33mcommit 7aa56b5be9b02d08ec1cbc8692a94bd6c786c220[m
+Author: AdnanMahmoudiDev <adnan.mahmoudi.dev@gmail.com>
+Date:   Wed Jun 3 19:37:17 2026 +0330
+
+    feat(ui): redesign auth pages and implement dark theme across dashboard
+    
+    - Apply 'Dark Violet' theme to all authentication pages (Login, Register, Forgot, etc.)
+    - Refactor profile management and navigation UI to match the new dark aesthetics
+    - Enhance responsive layout with better spacing and Tailwind styling
+    - Add proper overrides for specific navigation components
+
+[33mcommit 33ada9d43069a7cc4b54825a27eff52ce343d653[m
+Author: AdnanMahmoudiDev <adnan.mahmoudi.dev@gmail.com>
+Date:   Wed Jun 3 10:50:19 2026 +0330
+
+    style(ui): redesign welcome, login, register, and dashboard pages
+
+[33mcommit e99cad9f937a3f54a8aafcff682b8eca7eb740a0[m
+Author: AdnanMahmoudiDev <adnan.mahmoudi.dev@gmail.com>
+Date:   Tue Jun 2 13:22:13 2026 +0330
+
+    UI: redesign dashboard , register , login  layout (rtl ready)
+
+[33mcommit 96b61d547660120dc3f2d5d7ef941ee2263ac514[m
+Author: AdnanMahmoudiDev <adnan.mahmoudi.dev@gmail.com>
+Date:   Tue Jun 2 11:57:06 2026 +0330
+
+    Initial commit: Setup Laravel with Breeze and custom User model
