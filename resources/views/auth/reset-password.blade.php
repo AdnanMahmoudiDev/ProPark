@@ -7,7 +7,7 @@
 
         <h2 class="text-2xl font-bold text-white mb-6">تعیین رمز عبور جدید</h2>
 
-        <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
+        <div class="w-full sm:max-w-md px-6 py-8   overflow-hidden sm:rounded-2xl">
             <form method="POST" action="{{ route('password.store') }}">
                 @csrf
 

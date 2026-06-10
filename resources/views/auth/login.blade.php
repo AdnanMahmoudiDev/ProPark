@@ -11,7 +11,7 @@
         <h2 class="text-2xl font-bold text-white mb-6">ورود به ProPark</h2>
 
          {{-- کارت اصلی (مشابه صفحه فراموشی رمز عبور)  --}}
-        <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
+        <div class="w-full sm:max-w-md px-6 py-8  overflow-hidden sm:rounded-2xl">
             
             <x-auth-session-status class="mb-4" :status="session('status')" />
 

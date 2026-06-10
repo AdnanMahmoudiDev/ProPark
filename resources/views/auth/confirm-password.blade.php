@@ -8,7 +8,7 @@
         <h2 class="text-2xl font-bold text-white mb-6">تایید امنیتی</h2>
 
          {{-- کارت اصلی  --}}
-        <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
+        <div class="w-full sm:max-w-md px-6 py-8 overflow-hidden sm:rounded-2xl">
             
             <div class="mb-6 text-sm text-gray-400 leading-relaxed">
                 {{ __('این یک بخش امن از برنامه است. لطفاً قبل از ادامه، رمز عبور خود را تایید کنید.') }}

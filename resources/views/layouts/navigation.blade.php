@@ -21,13 +21,7 @@
         {{-- لینک داشبرورد کاربری برای دسکتاپ--}}
         @auth
         <div class="hidden sm:flex sm:items-center sm:gap-6">
-            <x-nav-link
-                :href="route('dashboard')"
-                :active="request()->routeIs('dashboard')"
-                class="text-sm font-medium text-gray-300 hover:text-violet-400 transition"
-            >
-                {{ __('داشبورد کاربری') }}
-            </x-nav-link>
+           
 
             {{-- پروفایل --}}
             <x-dropdown align="left" width="56">
