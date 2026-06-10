@@ -2,21 +2,21 @@
     
     <div class="flex flex-col items-center w-full">
         
-        <!-- لوگو -->
+         {{-- لوگو  --}}
         <div class="mb-4">
             <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
         </div>
 
-        <!-- عنوان صفحه -->
+        {{--  عنوان صفحه  --}}
         <h2 class="text-2xl font-bold text-white mb-6">ثبت‌نام در ProPark</h2>
 
-        <!-- کارت اصلی ثبت‌نام -->
+        {{--  کارت اصلی ثبت‌نام  --}}
         <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
             
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
-                <!-- نام و نام خانوادگی -->
+                {{--  نام و نام خانوادگی  --}}
                 <div>
                     <x-input-label for="name" class="text-gray-300" :value="__('نام و نام خانوادگی')" />
                     <x-text-input id="name" 
@@ -30,7 +30,7 @@
                     <x-input-error :messages="$errors->get('name')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- ایمیل -->
+                {{--  ایمیل  --}}
                 <div class="mt-4">
                     <x-input-label for="email" class="text-gray-300" :value="__('ایمیل')" />
                     <x-text-input id="email" 
@@ -43,7 +43,7 @@
                     <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- شماره تلفن (اختصاصی ProPark) -->
+                {{--  شماره تلفن (اختصاصی ProPark)  --}}
                 <div class="mt-4">
                     <x-input-label for="phone_number" class="text-gray-300" :value="__('شماره موبایل')" />
                     <x-text-input id="phone_number" 
@@ -57,7 +57,7 @@
                     <x-input-error :messages="$errors->get('phone_number')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- رمز عبور -->
+                 {{-- رمز عبور  --}}
                 <div class="mt-4">
                     <x-input-label for="password" class="text-gray-300" :value="__('رمز عبور')" />
                     <x-text-input id="password" 
@@ -69,7 +69,7 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- تایید رمز عبور -->
+                 {{-- تایید رمز عبور  --}}
                 <div class="mt-4">
                     <x-input-label for="password_confirmation" class="text-gray-300" :value="__('تکرار رمز عبور')" />
                     <x-text-input id="password_confirmation" 
@@ -81,7 +81,7 @@
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- دکمه‌ها -->
+                 {{-- دکمه‌ها  --}}
                 <div class="flex items-center justify-between mt-8">
                     <a class="text-sm text-gray-500 hover:text-violet-400 transition" href="{{ route('login') }}">
                         {{ __('حساب دارید؟ ورود') }}

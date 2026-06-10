@@ -1,14 +1,14 @@
 <x-guest-layout>
     
     <div class="flex flex-col items-center w-full">
-        <!-- لوگو -->
+         {{-- لوگو  --}}
         <div class="mb-4">
             <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
         </div>
         <h2 class="text-2xl font-bold text-white">ورود به ProPark</h2>
         <br>
 
-        <!-- کارت اصلی صفحه -->
+        {{--  کارت اصلی صفحه  --}}
         <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
             <div class="mb-6 text-sm text-gray-400 leading-relaxed">
                 {{ __('رمز عبور خود را فراموش کرده‌اید؟ مشکلی نیست. ایمیل خود را وارد کنید تا لینک بازنشانی رمز عبور را برایتان ارسال کنیم.') }}
@@ -20,7 +20,7 @@
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
 
-                <!-- ایمیل -->
+                 {{-- ایمیل  --}}
                 <div>
                     <x-input-label for="email" :value="__('ایمیل')" class="text-gray-300" />
                     <x-text-input 

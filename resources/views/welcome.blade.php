@@ -45,7 +45,7 @@
         </div>
     </main>
 
-        {{-- قسمت فوتر --}}
+        {{-- قسمت فونر --}}
     <section class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-8">
         @php
             $features = [
@@ -65,7 +65,7 @@
 
 
     <footer class="py-10 text-center text-gray-600 text-sm border-t border-gray-900">
-        {{-- درباره ما --}}
+        {{-- دربازه ما --}}
         
     <section class="max-w-7xl mx-auto px-6 py-20 border-t border-gray-800">
         <div class="grid md:grid-cols-2 gap-12 items-center">

@@ -14,7 +14,7 @@
         <div class="min-h-screen bg-gray-950">
             @include('layouts.navigation')
 
-            <!-- هدر -->
+             {{-- هدر  --}}
             @isset($header)
                 <header class="bg-gray-900/50 border-b border-gray-800 backdrop-blur-sm">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -23,7 +23,7 @@
                 </header>
             @endisset
 
-            <!-- کانتنت سایت -->
+            {{--  کانتنت سایت  --}}
             <main>
                 {{ $slot }}
             </main>

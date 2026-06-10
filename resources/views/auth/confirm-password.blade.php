@@ -1,13 +1,13 @@
 <x-guest-layout>
     <div class="flex flex-col items-center w-full">
-        <!-- لوگو -->
+        {{--  لوگو  --}}
         <div class="mb-4">
             <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
         </div>
 
         <h2 class="text-2xl font-bold text-white mb-6">تایید امنیتی</h2>
 
-        <!-- کارت اصلی -->
+         {{-- کارت اصلی  --}}
         <div class="w-full sm:max-w-md px-6 py-8 bg-gray-900 border border-gray-800 shadow-xl overflow-hidden sm:rounded-2xl">
             
             <div class="mb-6 text-sm text-gray-400 leading-relaxed">
@@ -17,7 +17,7 @@
             <form method="POST" action="{{ route('password.confirm') }}">
                 @csrf
 
-                <!-- پسورد -->
+                {{--  پسورد  --}}
                 <div>
                     <x-input-label for="password" class="text-gray-300" :value="__('رمز عبور')" />
                     <x-text-input id="password" 

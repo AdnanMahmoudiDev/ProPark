@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="flex flex-col items-center w-full">
-        <!-- لوگو -->
+         {{-- لوگو  --}}
         <div class="mb-4">
             <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
         </div>
@@ -11,24 +11,24 @@
             <form method="POST" action="{{ route('password.store') }}">
                 @csrf
 
-                <!-- توکن ریست پسورد -->
+                 {{-- توکن ریست پسورد  --}}
                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                <!-- ایمیل -->
+                 {{-- ایمیل  --}}
                 <div>
                     <x-input-label for="email" class="text-gray-300" :value="__('ایمیل')" />
                     <x-text-input id="email" class="block mt-2 w-full bg-gray-950 border-gray-800 text-white rounded-xl" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- پسورد -->
+                {{--  پسورد  --}}
                 <div class="mt-4">
                     <x-input-label for="password" class="text-gray-300" :value="__('رمز عبور جدید')" />
                     <x-text-input id="password" class="block mt-2 w-full bg-gray-950 border-gray-800 text-white rounded-xl" type="password" name="password" required autocomplete="new-password" />
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400" />
                 </div>
 
-                <!-- تایید پسورد -->
+                 {{-- تایید پسورد  --}}
                 <div class="mt-4">
                     <x-input-label for="password_confirmation" class="text-gray-300" :value="__('تکرار رمز عبور')" />
                     <x-text-input id="password_confirmation" class="block mt-2 w-full bg-gray-950 border-gray-800 text-white rounded-xl" type="password" name="password_confirmation" required autocomplete="new-password" />
