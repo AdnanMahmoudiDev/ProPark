@@ -10,6 +10,7 @@ use App\Models\Cart;
 class Plan extends Model
 {
     protected $fillable = [
+        'level',
         'slug',
         'title',
         'description',
