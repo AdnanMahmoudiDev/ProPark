@@ -10,6 +10,11 @@ use App\Models\License;
 
 class Subscription extends Model
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_CANCELED = 'canceled';
+    public const STATUS_DEACTIVATED = 'deactivated';
+
     protected $fillable = [
         'user_id',
         'plan_id',
@@ -46,5 +51,38 @@ class Subscription extends Model
     public function license()
     {
         return $this->hasOne(License::class);
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at !== null && $this->expires_at->isPast();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE && ! $this->isExpired();
+    }
+
+    public function getEffectiveStatusAttribute(): string
+    {
+        if ($this->status === self::STATUS_ACTIVE && $this->isExpired()) {
+            return self::STATUS_DEACTIVATED;
+        }
+
+        return $this->status;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('expires_at', '>', now());
+    }
+
+    public function scopeExpired($query)
+    {
+        return $query
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<=', now());
     }
 }
