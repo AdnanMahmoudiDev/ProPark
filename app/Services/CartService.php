@@ -4,14 +4,16 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Plan;
+use App\Models\PlanPrice;
 use App\Models\User;
+use Exception;
 
 class CartService
 {
     public function getPendingCart(User $user): ?Cart
     {
         return $user->carts()
-            ->where('status', 'pending')
+            ->pending()
             ->latest()
             ->first();
     }
@@ -24,14 +26,17 @@ class CartService
     public function createPendingCart(User $user, Plan $plan, int $durationMonths): Cart
     {
         if ($this->hasPendingCart($user)) {
-            throw new \Exception('User already has a pending cart.');
+            throw new Exception('User already has a pending cart.');
         }
+
+        $planPrice = $this->resolveActivePlanPrice($plan, $durationMonths);
 
         return Cart::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
-            'duration_months' => $durationMonths,
-            'status' => 'pending',
+            'plan_price_id' => $planPrice->id,
+            'type' => Cart::TYPE_PURCHASE,
+            'status' => Cart::STATUS_PENDING,
         ]);
     }
 
@@ -44,9 +49,23 @@ class CartService
         }
 
         $cart->update([
-            'status' => 'cancelled',
+            'status' => Cart::STATUS_CANCELED,
         ]);
 
         return true;
+    }
+
+    private function resolveActivePlanPrice(Plan $plan, int $durationMonths): PlanPrice
+    {
+        $planPrice = $plan->prices()
+            ->where('duration_months', $durationMonths)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$planPrice) {
+            throw new Exception('Selected plan price is not available.');
+        }
+
+        return $planPrice;
     }
 }
