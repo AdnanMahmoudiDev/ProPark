@@ -21,6 +21,7 @@ class Plan extends Model
     ];
 
     protected $casts = [
+        'level' => 'integer',
         'facilities' => 'array',
         'max_devices' => 'integer',
         'is_active' => 'boolean',
