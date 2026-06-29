@@ -2,26 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-  
-    //  constants (جلوگیری از magic string)
-    
+    /*
+    |--------------------------------------------------------------------------
+    | Status Constants
+    |--------------------------------------------------------------------------
+    |
+    | These constants prevent magic strings across the codebase.
+    |
+    */
 
     public const STATUS_PENDING = 'pending';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELED = 'canceled';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Type Constants
+    |--------------------------------------------------------------------------
+    */
 
     public const TYPE_PURCHASE = 'purchase';
     public const TYPE_RENEW = 'renew';
     public const TYPE_UPGRADE = 'upgrade';
     public const TYPE_DOWNGRADE = 'downgrade';
 
-    
-    //fillable
+    /*
+    |--------------------------------------------------------------------------
+    | Mass Assignable Attributes
+    |--------------------------------------------------------------------------
+    */
 
     protected $fillable = [
         'user_id',
@@ -31,8 +45,11 @@ class Cart extends Model
         'status',
     ];
 
-    // casting
-  
+    /*
+    |--------------------------------------------------------------------------
+    | Attribute Casting
+    |--------------------------------------------------------------------------
+    */
 
     protected $casts = [
         'user_id' => 'integer',
@@ -42,8 +59,11 @@ class Cart extends Model
         'status' => 'string',
     ];
 
-    //  relationships
-    
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function user()
     {
@@ -60,8 +80,11 @@ class Cart extends Model
         return $this->belongsTo(PlanPrice::class);
     }
 
-    // scopes (service layer)
-   
+    /*
+    |--------------------------------------------------------------------------
+    | Status Scopes
+    |--------------------------------------------------------------------------
+    */
 
     public function scopePending(Builder $query): Builder
     {
@@ -72,6 +95,43 @@ class Cart extends Model
     {
         return $query->where('status', self::STATUS_COMPLETED);
     }
+
+    public function scopeCanceled(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_CANCELED);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Type Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopePurchase(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_PURCHASE);
+    }
+
+    public function scopeRenew(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_RENEW);
+    }
+
+    public function scopeUpgrade(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_UPGRADE);
+    }
+
+    public function scopeDowngrade(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_DOWNGRADE);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Scopes
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeForUser(Builder $query, int $userId): Builder
     {

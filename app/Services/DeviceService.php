@@ -4,12 +4,11 @@ namespace App\Services;
 
 use App\Models\License;
 use App\Models\LicenseDevice;
+use Illuminate\Support\Facades\DB;
 
 class DeviceService
 {
-    
-    //  پیدا کردن دستگاه ثبت شده
-     
+    // پیدا کردن دستگاه ثبت شده
     public function findDevice(License $license, string $machineId): ?LicenseDevice
     {
         return $license->devices()
@@ -17,9 +16,7 @@ class DeviceService
             ->first();
     }
 
-    
-    //   بررسی اینکه دستگاه قبلاً ثبت شده یا نه
-
+    // بررسی اینکه دستگاه قبلاً ثبت شده یا نه
     public function isDeviceRegistered(License $license, string $machineId): bool
     {
         return $this->findDevice($license, $machineId) !== null;
@@ -40,7 +37,7 @@ class DeviceService
         return $currentCount < $maxDevices;
     }
 
-    // پیدا کردن اولین جایگاه خالی برای ثبت دستگاه
+    // پیدا کردن اولین seat آزاد
     public function getNextAvailableSeat(License $license, int $maxDevices): int
     {
         $usedSeats = $license->devices()
@@ -58,34 +55,38 @@ class DeviceService
         throw new \RuntimeException('No available seat for this license.');
     }
 
-    // ثبت دستگاه جدید
+    // ثبت دستگاه
     public function registerDevice(License $license, string $machineId): LicenseDevice
     {
-        $existingDevice = $this->findDevice($license, $machineId);
+        return DB::transaction(function () use ($license, $machineId) {
 
-        if ($existingDevice) {
-            // به‌روزرسانی زمان آخرین فعال‌سازی
-            $existingDevice->update([
+            // اگر دستگاه قبلاً ثبت شده باشد
+            $existingDevice = $this->findDevice($license, $machineId);
+
+            if ($existingDevice) {
+                $existingDevice->update([
+                    'activated_at' => now(),
+                ]);
+
+                return $existingDevice;
+            }
+
+            if (! $this->canRegisterNewDevice($license)) {
+                throw new \RuntimeException('Maximum device limit reached for this license.');
+            }
+
+            $maxDevices = $license->subscription->plan->max_devices;
+
+            $seatNumber = $this->getNextAvailableSeat($license, $maxDevices);
+
+            return LicenseDevice::create([
+                'license_id' => $license->id,
+                'seat_number' => $seatNumber,
+                'machine_fingerprint' => $machineId,
                 'activated_at' => now(),
             ]);
-
-            return $existingDevice;
-        }
-
-        $maxDevices = $license->subscription->plan->max_devices;
-
-        $seatNumber = $this->getNextAvailableSeat($license, $maxDevices);
-
-        $device = LicenseDevice::create([
-            'license_id' => $license->id,
-            'seat_number' => $seatNumber,
-            'machine_fingerprint' => $machineId,
-            'activated_at' => now(),
-        ]);
-
-        return $device;
+        });
     }
-
 
     // حذف دستگاه
     public function removeDevice(License $license, string $machineId): bool

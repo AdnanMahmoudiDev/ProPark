@@ -16,7 +16,7 @@ class PlanPriceSeeder extends Seeder
 
         $eco = DB::table('plans')->where('slug','eco')->first()->id;
         $pro = DB::table('plans')->where('slug','pro')->first()->id;
-        $sazmani = DB::table('plans')->where('slug','sazmani')->first()->id;
+        $sazmani = DB::table('plans')->where('slug','organization')->first()->id;
 
         DB::table('plan_prices')->insert([
 

@@ -9,38 +9,75 @@ use Carbon\Carbon;
 
 class SubscriptionService
 {
+    /**
+     * گرفتن آخرین اشتراک فعال کاربر
+     */
     public function getActiveSubscription(User $user): ?Subscription
     {
         return $user->subscriptions()
-            ->where('expires_at', '>', now())
-            ->latest()
+            ->active()
+            ->latest('expires_at')
             ->first();
     }
 
-    public function createSubscription(User $user, Plan $plan, int $durationMonths): Subscription
-    {
-        $expiresAt = now()->addMonths($durationMonths);
+    /**
+     * ساخت اشتراک جدید
+     */
+    public function createSubscription(
+        User $user,
+        Plan $plan,
+        int $durationMonths
+    ): Subscription {
+
+        $startedAt = now();
+        $expiresAt = $startedAt->copy()->addMonths($durationMonths);
 
         return Subscription::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
-            'starts_at' => now(),
+            'started_at' => $startedAt,
             'expires_at' => $expiresAt,
+            'status' => Subscription::STATUS_ACTIVE,
         ]);
     }
 
-    public function renewSubscription(Subscription $subscription, int $durationMonths): Subscription
-    {
+    /**
+     * تمدید اشتراک
+     */
+    public function renewSubscription(
+        Subscription $subscription,
+        int $durationMonths
+    ): Subscription {
+
+        $baseDate = $subscription->expires_at && $subscription->expires_at->isFuture()
+            ? $subscription->expires_at
+            : now();
+
+        $newExpiresAt = $baseDate->copy()->addMonths($durationMonths);
+
         $subscription->update([
-            'expires_at' => Carbon::parse($subscription->expires_at)->addMonths($durationMonths),
+            'expires_at' => $newExpiresAt,
+            'status' => Subscription::STATUS_ACTIVE,
         ]);
 
         return $subscription->fresh();
     }
 
-    public function upgradeSubscription(Subscription $subscription, Plan $newPlan, int $durationMonths): Subscription
-    {
-        $remainingSeconds = max(now()->diffInSeconds($subscription->expires_at, false), 0);
+    /**
+     * ارتقا پلن
+     * نصف زمان باقی‌مانده به عنوان بونوس منتقل می‌شود
+     */
+    public function upgradeSubscription(
+        Subscription $subscription,
+        Plan $newPlan,
+        int $durationMonths
+    ): Subscription {
+
+        $remainingSeconds = max(
+            now()->diffInSeconds($subscription->expires_at, false),
+            0
+        );
+
         $bonusSeconds = (int) floor($remainingSeconds / 2);
 
         $newExpiresAt = now()
@@ -49,16 +86,28 @@ class SubscriptionService
 
         $subscription->update([
             'plan_id' => $newPlan->id,
-            'starts_at' => now(),
+            'started_at' => now(),
             'expires_at' => $newExpiresAt,
+            'status' => Subscription::STATUS_ACTIVE,
         ]);
 
         return $subscription->fresh();
     }
 
-    public function downgradeSubscription(Subscription $subscription, Plan $newPlan, int $durationMonths): Subscription
-    {
-        $remainingSeconds = max(now()->diffInSeconds($subscription->expires_at, false), 0);
+    /**
+     * کاهش پلن
+     * تمام زمان باقی‌مانده منتقل می‌شود
+     */
+    public function downgradeSubscription(
+        Subscription $subscription,
+        Plan $newPlan,
+        int $durationMonths
+    ): Subscription {
+
+        $remainingSeconds = max(
+            now()->diffInSeconds($subscription->expires_at, false),
+            0
+        );
 
         $newExpiresAt = now()
             ->addMonths($durationMonths)
@@ -66,16 +115,27 @@ class SubscriptionService
 
         $subscription->update([
             'plan_id' => $newPlan->id,
-            'starts_at' => now(),
+            'started_at' => now(),
             'expires_at' => $newExpiresAt,
+            'status' => Subscription::STATUS_ACTIVE,
         ]);
 
         return $subscription->fresh();
     }
 
+    /**
+     * تعداد روز باقی مانده
+     */
     public function getRemainingDays(Subscription $subscription): int
     {
-        $remainingSeconds = max(now()->diffInSeconds($subscription->expires_at, false), 0);
+        if (!$subscription->expires_at) {
+            return 0;
+        }
+
+        $remainingSeconds = max(
+            now()->diffInSeconds($subscription->expires_at, false),
+            0
+        );
 
         return (int) ceil($remainingSeconds / 86400);
     }

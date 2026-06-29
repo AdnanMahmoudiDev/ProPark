@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Models\License;
+use App\Models\Subscription;
 use App\Services\DeviceService;
 use App\Services\License\SignatureService;
 use Carbon\Carbon;
 
-// این کلاس مسئولیت اهتبار سنجی لایسنس ها و محاسبه ی زمان باقیمانده اشتراک ها است
+// این کلاس مسئولیت اعتبار سنجی لایسنس ها و محاسبه ی زمان باقیمانده اشتراک ها را دارد
 class LicenseValidatorService
 {
     protected DeviceService $deviceService;
@@ -43,6 +44,7 @@ class LicenseValidatorService
             if ($hours > 0) {
                 return "{$days} days and {$hours} hours";
             }
+
             return "{$days} days";
         }
 
@@ -50,6 +52,7 @@ class LicenseValidatorService
             if ($minutes > 0) {
                 return "{$hours} hours and {$minutes} minutes";
             }
+
             return "{$hours} hours";
         }
 
@@ -57,6 +60,7 @@ class LicenseValidatorService
             if ($seconds > 0) {
                 return "{$minutes} minutes and {$seconds} seconds";
             }
+
             return "{$minutes} minutes";
         }
 
@@ -67,8 +71,8 @@ class LicenseValidatorService
         return 'Expired';
     }
 
-    // نرمالسازی مقدار xpires_at
-    // اگر متن باشد ان را به carbon تبدیل میکند
+    // نرمالسازی مقدار expires_at
+    // اگر متن باشد آن را به Carbon تبدیل میکند
     private function normalizeExpiresAt($expiresAt): Carbon
     {
         return $expiresAt instanceof Carbon
@@ -76,11 +80,9 @@ class LicenseValidatorService
             : Carbon::parse($expiresAt);
     }
 
-    // محاسبه ی دقیق زمان باقیمانده اشتراک ها 
+    // محاسبه ی دقیق زمان باقیمانده اشتراک ها
     private function calculateRemainingValidity(Carbon $expiresAt): array
     {
-        // اختلاف زمانی به ثانیه 
-        // تبدیل اختلاف زمانی منفی به صفر مثلا اگر اعتبار لایسنس تمام شده بود این باعث میشود بجای تاریخ اعتبار مانده را منفی برگرداند صفر برمیگرداند
         $remainingSeconds = (int) max(0, floor(now()->diffInSeconds($expiresAt, false)));
 
         $days = intdiv($remainingSeconds, 86400);
@@ -98,70 +100,133 @@ class LicenseValidatorService
         ];
     }
 
-    // API اصلی اعتبار سنجی لایسنس که برای استفاده از از برنامه پایتونی استفاده میشود
+    private function subscriptionData(
+        License $license,
+        Subscription $subscription,
+        ?Carbon $expiresAt = null,
+        ?array $remaining = null,
+        $device = null
+    ): array {
+        $expiresAt = $expiresAt ?: (
+            $subscription->expires_at
+                ? $this->normalizeExpiresAt($subscription->expires_at)
+                : null
+        );
+
+        $remaining = $remaining ?: (
+            $expiresAt
+                ? $this->calculateRemainingValidity($expiresAt)
+                : null
+        );
+
+        $data = [
+            'license_key' => $license->license_key,
+            'subscription' => [
+                'status' => $subscription->status,
+                'effective_status' => $subscription->isActive()
+                    ? Subscription::STATUS_ACTIVE
+                    : Subscription::STATUS_DEACTIVATED,
+            ],
+            'plan' => [
+                'slug' => optional($subscription->plan)->slug,
+            ],
+        ];
+
+        if ($expiresAt) {
+            $data['expires_at'] = $expiresAt->format('Y-m-d H:i:s');
+        }
+
+        if ($remaining) {
+            $data['remaining'] = $remaining;
+            $data['remaining_days'] = $remaining['days'];
+        }
+
+        if ($device !== null) {
+            $data['device'] = [
+                'seat_number' => optional($device)->seat_number,
+            ];
+        }
+
+        return $data;
+    }
+
+    private function inactiveSubscriptionResponse(
+        License $license,
+        Subscription $subscription,
+        string $message,
+        ?Carbon $expiresAt = null,
+        ?array $remaining = null,
+        $device = null
+    ): array {
+        return $this->signResponse([
+            'valid' => false,
+            'message' => $message,
+            'data' => $this->subscriptionData($license, $subscription, $expiresAt, $remaining, $device),
+        ]);
+    }
+
+    // API اصلی اعتبار سنجی لایسنس که برای استفاده از برنامه پایتونی استفاده میشود
     public function validate(string $licenseKey, string $deviceId): array
     {
-
         $license = License::where('license_key', $licenseKey)
             ->with(['subscription.plan', 'devices'])
             ->first();
 
-        // برسی وجود و فعال بودن لایسنس 
         if (!$license || !$license->is_active) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Invalid or inactive license',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $subscription = $license->subscription;
 
-        // برسی وجود اشتراک
         if (!$subscription) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Subscription data missing',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
-        // برسی داشتن تاریخ انقضا
         if (!$subscription->expires_at) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Subscription expiration date missing',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $expiresAt = $this->normalizeExpiresAt($subscription->expires_at);
         $remaining = $this->calculateRemainingValidity($expiresAt);
 
-        // برسی منقضی بودن اشتراک
-        if ($remaining['total_seconds'] <= 0) {
-            $response = [
-                'valid' => false,
-                'message' => 'Subscription expired',
-                'data' => [
-                    'license_key' => $license->license_key,
-                    'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
-                    'remaining' => $remaining,
-                    'plan' => [
-                        'slug' => optional($subscription->plan)->slug,
-                    ],
-                ],
-            ];
+        if ($subscription->status !== Subscription::STATUS_ACTIVE) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription is inactive',
+                $expiresAt,
+                $remaining
+            );
+        }
 
-            return $this->signResponse($response);
+        if (!$subscription->isActive()) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription expired',
+                $expiresAt,
+                $remaining
+            );
         }
 
         $plan = $subscription->plan;
 
-        //  کنترل محدودیت دستگاه ها
+        if (!$plan) {
+            return $this->signResponse([
+                'valid' => false,
+                'message' => 'Subscription plan data missing',
+            ]);
+        }
+
         $maxDevices = $plan->max_devices;
         $currentDevices = $this->deviceService->countDevices($license);
 
@@ -169,24 +234,23 @@ class LicenseValidatorService
             !$this->deviceService->isDeviceRegistered($license, $deviceId)
             && $currentDevices >= $maxDevices
         ) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Device limit reached',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
-        //  ثبت دستگاه
-        // اگر قبلا ثبت نشده باشد
         $device = $this->deviceService->registerDevice($license, $deviceId);
 
-        // پاسخ موفق بودن
-        $response = [
+        return $this->signResponse([
             'valid' => true,
             'message' => 'Access granted',
             'data' => [
                 'license_key' => $license->license_key,
+                'subscription' => [
+                    'status' => $subscription->status,
+                    'effective_status' => Subscription::STATUS_ACTIVE,
+                ],
                 'plan' => [
                     'slug' => $plan->slug,
                 ],
@@ -195,15 +259,12 @@ class LicenseValidatorService
                 ],
                 'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
                 'remaining' => $remaining,
-
                 'remaining_days' => $remaining['days'],
             ],
-        ];
-
-        return $this->signResponse($response);
+        ]);
     }
 
-    // API فقط برای گرفتن زمان باقیمانده اعتبار لایسنس 
+    // API فقط برای گرفتن زمان باقیمانده اعتبار لایسنس
     public function getRemainingValidity(string $licenseKey, string $deviceId): array
     {
         $license = License::where('license_key', $licenseKey)
@@ -211,50 +272,40 @@ class LicenseValidatorService
             ->first();
 
         if (!$license) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License not found',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         if (!$license->is_active) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License is inactive',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $subscription = $license->subscription;
 
         if (!$subscription) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'No subscription found for this license',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         if (!$subscription->expires_at) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Subscription expiration date is not set',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         if (!$this->deviceService->isDeviceRegistered($license, $deviceId)) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'This device is not registered for this license',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $device = $this->deviceService->findDevice($license, $deviceId);
@@ -262,33 +313,40 @@ class LicenseValidatorService
         $expiresAt = $this->normalizeExpiresAt($subscription->expires_at);
         $remaining = $this->calculateRemainingValidity($expiresAt);
 
-        if ($remaining['total_seconds'] <= 0) {
-            $response = [
-                'valid' => false,
-                'message' => 'Subscription has expired',
-                'data' => [
-                    'license_key' => $license->license_key,
-                    'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
-                    'remaining' => $remaining,
-                    'plan' => [
-                        'slug' => optional($subscription->plan)->slug,
-                    ],
-                    'device' => [
-                        'seat_number' => optional($device)->seat_number,
-                    ],
-                ],
-            ];
-
-            return $this->signResponse($response);
+        if ($subscription->status !== Subscription::STATUS_ACTIVE) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription is inactive',
+                $expiresAt,
+                $remaining,
+                $device
+            );
         }
 
-        $response = [
+        if (!$subscription->isActive()) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription has expired',
+                $expiresAt,
+                $remaining,
+                $device
+            );
+        }
+
+        return $this->signResponse([
             'valid' => true,
             'message' => 'License validity fetched successfully',
             'data' => [
                 'license_key' => $license->license_key,
+                'subscription' => [
+                    'status' => $subscription->status,
+                    'effective_status' => Subscription::STATUS_ACTIVE,
+                ],
                 'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
                 'remaining' => $remaining,
+                'remaining_days' => $remaining['days'],
                 'plan' => [
                     'slug' => optional($subscription->plan)->slug,
                 ],
@@ -296,13 +354,10 @@ class LicenseValidatorService
                     'seat_number' => optional($device)->seat_number,
                 ],
             ],
-        ];
-
-        return $this->signResponse($response);
+        ]);
     }
 
-    // API برای حذف یک دستگاه از نشست فعال
-    // API خروج دستگاه از لایسنس (Logout / Deactivate Device)
+    // API خروج دستگاه از لایسنس
     public function deactivateDevice(string $licenseKey, string $deviceId): array
     {
         $license = License::where('license_key', $licenseKey)
@@ -310,39 +365,33 @@ class LicenseValidatorService
             ->first();
 
         if (!$license) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License not found',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         if (!$license->is_active) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License is inactive',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $device = $this->deviceService->findDevice($license, $deviceId);
 
         if (!$device) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Device not found for this license',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $seatNumber = $device->seat_number;
 
         $this->deviceService->removeDevice($license, $deviceId);
 
-        $response = [
+        return $this->signResponse([
             'valid' => true,
             'message' => 'Device successfully deactivated',
             'data' => [
@@ -351,9 +400,7 @@ class LicenseValidatorService
                     'seat_number' => $seatNumber,
                 ],
             ],
-        ];
-
-        return $this->signResponse($response);
+        ]);
     }
 
     // API برای دریافت اطلاعات لایسنس
@@ -364,46 +411,65 @@ class LicenseValidatorService
             ->first();
 
         if (!$license) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License not found',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         if (!$license->is_active) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'License is inactive',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $subscription = $license->subscription;
 
         if (!$subscription || !$subscription->expires_at) {
-            $response = [
+            return $this->signResponse([
                 'valid' => false,
                 'message' => 'Subscription data missing',
-            ];
-
-            return $this->signResponse($response);
+            ]);
         }
 
         $expiresAt = $this->normalizeExpiresAt($subscription->expires_at);
         $remaining = $this->calculateRemainingValidity($expiresAt);
 
         $device = $this->deviceService->findDevice($license, $deviceId);
-
         $plan = $subscription->plan;
 
-        $response = [
+        if ($subscription->status !== Subscription::STATUS_ACTIVE) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription is inactive',
+                $expiresAt,
+                $remaining,
+                $device
+            );
+        }
+
+        if (!$subscription->isActive()) {
+            return $this->inactiveSubscriptionResponse(
+                $license,
+                $subscription,
+                'Subscription has expired',
+                $expiresAt,
+                $remaining,
+                $device
+            );
+        }
+
+        return $this->signResponse([
             'valid' => true,
             'message' => 'License info fetched successfully',
             'data' => [
                 'license_key' => $license->license_key,
+                'subscription' => [
+                    'status' => $subscription->status,
+                    'effective_status' => Subscription::STATUS_ACTIVE,
+                ],
                 'plan' => [
                     'slug' => optional($plan)->slug,
                     'max_devices' => optional($plan)->max_devices,
@@ -416,8 +482,6 @@ class LicenseValidatorService
                 'remaining' => $remaining,
                 'remaining_days' => $remaining['days'],
             ],
-        ];
-
-        return $this->signResponse($response);
+        ]);
     }
 }

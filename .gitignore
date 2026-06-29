@@ -1,23 +1,82 @@
+# PHPUnit
 /.phpunit.cache
+.phpunit.result.cache
+
+# PHP dependencies
+/vendor
+
+# Node dependencies
 /node_modules
+
+# Vite / frontend build files
 /public/build
 /public/hot
+
+# Laravel public storage symlink
 /public/storage
-/storage/*.key
+
+# Laravel storage runtime files
 /storage/pail
-/vendor
+/storage/logs/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Keep required storage directories
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+
+# Application keys and sensitive storage files
+/storage/*.key
+/storage/app/*.key
+/storage/app/*.pem
+/storage/app/license_private.pem
+/storage/app/license_public.pem
+
+# OpenSSL local config
+openssl.cnf
+
+# Environment files
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
+.env.local
+.env.testing
+
+# Composer authentication file
 /auth.json
+
+# Laravel bootstrap cache
+/bootstrap/cache/*.php
+
+# IDE / editor files
 /.fleet
 /.idea
 /.nova
 /.vscode
 /.zed
+
+# PHPactor
+.phpactor.json
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# NPM / Yarn logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
