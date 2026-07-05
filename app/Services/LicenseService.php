@@ -36,6 +36,7 @@ class LicenseService
     public function createLicense(Subscription $subscription): License
     {
         return License::create([
+            'user_id'         => $subscription->user_id,
             'subscription_id' => $subscription->id,
             'license_key'     => $this->generateUniqueLicenseKey(),
             'is_active'       => true,

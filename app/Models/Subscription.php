@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Plan;
 use App\Models\PlanPrice;
 use App\Models\License;
+use Morilog\Jalali\Jalalian;
 
 class Subscription extends Model
 {
@@ -33,6 +34,7 @@ class Subscription extends Model
         'status' => 'string',
     ];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -53,6 +55,7 @@ class Subscription extends Model
         return $this->hasOne(License::class);
     }
 
+
     public function isExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();
@@ -72,6 +75,8 @@ class Subscription extends Model
         return $this->status;
     }
 
+
+
     public function scopeActive($query)
     {
         return $query
@@ -84,5 +89,25 @@ class Subscription extends Model
         return $query
             ->whereNotNull('expires_at')
             ->where('expires_at', '<=', now());
+    }
+
+
+
+    public function getStartedAtJalaliAttribute(): ?string
+    {
+        if (!$this->started_at) {
+            return null;
+        }
+
+        return Jalalian::fromCarbon($this->started_at)->format('Y/m/d H:i');
+    }
+
+    public function getExpiresAtJalaliAttribute(): ?string
+    {
+        if (!$this->expires_at) {
+            return null;
+        }
+
+        return Jalalian::fromCarbon($this->expires_at)->format('Y/m/d H:i');
     }
 }
