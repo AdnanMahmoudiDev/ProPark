@@ -1,6 +1,4 @@
 <x-app-layout>
-
-    {{-- نوبار حذف شد چون در app.blade.php هست --}}
     
     <main class="relative py-24">
 
