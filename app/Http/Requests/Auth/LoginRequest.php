@@ -34,6 +34,20 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'وارد کردن ایمیل الزامی است.',
+            'email.email' => 'لطفاً یک آدرس ایمیل معتبر وارد کنید.',
+            'password.required' => 'وارد کردن رمز عبور الزامی است.',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws ValidationException
@@ -46,7 +60,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'مشخصات وارد شده با اطلاعات ما مطابقت ندارد یا رمز عبور اشتباه است.',
             ]);
         }
 
@@ -69,10 +83,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => 'دفعات تلاش شما بیش از حد مجاز بوده است. لطفاً '.$seconds.' ثانیه دیگر دوباره تلاش کنید.',
         ]);
     }
 

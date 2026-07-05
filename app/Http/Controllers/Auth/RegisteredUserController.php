@@ -15,16 +15,15 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
+    //نمایش صفحه ی ثبت نام
+ 
     public function create(): View
     {
         return view('auth.register');
     }
 
     /**
-     * Handle an incoming registration request.
+     * هندل کردن درخواست ثبت نام
      *
      * @throws ValidationException
      */
@@ -32,9 +31,45 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone_number' => ['required', 'string', 'min:11', 'max:14','unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+            'phone_number' => [
+                'required',
+                'digits:11',
+                'regex:/^09[0-9]{9}$/',
+                'unique:users,phone_number',
+            ],
+            'password' => [
+                'required', 
+                'confirmed', 
+                Rules\Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ], [
+            // پیام‌های اعتبارسنجی نام و ایمیل
+            'name.required' => 'وارد کردن نام و نام خانوادگی الزامی است.',
+            'email.required' => 'آدرس ایمیل الزامی است.',
+            'email.email' => 'لطفاً یک آدرس ایمیل معتبر وارد کنید.',
+            'email.unique' => 'این ایمیل قبلاً در سیستم ثبت شده است.',
+            
+            // پیام‌های اعتبارسنجی شماره موبایل
+            'phone_number.required' => 'وارد کردن شماره موبایل الزامی است.',
+            'phone_number.digits' => 'شماره موبایل باید دقیقاً 11 رقم باشد.',
+            'phone_number.regex' => 'فرمت شماره موبایل نامعتبر است (مثال: 09123456789).',
+            'phone_number.unique' => 'این شماره موبایل قبلاً ثبت شده است.',
+
+            // پیام‌های اعتبارسنجی رمز عبور 
+            'password.required' => 'وارد کردن رمز عبور الزامی است.',
+            'password.confirmed' => 'تکرار رمز عبور با رمز عبور وارد شده مطابقت ندارد.',
+            'password.min' => 'رمز عبور باید حداقل 8 کاراکتر باشد.',
+            'password.letters' => 'رمز عبور باید حداقل شامل یک حرف باشد.',
+            'password.mixed' => 'رمز عبور باید شامل هر دو نوع حروف کوچک و بزرگ باشد.',
+            'password.numbers' => 'رمز عبور باید حداقل شامل یک عدد باشد.',
+            'password.symbols' => 'رمز عبور باید شامل حداقل یک کاراکتر خاص (مانند @، #، $، % و...) باشد.',
+            'password.uncompromised' => 'این رمز عبور در پایگاه داده‌های لو رفته جهانی پیدا شده است؛ برای امنیت بیشتر رمز دیگری انتخاب کنید.',
         ]);
 
         $user = User::create([
@@ -42,7 +77,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
-            'role' => 'user',
+            'role' => 'user', 
         ]);
 
         event(new Registered($user));
