@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
+use App\Http\Controllers\User\CartController; // کنترلر سبد خرید
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
@@ -41,6 +42,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::delete('/devices/{licenseDevice}', [UserDeviceController::class, 'destroy'])
         ->name('user.devices.destroy');
+
+    // مدیریت سبد خرید 
+    Route::prefix('cart')->name('user.cart.')->controller(CartController::class)->group(function () {
+        Route::get('/', 'index')->name('index');             // نمایش سبد خرید
+        Route::post('/store', 'store')->name('store');       // افزودن محصول به سبد خرید
+        Route::delete('/cancel', 'destroy')->name('cancel'); // لغو و خالی کردن سبد خرید
+        Route::post('/checkout', 'checkout')->name('checkout'); // پرداخت و نهایی‌سازی خرید
+    });
 
     // مدیریت پروفایل
     Route::controller(ProfileController::class)->group(function () {
