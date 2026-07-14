@@ -28,20 +28,20 @@ class CheckoutService
         $activeSub = $this->subscriptionService->getActiveSubscription($user);
 
         if (!$activeSub) {
-            return Cart::TYPE_PURCHASE; // خرید اول
+            return Cart::TYPE_PURCHASE;
         }
 
         $currentPlanLevel = $activeSub->plan->level;
 
         if ($newPlanLevel > $currentPlanLevel) {
-            return Cart::TYPE_UPGRADE; // ارتقا
+            return Cart::TYPE_UPGRADE;
         }
 
         if ($newPlanLevel < $currentPlanLevel) {
-            return Cart::TYPE_DOWNGRADE; // تنزل
+            return Cart::TYPE_DOWNGRADE;
         }
 
-        return Cart::TYPE_RENEW; // تمدید
+        return Cart::TYPE_RENEW;
     }
 
     /**
@@ -50,7 +50,6 @@ class CheckoutService
     public function completeCheckout(Cart $cart): array
     {
         return DB::transaction(function () use ($cart) {
-            // قفل کردن ردیف سبد خرید برای جلوگیری از Race Conditions
             $cart = Cart::with(['user', 'plan', 'planPrice'])
                 ->lockForUpdate()
                 ->findOrFail($cart->id);
@@ -65,22 +64,18 @@ class CheckoutService
 
             $user = $cart->user;
             $newPlan = $cart->plan;
-            $planPriceId = $cart->plan_price_id;
+            $planPriceId = (int) $cart->plan_price_id;
             $durationMonths = (int) $cart->planPrice->duration_months;
 
-            if (!$planPriceId) {
+            if ($planPriceId <= 0) {
                 throw new Exception('شناسه قیمت پلن برای این خرید نامعتبر است.');
             }
 
-            // تشخیص اکشن واقعی
             $action = $this->determineAction($user, (int) $newPlan->level);
-
-            // گرفتن اشتراک فعال فعلی (در صورت وجود)
             $activeSub = $this->subscriptionService->getActiveSubscription($user);
 
             switch ($action) {
                 case Cart::TYPE_PURCHASE:
-                    // ایجاد اشتراک جدید همراه با plan_price_id خرید
                     $subscription = $this->subscriptionService->createSubscription(
                         $user,
                         $newPlan,
@@ -88,7 +83,6 @@ class CheckoutService
                         $durationMonths
                     );
 
-                    // ایجاد لایسنس جدید متصل به اشتراک
                     $this->licenseService->createLicense($subscription);
                     break;
 
@@ -97,9 +91,11 @@ class CheckoutService
                         throw new Exception('اشتراک فعالی برای تمدید یافت نشد.');
                     }
 
-                    // اگر لازم داری plan_price_id جدید تمدید هم ذخیره شود،
-                    // باید امضای renewSubscription را هم مشابه همین تغییر بدهی.
-                    $this->subscriptionService->renewSubscription($activeSub, $durationMonths);
+                    $this->subscriptionService->renewSubscription(
+                        $activeSub,
+                        $planPriceId,
+                        $durationMonths
+                    );
                     break;
 
                 case Cart::TYPE_UPGRADE:
@@ -107,9 +103,12 @@ class CheckoutService
                         throw new Exception('اشتراک فعالی برای ارتقا یافت نشد.');
                     }
 
-                    // اگر لازم داری plan_price_id جدید ارتقا هم ذخیره شود،
-                    // باید امضای upgradeSubscription را هم مشابه همین تغییر بدهی.
-                    $this->subscriptionService->upgradeSubscription($activeSub, $newPlan, $durationMonths);
+                    $this->subscriptionService->upgradeSubscription(
+                        $activeSub,
+                        $newPlan,
+                        $planPriceId,
+                        $durationMonths
+                    );
                     break;
 
                 case Cart::TYPE_DOWNGRADE:
@@ -117,13 +116,15 @@ class CheckoutService
                         throw new Exception('اشتراک فعالی برای تنزل یافت نشد.');
                     }
 
-                    // اگر لازم داری plan_price_id جدید تنزل هم ذخیره شود،
-                    // باید امضای downgradeSubscription را هم مشابه همین تغییر بدهی.
-                    $this->subscriptionService->downgradeSubscription($activeSub, $newPlan, $durationMonths);
+                    $this->subscriptionService->downgradeSubscription(
+                        $activeSub,
+                        $newPlan,
+                        $planPriceId,
+                        $durationMonths
+                    );
 
                     $deviceLimit = (int) ($newPlan->device_limit ?? $newPlan->max_devices ?? 0);
 
-                    // اجرای قانون محدودیت دستگاه‌ها پس از تنزل پلن
                     $this->enforceDeviceLimitAfterDowngrade($user, $deviceLimit);
                     break;
 
@@ -131,7 +132,6 @@ class CheckoutService
                     throw new Exception('نوع عملیات نامعتبر است.');
             }
 
-            // ثبت اتمام موفقیت‌آمیز سبد خرید
             $cart->update([
                 'status' => Cart::STATUS_COMPLETED,
                 'type' => $action,
