@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\User;
-use App\Models\Subscription;
-use App\Models\Plan;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -53,31 +51,43 @@ class CheckoutService
     {
         return DB::transaction(function () use ($cart) {
             // قفل کردن ردیف سبد خرید برای جلوگیری از Race Conditions
-            $cart = Cart::lockForUpdate()->findOrFail($cart->id);
+            $cart = Cart::with(['user', 'plan', 'planPrice'])
+                ->lockForUpdate()
+                ->findOrFail($cart->id);
 
             if ($cart->status !== Cart::STATUS_PENDING) {
                 throw new Exception('این سبد خرید قبلاً تعیین تکلیف شده است.');
             }
 
+            if (!$cart->planPrice) {
+                throw new Exception('قیمت پلن برای این سبد خرید یافت نشد.');
+            }
+
             $user = $cart->user;
             $newPlan = $cart->plan;
-            $durationMonths = $cart->planPrice->duration_months;
+            $planPriceId = $cart->plan_price_id;
+            $durationMonths = (int) $cart->planPrice->duration_months;
+
+            if (!$planPriceId) {
+                throw new Exception('شناسه قیمت پلن برای این خرید نامعتبر است.');
+            }
 
             // تشخیص اکشن واقعی
-            $action = $this->determineAction($user, $newPlan->level);
+            $action = $this->determineAction($user, (int) $newPlan->level);
 
             // گرفتن اشتراک فعال فعلی (در صورت وجود)
             $activeSub = $this->subscriptionService->getActiveSubscription($user);
 
             switch ($action) {
                 case Cart::TYPE_PURCHASE:
-                    // ایجاد اشتراک جدید
+                    // ایجاد اشتراک جدید همراه با plan_price_id خرید
                     $subscription = $this->subscriptionService->createSubscription(
                         $user,
                         $newPlan,
+                        $planPriceId,
                         $durationMonths
                     );
-                    
+
                     // ایجاد لایسنس جدید متصل به اشتراک
                     $this->licenseService->createLicense($subscription);
                     break;
@@ -86,7 +96,9 @@ class CheckoutService
                     if (!$activeSub) {
                         throw new Exception('اشتراک فعالی برای تمدید یافت نشد.');
                     }
-                    // تمدید اشتراک فعلی
+
+                    // اگر لازم داری plan_price_id جدید تمدید هم ذخیره شود،
+                    // باید امضای renewSubscription را هم مشابه همین تغییر بدهی.
                     $this->subscriptionService->renewSubscription($activeSub, $durationMonths);
                     break;
 
@@ -94,7 +106,9 @@ class CheckoutService
                     if (!$activeSub) {
                         throw new Exception('اشتراک فعالی برای ارتقا یافت نشد.');
                     }
-                    // ارتقای اشتراک فعلی (نصف زمان باقی‌مانده به عنوان بونوس منتقل می‌شود)
+
+                    // اگر لازم داری plan_price_id جدید ارتقا هم ذخیره شود،
+                    // باید امضای upgradeSubscription را هم مشابه همین تغییر بدهی.
                     $this->subscriptionService->upgradeSubscription($activeSub, $newPlan, $durationMonths);
                     break;
 
@@ -102,15 +116,15 @@ class CheckoutService
                     if (!$activeSub) {
                         throw new Exception('اشتراک فعالی برای تنزل یافت نشد.');
                     }
-                    // تنزل اشتراک فعلی (کل زمان باقی‌مانده منتقل می‌شود)
+
+                    // اگر لازم داری plan_price_id جدید تنزل هم ذخیره شود،
+                    // باید امضای downgradeSubscription را هم مشابه همین تغییر بدهی.
                     $this->subscriptionService->downgradeSubscription($activeSub, $newPlan, $durationMonths);
 
-                    // دریافت ظرفیت دستگاه جدید (استفاده از مقدار پیش‌فرض در صورت null بودن)
-                    // عدنان، نام ستون را با ساختار دیتابیس خودت (مثلاً max_devices یا device_limit) هماهنگ کن
-                    $deviceLimit = $newPlan->device_limit ?? $newPlan->max_devices ?? 0;
+                    $deviceLimit = (int) ($newPlan->device_limit ?? $newPlan->max_devices ?? 0);
 
                     // اجرای قانون محدودیت دستگاه‌ها پس از تنزل پلن
-                    $this->enforceDeviceLimitAfterDowngrade($user, (int) $deviceLimit);
+                    $this->enforceDeviceLimitAfterDowngrade($user, $deviceLimit);
                     break;
 
                 default:
@@ -120,13 +134,13 @@ class CheckoutService
             // ثبت اتمام موفقیت‌آمیز سبد خرید
             $cart->update([
                 'status' => Cart::STATUS_COMPLETED,
-                'type' => $action
+                'type' => $action,
             ]);
 
             return [
                 'success' => true,
                 'action' => $action,
-                'message' => 'پرداخت با موفقیت انجام و تغییرات اشتراک اعمال گردید.'
+                'message' => 'پرداخت با موفقیت انجام و تغییرات اشتراک اعمال گردید.',
             ];
         });
     }
@@ -140,8 +154,6 @@ class CheckoutService
             return;
         }
 
-        // ۱. پیدا کردن تمام لایسنس‌های متعلق به کاربر (یا لایسنس متصل به اشتراک فعال او)
-        // معمولاً کاربر یک لایسنس فعال دارد. شناسه آن را می‌گیریم.
         $licenseIds = DB::table('licenses')
             ->where('user_id', $user->id)
             ->pluck('id');
@@ -150,8 +162,6 @@ class CheckoutService
             return;
         }
 
-        // ۲. دریافت دستگاه‌های متصل به این لایسنس‌ها، مرتب‌شده بر اساس جدیدترین‌ها
-        // اولویت مرتب‌سازی با activated_at و سپس created_at است.
         $connectedDevices = DB::table('license_devices')
             ->whereIn('license_id', $licenseIds)
             ->orderByDesc('activated_at')
@@ -161,11 +171,8 @@ class CheckoutService
 
         $connectedCount = $connectedDevices->count();
 
-        // ۳. اگر تعداد دستگاه‌ها بیشتر از ظرفیت مجاز جدید بود، جدیدترین‌ها را حذف کن
         if ($connectedCount > $allowedDevices) {
             $excessCount = $connectedCount - $allowedDevices;
-
-            // گرفتن ID جدیدترین دستگاه‌ها جهت حذف
             $deviceIdsToDelete = $connectedDevices->take($excessCount)->pluck('id');
 
             DB::table('license_devices')
