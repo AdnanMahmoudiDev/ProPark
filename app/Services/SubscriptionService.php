@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
-use Carbon\Carbon;
 
 class SubscriptionService
 {
@@ -26,15 +25,16 @@ class SubscriptionService
     public function createSubscription(
         User $user,
         Plan $plan,
+        int $planPriceId,
         int $durationMonths
     ): Subscription {
-
         $startedAt = now();
         $expiresAt = $startedAt->copy()->addMonths($durationMonths);
 
         return Subscription::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
+            'plan_price_id' => $planPriceId,
             'started_at' => $startedAt,
             'expires_at' => $expiresAt,
             'status' => Subscription::STATUS_ACTIVE,
@@ -46,9 +46,9 @@ class SubscriptionService
      */
     public function renewSubscription(
         Subscription $subscription,
+        int $planPriceId,
         int $durationMonths
     ): Subscription {
-
         $baseDate = $subscription->expires_at && $subscription->expires_at->isFuture()
             ? $subscription->expires_at
             : now();
@@ -56,6 +56,7 @@ class SubscriptionService
         $newExpiresAt = $baseDate->copy()->addMonths($durationMonths);
 
         $subscription->update([
+            'plan_price_id' => $planPriceId,
             'expires_at' => $newExpiresAt,
             'status' => Subscription::STATUS_ACTIVE,
         ]);
@@ -70,9 +71,9 @@ class SubscriptionService
     public function upgradeSubscription(
         Subscription $subscription,
         Plan $newPlan,
+        int $planPriceId,
         int $durationMonths
     ): Subscription {
-
         $remainingSeconds = max(
             now()->diffInSeconds($subscription->expires_at, false),
             0
@@ -86,6 +87,7 @@ class SubscriptionService
 
         $subscription->update([
             'plan_id' => $newPlan->id,
+            'plan_price_id' => $planPriceId,
             'started_at' => now(),
             'expires_at' => $newExpiresAt,
             'status' => Subscription::STATUS_ACTIVE,
@@ -101,9 +103,9 @@ class SubscriptionService
     public function downgradeSubscription(
         Subscription $subscription,
         Plan $newPlan,
+        int $planPriceId,
         int $durationMonths
     ): Subscription {
-
         $remainingSeconds = max(
             now()->diffInSeconds($subscription->expires_at, false),
             0
@@ -115,6 +117,7 @@ class SubscriptionService
 
         $subscription->update([
             'plan_id' => $newPlan->id,
+            'plan_price_id' => $planPriceId,
             'started_at' => now(),
             'expires_at' => $newExpiresAt,
             'status' => Subscription::STATUS_ACTIVE,
