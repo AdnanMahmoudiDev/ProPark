@@ -11,13 +11,13 @@
             </h2>
 
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <span class="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
                 <span>لیست کلیه کاربران ثبت‌شده در سامانه ProPark</span>
             </div>
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="px-4 py-2 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 text-xs font-medium">
+            <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs font-medium">
                 تعداد کل کاربران: {{ $users->total() }}
             </div>
         </div>
@@ -38,7 +38,7 @@
     <div class="bg-gray-900/70 border border-gray-800 rounded-3xl overflow-hidden">
 
         {{-- کارت هدر --}}
-        <div class="px-5 py-4 md:px-6 md:py-5 border-b border-gray-800 bg-gradient-to-r from-violet-900/20 to-transparent">
+        <div class="px-5 py-4 md:px-6 md:py-5 border-b border-gray-800 bg-gradient-to-r from-blue-900/20 to-transparent">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h3 class="text-base md:text-lg font-semibold text-white">
@@ -75,7 +75,7 @@
 
                             <div class="shrink-0">
                                 @if ($user->role === 'admin')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-medium bg-violet-900/20 border border-violet-700 text-violet-400">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-medium bg-blue-900/20 border border-blue-700 text-blue-400">
                                         مدیر سیستم
                                     </span>
                                 @else
@@ -115,7 +115,7 @@
 
                                 <select
                                     name="role"
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-violet-700 focus:ring-violet-700 focus:ring-0 focus:outline-none transition"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-blue-700 focus:ring-0 focus:outline-none transition"
                                 >
                                     <option value="user" class="bg-gray-900 text-gray-300" @selected($user->role === 'user')>
                                         کاربر عادی
@@ -127,7 +127,7 @@
 
                                 <button
                                     type="submit"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 hover:bg-violet-600 hover:text-white text-sm font-medium transition duration-200"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 hover:bg-blue-600 hover:text-white text-sm font-medium transition duration-200"
                                 >
                                     ثبت تغییرات
                                 </button>
@@ -173,7 +173,7 @@
 
                                     <td class="py-4 px-4 text-sm align-top">
                                         @if ($user->role === 'admin')
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-violet-900/20 border border-violet-700 text-violet-400">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-900/20 border border-blue-700 text-blue-400">
                                                 مدیر سیستم
                                             </span>
                                         @else
@@ -194,7 +194,7 @@
 
                                             <select
                                                 name="role"
-                                                class="rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-xs py-2 px-3 focus:border-violet-700 focus:ring-violet-700 focus:ring-0 focus:outline-none transition"
+                                                class="rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-xs py-2 px-3 focus:border-blue-700 focus:ring-blue-700 focus:ring-0 focus:outline-none transition"
                                             >
                                                 <option value="user" class="bg-gray-900 text-gray-300" @selected($user->role === 'user')>
                                                     کاربر عادی
@@ -206,7 +206,7 @@
 
                                             <button
                                                 type="submit"
-                                                class="px-4 py-2 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 hover:bg-violet-600 hover:text-white text-xs font-medium transition duration-200 whitespace-nowrap"
+                                                class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 hover:bg-blue-600 hover:text-white text-xs font-medium transition duration-200 whitespace-nowrap"
                                             >
                                                 ثبت
                                             </button>

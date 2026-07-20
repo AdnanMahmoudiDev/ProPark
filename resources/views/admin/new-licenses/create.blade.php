@@ -7,7 +7,7 @@
     {{-- هدر --}}
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div class="flex items-center gap-3">
-            <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-violet-800/60 bg-violet-900/20 text-violet-300 shadow-lg shadow-violet-950/30">
+            <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-blue-800/60 bg-blue-900/20 text-blue-300 shadow-lg shadow-blue-950/30">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                           d="M16.5 7.5h2.25A2.25 2.25 0 0 1 21 9.75v8.25A2.25 2.25 0 0 1 18.75 20.25H5.25A2.25 2.25 0 0 1 3 18V9.75A2.25 2.25 0 0 1 5.25 7.5H7.5m9 0V6A3 3 0 0 0 13.5 3h-3A3 3 0 0 0 7.5 6v1.5m9 0h-9m4.5 4.5v4.5m-2.25-2.25h4.5"/>
@@ -99,7 +99,7 @@
                 {{-- پلن --}}
                 <div class="space-y-2">
                     <label for="plan_id" class="flex items-center gap-2 text-sm font-medium text-gray-300">
-                        <svg class="h-4 w-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h10.5"/>
                         </svg>
@@ -110,7 +110,7 @@
                         name="plan_id"
                         id="plan_id"
                         required
-                        class="w-full rounded-2xl border border-gray-800 bg-black/40 px-4 py-3 text-sm text-gray-200 transition focus:border-violet-700 focus:outline-none focus:ring-violet-700"
+                        class="w-full rounded-2xl border border-gray-800 bg-black/40 px-4 py-3 text-sm text-gray-200 transition focus:border-blue-700 focus:outline-none focus:ring-blue-700"
                     >
                         <option value="" class="bg-gray-900 text-gray-400">انتخاب پلن...</option>
                         @foreach($plans as $plan)
@@ -135,7 +135,7 @@
                         name="duration_months"
                         id="duration_months"
                         required
-                        class="w-full rounded-2xl border border-gray-800 bg-black/40 px-4 py-3 text-sm text-gray-200 transition focus:border-violet-700 focus:outline-none focus:ring-violet-700"
+                        class="w-full rounded-2xl border border-gray-800 bg-black/40 px-4 py-3 text-sm text-gray-200 transition focus:border-blue-700 focus:outline-none focus:ring-blue-700"
                     >
                         <option value="" class="bg-gray-900 text-gray-400">انتخاب مدت...</option>
                         <option value="1" class="bg-gray-900 text-gray-200">۱ ماه</option>
@@ -145,7 +145,6 @@
                     </select>
                 </div>
 
-                
                 <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
                     <button
                         type="submit"
