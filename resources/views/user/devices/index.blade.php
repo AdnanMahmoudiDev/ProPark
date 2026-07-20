@@ -10,10 +10,12 @@
                 </p>
             </div>
 
-            <a href="{{ route('subscription.details') }}"
-               class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-medium text-gray-300 transition-colors duration-200 hover:bg-gray-800 hover:text-white">
+            <a
+                href="{{ route('subscription.details') }}"
+                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-4 w-4"
+                     class="h-4 w-4 transition duration-300 group-hover:translate-x-1"
                      fill="none"
                      viewBox="0 0 24 24"
                      stroke="currentColor">
@@ -22,7 +24,7 @@
                           stroke-width="2"
                           d="M15 19l-7-7 7-7" />
                 </svg>
-                بازگشت به جزئیات اشتراک
+                <span>بازگشت به جزئیات اشتراک</span>
             </a>
         </div>
     </x-slot>
@@ -30,7 +32,7 @@
     <div class="min-h-screen bg-[#070913] py-8 text-gray-100 sm:py-10">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 
-            {{-- پیام موفقیت امیز بودن  --}}
+            {{-- پیام موفقیت --}}
             @if(session('success'))
                 <div class="mb-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-4 text-emerald-300 shadow-sm">
                     <div class="flex items-start gap-3">
@@ -59,13 +61,11 @@
                 </div>
             @endif
 
-            {{-- کارت اصلی --}}
             <div class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 shadow-2xl shadow-black/20 backdrop-blur">
-                {{-- هدر --}}
                 <div class="border-b border-gray-800 bg-gradient-to-r from-[#111827] via-[#0f172a] to-[#111827] px-5 py-6 sm:px-7">
                     <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                         <div class="flex items-start gap-4">
-                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/10 text-violet-300 shadow-lg shadow-violet-950/20">
+                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300 shadow-lg shadow-blue-950/20">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      class="h-7 w-7"
                                      fill="none"
@@ -88,17 +88,15 @@
                             </div>
                         </div>
 
-                        <div class="inline-flex items-center gap-2 self-start rounded-full border border-gray-800 bg-black/20 px-4 py-2 text-xs font-semibold text-gray-300">
-                            <span class="inline-block h-2 w-2 rounded-full bg-violet-400"></span>
+                        <div class="inline-flex items-center gap-2 self-start rounded-full border border-blue-500/10 bg-blue-500/5 px-4 py-2 text-xs font-semibold text-blue-200">
+                            <span class="inline-block h-2 w-2 rounded-full bg-blue-400"></span>
                             {{ $devices->count() }} دستگاه ثبت‌شده
                         </div>
                     </div>
                 </div>
 
-                {{-- بادی --}}
                 <div class="p-5 sm:p-7">
                     @if($devices->isEmpty())
-                        
                         <div class="rounded-3xl border border-dashed border-gray-800 bg-[#0b1120] px-6 py-14 text-center">
                             <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl border border-gray-800 bg-gray-900/80 text-gray-500">
                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -122,8 +120,10 @@
                             </p>
 
                             <div class="mt-8">
-                                <a href="{{ route('subscription.details') }}"
-                                   class="inline-flex items-center gap-2 rounded-2xl border border-violet-800/70 bg-violet-900/20 px-5 py-3 text-sm font-semibold text-violet-300 transition duration-200 hover:border-violet-700 hover:bg-violet-800/30 hover:text-white">
+                                <a
+                                    href="{{ route('subscription.details') }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-800/70 bg-blue-900/20 px-5 py-3 text-sm font-bold text-blue-300 shadow-lg shadow-blue-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-800/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5"
                                          fill="none"
@@ -139,13 +139,13 @@
                             </div>
                         </div>
                     @else
-                        {{-- مخصوص موبایل --}}
+                        {{-- موبایل --}}
                         <div class="space-y-4 md:hidden">
                             @foreach($devices as $index => $device)
-                                <div class="rounded-2xl border border-gray-800 bg-[#0b1120] p-4 shadow-sm">
+                                <div class="rounded-2xl border border-gray-800 bg-[#0b1120] p-4 shadow-sm transition duration-300 hover:border-blue-900/40 hover:bg-[#0d1424]">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="flex items-center gap-3">
-                                            <div class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-800 bg-gray-900 text-violet-300">
+                                            <div class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-800 bg-gray-900 text-blue-300">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                      class="h-5 w-5"
                                                      fill="none"
@@ -168,17 +168,17 @@
                                             </div>
                                         </div>
 
-                                        <span class="rounded-full border border-violet-500/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold text-violet-300">
+                                        <span class="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold text-blue-300">
                                             دستگاه
                                         </span>
                                     </div>
 
                                     <div class="mt-4 space-y-3">
-                                        <div class="rounded-xl bg-gray-900/70 p-3">
+                                        <div class="rounded-xl bg-gray-900/70 p-3 ring-1 ring-white/5">
                                             <p class="text-[11px] font-bold tracking-wide text-gray-500">
                                                 شناسه سخت‌افزاری
                                             </p>
-                                            <p class="mt-2 break-all font-mono text-xs leading-6 text-violet-300">
+                                            <p class="mt-2 break-all font-mono text-xs leading-6 text-blue-300">
                                                 {{ $device->machine_fingerprint ?? 'نامشخص' }}
                                             </p>
                                         </div>
@@ -211,8 +211,10 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit"
-                                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm font-semibold text-red-300 transition duration-200 hover:border-red-700 hover:bg-red-900/30 hover:text-white">
+                                            <button
+                                                type="submit"
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm font-bold text-red-300 shadow-lg shadow-red-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-red-700 hover:bg-red-900/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-400/30"
+                                            >
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                      class="h-4 w-4"
                                                      fill="none"
@@ -231,7 +233,7 @@
                             @endforeach
                         </div>
 
-                        {{-- مخصوص دسکتاپ --}}
+                        {{-- دسکتاپ --}}
                         <div class="hidden overflow-hidden rounded-2xl border border-gray-800 bg-[#0b1120] md:block">
                             <div class="overflow-x-auto">
                                 <table class="w-full table-fixed divide-y divide-gray-800">
@@ -267,7 +269,7 @@
 
                                                 <td class="px-4 py-5">
                                                     <div class="flex items-center gap-3">
-                                                        <div class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-800 bg-gray-900 text-violet-300">
+                                                        <div class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-800 bg-gray-900 text-blue-300">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                  class="h-5 w-5"
                                                                  fill="none"
@@ -292,7 +294,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-5">
-                                                    <code class="inline-block max-w-[320px] truncate rounded-lg bg-gray-900 px-3 py-2 font-mono text-xs text-violet-300 ring-1 ring-white/5"
+                                                    <code class="inline-block max-w-[320px] truncate rounded-lg bg-gray-900 px-3 py-2 font-mono text-xs text-blue-300 ring-1 ring-white/5"
                                                           title="{{ $device->machine_fingerprint }}">
                                                         {{ $device->machine_fingerprint ?? 'نامشخص' }}
                                                     </code>
@@ -313,8 +315,10 @@
                                                         @csrf
                                                         @method('DELETE')
 
-                                                        <button type="submit"
-                                                                class="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-red-900/60 bg-red-950/30 px-4 py-2.5 text-sm font-semibold text-red-300 transition duration-200 hover:border-red-700 hover:bg-red-900/30 hover:text-white">
+                                                        <button
+                                                            type="submit"
+                                                            class="inline-flex items-center gap-2 whitespace-nowrap rounded-2xl border border-red-900/60 bg-red-950/30 px-4 py-2.5 text-sm font-bold text-red-300 shadow-lg shadow-red-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-red-700 hover:bg-red-900/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-400/30"
+                                                        >
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                  class="h-4 w-4"
                                                                  fill="none"
@@ -336,7 +340,6 @@
                             </div>
                         </div>
 
-                        
                         <div class="mt-6 rounded-2xl border border-amber-500/10 bg-amber-500/5 p-5">
                             <div class="flex items-start gap-3">
                                 <div class="rounded-xl bg-amber-500/10 p-2 text-amber-400">
@@ -366,11 +369,10 @@
                 </div>
             </div>
 
-            {{-- باکس نکنه مهم --}}
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-500">
                     اگر دستگاهی را نمی‌شناسید یا مشکوک به استفاده غیرمجاز هستید، آن را حذف کنید و در صورت نیاز با
-                    <a href="#" class="text-violet-400 transition-colors hover:text-violet-300 hover:underline">
+                    <a href="#" class="text-blue-400 transition-colors hover:text-blue-300 hover:underline">
                         پشتیبانی
                     </a>
                     تماس بگیرید.
