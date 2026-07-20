@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center w-full">
          {{-- لوگو  --}}
         <div class="mb-4">
-            <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
+            <x-application-logo class="w-20 h-20 fill-current text-blue-500" />
         </div>
 
         <h2 class="text-2xl font-bold text-white mb-6">تایید ایمیل</h2>
@@ -24,7 +24,7 @@
                  {{-- فرم ارسال مجدد  --}}
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <x-primary-button class="bg-violet-600 hover:bg-violet-500 rounded-xl px-6 py-2 shadow-lg shadow-violet-900/20 transition-all duration-200">
+                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 rounded-xl px-6 py-2 shadow-lg shadow-blue-900/20 transition-all duration-200">
                         {{ __('ارسال مجدد ایمیل تایید') }}
                     </x-primary-button>
                 </form>
@@ -32,7 +32,7 @@
                  {{-- دکمه خروج  --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="text-sm text-gray-500 hover:text-violet-400 transition underline decoration-gray-600 hover:decoration-violet-400 underline-offset-4">
+                    <button type="submit" class="text-sm text-gray-500 hover:text-blue-400 transition underline decoration-gray-600 hover:decoration-blue-400 underline-offset-4">
                         {{ __('خروج از حساب') }}
                     </button>
                 </form>

@@ -10,7 +10,7 @@
                 داشبورد مدیریت
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <span class="w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span>
                     تاریخ امروز:
                     {{ jdate(now())->format('Y/m/d') }}
@@ -19,7 +19,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="px-4 py-2 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 text-xs">
+            <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs">
                 ProPark Admin Panel
             </div>
         </div>
@@ -27,12 +27,12 @@
 
     {{-- باکس خوش امد گویی --}}
     <div class="relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-800 rounded-3xl p-7 shadow-2xl">
-        <div class="absolute top-0 right-0 w-72 h-72 bg-violet-700/10 blur-3xl rounded-full"></div>
+        <div class="absolute top-0 right-0 w-72 h-72 bg-blue-700/10 blur-3xl rounded-full"></div>
         <div class="relative z-10">
             <div class="flex items-start justify-between flex-wrap gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-violet-600/20 border border-violet-700 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-700 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
                         </svg>
                     </div>
@@ -45,7 +45,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="px-4 py-2 rounded-xl border border-violet-700 bg-violet-900/20 text-violet-400 text-xs font-medium">
+                <div class="px-4 py-2 rounded-xl border border-blue-700 bg-blue-900/20 text-blue-400 text-xs font-medium">
                     سطح دسترسی: مدیر 
                 </div>
             </div>
@@ -55,21 +55,21 @@
     {{-- قسمت کاربران --}}
     <div>
         <div class="flex items-center gap-2 mb-4">
-            <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+            <span class="w-1.5 h-5 bg-blue-500 rounded-full"></span>
             <h3 class="text-base font-bold text-white">آمار کاربران</h3>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             {{-- تمام کاربران --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-violet-700/50 transition duration-300">
-                <div class="absolute top-0 left-0 w-40 h-40 bg-violet-600/10 blur-3xl rounded-full"></div>
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-blue-700/50 transition duration-300">
+                <div class="absolute top-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
                 <div class="relative z-10 flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-400">کل کاربران ثبت‌نامی</p>
                         <h3 class="mt-2 text-3xl font-bold text-white">{{ $totalUsers }}</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-violet-600/20 border border-violet-700 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-700 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                     </div>
@@ -77,8 +77,8 @@
             </div>
 
             {{-- کاربر های جدید --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-violet-700/50 transition duration-300">
-                <div class="absolute top-0 left-0 w-40 h-40 bg-violet-600/10 blur-3xl rounded-full"></div>
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-blue-700/50 transition duration-300">
+                <div class="absolute top-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
                 <div class="relative z-10 flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-400">کاربران جدید (۷ روز اخیر)</p>
@@ -93,8 +93,8 @@
             </div>
 
             {{-- نرخ تبدیل --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-violet-700/50 transition duration-300">
-                <div class="absolute top-0 left-0 w-40 h-40 bg-violet-600/10 blur-3xl rounded-full"></div>
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-blue-700/50 transition duration-300">
+                <div class="absolute top-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
                 <div class="relative z-10 flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-400">نرخ تبدیل</p>
@@ -113,13 +113,13 @@
     {{-- قسمت اشتراک ها --}}
     <div>
         <div class="flex items-center gap-2 mb-4">
-            <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+            <span class="w-1.5 h-5 bg-blue-500 rounded-full"></span>
             <h3 class="text-base font-bold text-white">آمار اشتراک‌ها</h3>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {{-- کل اشتراک ها --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
                     <p class="text-xs text-gray-400">کل اشتراک‌ها</p>
                     <h3 class="mt-2 text-2xl font-bold text-white">{{ $totalSubscriptions }}</h3>
@@ -127,7 +127,7 @@
             </div>
 
             {{-- اشتراک های فعال --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
                     <p class="text-xs text-gray-400">فعال</p>
                     <h3 class="mt-2 text-2xl font-bold text-emerald-400">{{ $activeSubscriptions }}</h3>
@@ -135,7 +135,7 @@
             </div>
 
             {{-- اشتراک های منقضی شده --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
                     <p class="text-xs text-gray-400">منقضی شده</p>
                     <h3 class="mt-2 text-2xl font-bold text-rose-400">{{ $expiredSubscriptions }}</h3>
@@ -143,7 +143,7 @@
             </div>
 
             {{-- اشتراک های جدید --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
                     <p class="text-xs text-gray-400">جدید (۷ روز اخیر)</p>
                     <h3 class="mt-2 text-2xl font-bold text-cyan-400">{{ $newSubscriptionsLast7Days }}</h3>
@@ -151,7 +151,7 @@
             </div>
 
             {{-- در استانه انقضا --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
                     <p class="text-xs text-gray-400">در آستانه انقضا</p>
                     <h3 class="mt-2 text-2xl font-bold text-amber-400">{{ $expiringSoonSubscriptions }}</h3>
@@ -165,7 +165,7 @@
         {{-- اخرین کاربر ها --}}
         <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
             <div class="flex items-center gap-2 mb-4">
-                <span class="w-1.5 h-6 bg-violet-500 rounded-full"></span>
+                <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span>
                 <h3 class="text-lg font-bold text-white">آخرین کاربران</h3>
             </div>
 
@@ -204,7 +204,7 @@
         {{-- اخرین اشتراک ها --}}
         <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
             <div class="flex items-center gap-2 mb-4">
-                <span class="w-1.5 h-6 bg-violet-500 rounded-full"></span>
+                <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span>
                 <h3 class="text-lg font-bold text-white">آخرین اشتراک‌ها</h3>
             </div>
 

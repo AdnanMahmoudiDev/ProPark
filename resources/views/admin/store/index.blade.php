@@ -10,12 +10,12 @@
                 مدیریت پلن‌های فروشگاه
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <span class="w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span>ویرایش گروهی قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه ProPark</span>
             </div>
         </div>
 
-        <div class="px-4 py-2 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 text-xs">
+        <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs">
             تعداد پلن‌ها: {{ $plans->count() }}
         </div>
     </div>
@@ -110,7 +110,7 @@
                                             value="{{ number_format((int) $price->price) }}"
                                             required
                                             data-price-input
-                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                         >
                                         <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
                                     </div>
@@ -129,7 +129,7 @@
                                             min="0"
                                             max="100"
                                             required
-                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-violet-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         >
                                         <span class="text-xs text-gray-500 whitespace-nowrap">٪</span>
                                     </div>
@@ -142,7 +142,7 @@
                                     </label>
                                     <select
                                         name="prices[{{ $price->id }}][is_active]"
-                                        class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                        class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                     >
                                         <option value="1" class="bg-gray-900 text-gray-200" {{ $price->is_active ? 'selected' : '' }}>
                                             فعال
@@ -198,7 +198,7 @@
                                                     value="{{ number_format((int) $price->price) }}"
                                                     required
                                                     data-price-input
-                                                    class="w-36 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                                    class="w-36 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                                 >
                                                 <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
                                             </div>
@@ -214,7 +214,7 @@
                                                     min="0"
                                                     max="100"
                                                     required
-                                                    class="w-24 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-violet-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                    class="w-24 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 >
                                                 <span class="text-xs text-gray-500 whitespace-nowrap">٪</span>
                                             </div>
@@ -224,7 +224,7 @@
                                         <td class="py-4 px-2">
                                             <select
                                                 name="prices[{{ $price->id }}][is_active]"
-                                                class="min-w-[110px] rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                                class="min-w-[110px] rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                             >
                                                 <option value="1" class="bg-gray-900 text-gray-200" {{ $price->is_active ? 'selected' : '' }}>
                                                     فعال
@@ -265,7 +265,7 @@
             <div class="sticky bottom-4 z-10 flex justify-end">
                 <button
                     type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl border border-violet-800 bg-violet-900/90 backdrop-blur px-6 py-3 text-sm font-medium text-violet-300 transition duration-200 hover:bg-violet-800 hover:text-white shadow-lg"
+                    class="inline-flex items-center gap-2 rounded-2xl border border-blue-800 bg-blue-900/90 backdrop-blur px-6 py-3 text-sm font-medium text-blue-300 transition duration-200 hover:bg-blue-800 hover:text-white shadow-lg"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>

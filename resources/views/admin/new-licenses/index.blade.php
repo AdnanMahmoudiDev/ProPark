@@ -7,7 +7,7 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
             <div class="flex items-center gap-3">
-                <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-800/60 bg-violet-900/20 text-violet-300 shadow-lg shadow-violet-950/30">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-blue-800/60 bg-blue-900/20 text-blue-300 shadow-lg shadow-blue-950/30">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                               d="M16.5 7.5h2.25A2.25 2.25 0 0 1 21 9.75v8.25A2.25 2.25 0 0 1 18.75 20.25H5.25A2.25 2.25 0 0 1 3 18V9.75A2.25 2.25 0 0 1 5.25 7.5H7.5m9 0V6A3 3 0 0 0 13.5 3h-3A3 3 0 0 0 7.5 6v1.5m9 0h-9m4.5 4.5v4.5m-2.25-2.25h4.5"/>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="self-start rounded-2xl border border-violet-800 bg-violet-900/20 px-4 py-2 text-xs text-violet-300">
+        <div class="self-start rounded-2xl border border-blue-800 bg-blue-900/20 px-4 py-2 text-xs text-blue-300">
             تعداد کاربران: {{ $users->count() }}
         </div>
     </div>
@@ -121,7 +121,7 @@
 
                                 <td class="px-6 py-4">
                                     <a href="{{ route('admin.new-licenses.create', $user->id) }}"
-                                       class="inline-flex items-center gap-2 rounded-xl border border-violet-800 bg-violet-900/20 px-4 py-2.5 text-xs font-medium text-violet-300 transition duration-200 hover:bg-violet-800/40 hover:text-white">
+                                       class="inline-flex items-center gap-2 rounded-xl border border-blue-800 bg-blue-900/20 px-4 py-2.5 text-xs font-medium text-blue-300 transition duration-200 hover:bg-blue-800/40 hover:text-white">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                                   d="M12 4.5v15m7.5-7.5h-15"/>
@@ -161,7 +161,7 @@
 
                         <div>
                             <a href="{{ route('admin.new-licenses.create', $user->id) }}"
-                               class="flex items-center justify-center gap-2 w-full rounded-xl border border-violet-800 bg-violet-900/20 py-3 text-xs font-medium text-violet-300 transition duration-200 hover:bg-violet-800/40 hover:text-white">
+                               class="flex items-center justify-center gap-2 w-full rounded-xl border border-blue-800 bg-blue-900/20 py-3 text-xs font-medium text-blue-300 transition duration-200 hover:bg-blue-800/40 hover:text-white">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                           d="M12 4.5v15m7.5-7.5h-15"/>

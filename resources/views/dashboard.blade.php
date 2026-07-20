@@ -4,12 +4,12 @@
         <div class="flex items-center justify-between">
 
             <div>
-                <h2 class="text-2xl font-bold text-white leading-tight">
+                <h2 class="text-2xl font-bold leading-tight text-white">
                     داشبورد کاربری
                 </h2>
 
-                <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                    <span class="w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
+                <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                    <span class="h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
 
                     <span>
                         تاریخ امروز:
@@ -18,9 +18,8 @@
                 </div>
             </div>
 
-            <div class="hidden sm:flex items-center gap-3">
-                <div class="px-4 py-2 rounded-xl border border-violet-800
-                            bg-violet-900/20 text-violet-300 text-xs">
+            <div class="hidden items-center gap-3 sm:flex">
+                <div class="rounded-xl border border-blue-800 bg-blue-900/20 px-4 py-2 text-xs text-blue-300">
                     ProPark Panel
                 </div>
             </div>
@@ -28,36 +27,27 @@
         </div>
     </x-slot>
 
+    <div class="min-h-screen bg-[#0b0f19] py-10">
 
-    <div class="py-10 min-h-screen bg-[#0b0f19]">
+        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            {{-- خوشامد گویی --}}
+            <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-gray-900 to-gray-950 p-7 shadow-2xl">
 
-            {{-- خوشامد گویی  --}}
-            <div class="relative overflow-hidden
-                        bg-gradient-to-br from-gray-900 to-gray-950
-                        border border-gray-800
-                        rounded-3xl p-7 shadow-2xl">
-
-                <div class="absolute top-0 right-0 w-72 h-72
-                            bg-violet-700/10 blur-3xl rounded-full"></div>
+                <div class="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-700/10 blur-3xl"></div>
 
                 <div class="relative z-10">
 
-                    <div class="flex items-start justify-between flex-wrap gap-4">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
 
                         <div class="flex items-center gap-3">
 
-                            <div class="w-12 h-12 rounded-2xl
-                                        bg-violet-600/20
-                                        border border-violet-700
-                                        flex items-center justify-center">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-700 bg-blue-600/20">
 
-                                <svg class="w-6 h-6 text-violet-400"
+                                <svg class="h-6 w-6 text-blue-400"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
-
                                     <path stroke-linecap="round"
                                           stroke-linejoin="round"
                                           stroke-width="2"
@@ -72,17 +62,14 @@
                                     {{ auth()->user()->name }}
                                 </h3>
 
-                                <p class="text-sm text-gray-400 mt-1">
+                                <p class="mt-1 text-sm text-gray-400">
                                     مدیریت حساب و اشتراک ProPark
                                 </p>
                             </div>
 
                         </div>
 
-                        <div class="px-4 py-2 rounded-xl
-                                    border border-green-700
-                                    bg-green-900/20
-                                    text-green-400 text-xs font-medium">
+                        <div class="rounded-xl border border-green-700 bg-green-900/20 px-4 py-2 text-xs font-medium text-green-400">
                             حساب فعال
                         </div>
 
@@ -92,22 +79,13 @@
 
             </div>
 
-
-
             {{-- وضعیت --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
                 {{-- کارت اشتراک --}}
-                <div class="relative overflow-hidden
-                            bg-gray-900/70
-                            border border-gray-800
-                            rounded-3xl p-6
-                            hover:border-violet-700/50
-                            transition duration-300">
+                <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 p-6 transition duration-300 hover:border-blue-700/50">
 
-                    <div class="absolute top-0 left-0 w-40 h-40
-                                bg-violet-600/10 blur-3xl rounded-full">
-                    </div>
+                    <div class="absolute left-0 top-0 h-40 w-40 rounded-full bg-blue-600/10 blur-3xl"></div>
 
                     <div class="relative z-10">
 
@@ -127,48 +105,38 @@
                                 </h3>
                             </div>
 
-                            <div class="w-14 h-14 rounded-2xl
-                                        bg-violet-600/20 border border-violet-700
-                                        flex items-center justify-center">
-                                <svg class="w-7 h-7 text-violet-400"
+                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-700 bg-blue-600/20">
+                                <svg class="h-7 w-7 text-blue-400"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
-
                                     <path stroke-linecap="round"
                                           stroke-linejoin="round"
                                           stroke-width="2"
-                                          d="M12 8c-1.657 0-3 1.343-3 3v1H8a2 2 0 00-2 2v3h12v-3a2 2 0 00-2-2h-1v-1c0-1.657-1.343-3-3-3z"/>
-
+                                          d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                             </div>
 
                         </div>
 
-
-
                         <div class="mt-6">
 
                             @if($activeSubscription)
 
-                                <div class="flex items-center gap-2 text-green-400 text-sm">
-                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                <div class="flex items-center gap-2 text-sm text-green-400">
+                                    <span class="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
                                     اشتراک شما فعال است
                                 </div>
 
                                 <div class="mt-3 text-sm text-gray-400">
                                     تاریخ انقضا:
-                                    <span class="text-white font-medium">
+                                    <span class="font-medium text-white">
                                         {{ jdate($activeSubscription->expires_at)->format('Y/m/d') }}
                                     </span>
                                 </div>
 
-                                {{-- دکمه اطلاعات بیشتر --}}
                                 <a href="{{ route('subscription.details') }}"
-                                   class="mt-5 inline-block px-5 py-3 rounded-xl
-                                          bg-violet-600 hover:bg-violet-500
-                                          text-white text-sm font-medium
-                                          transition duration-200 shadow-lg">
+                                   class="group mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
                                     اطلاعات بیشتر
                                 </a>
 
@@ -184,19 +152,10 @@
 
                 </div>
 
-
-
-
-
-
                 {{-- کارت لایسنس --}}
-                <div class="relative overflow-hidden
-                            bg-gray-900/70
-                            border border-gray-800 rounded-3xl p-6
-                            hover:border-violet-700/50 transition duration-300">
+                <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 p-6 transition duration-300 hover:border-blue-700/50">
 
-                    <div class="absolute top-0 right-0 w-40 h-40
-                                bg-violet-600/10 blur-3xl rounded-full"></div>
+                    <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-blue-600/10 blur-3xl"></div>
 
                     <div class="relative z-10">
 
@@ -210,14 +169,11 @@
 
                                 <div class="mt-4">
                                     @if($license)
-                                        <div class="px-4 py-4 rounded-2xl
-                                                    bg-black/40 border border-gray-700
-                                                    text-violet-400 font-mono
-                                                    text-sm sm:text-base break-all select-all">
+                                        <div class="break-all rounded-2xl border border-gray-700 bg-black/40 px-4 py-4 font-mono text-sm text-blue-400 select-all sm:text-base">
                                             {{ $license->license_key }}
                                         </div>
                                     @else
-                                        <div class="text-gray-500 text-lg">
+                                        <div class="text-lg text-gray-500">
                                             —
                                         </div>
                                     @endif
@@ -225,29 +181,19 @@
 
                             </div>
 
-                            <div class="hidden sm:flex w-14 h-14 rounded-2xl
-                                        bg-violet-600/20 border border-violet-700
-                                        items-center justify-center mr-5">
-                                <svg class="w-7 h-7 text-violet-400"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     viewBox="0 0 24 24">
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-
+                            <div class="mr-5 hidden h-14 w-14 items-center justify-center rounded-2xl border border-blue-700 bg-blue-600/20 sm:flex">
+                                <svg class="h-7 w-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                                 </svg>
+
                             </div>
 
                         </div>
 
-
                         <div class="mt-5">
                             @if($license)
-                                <div class="flex items-center gap-2 text-green-400 text-sm">
-                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                <div class="flex items-center gap-2 text-sm text-green-400">
+                                    <span class="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
                                     لایسنس فعال
                                 </div>
                             @else
@@ -263,92 +209,71 @@
 
             </div>
 
-
-
-
-
-
-
-
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
 
                 {{-- عملیات سریع --}}
-                <div class="lg:col-span-2
-                            bg-gray-900/70 border border-gray-800
-                            rounded-3xl p-6">
+                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-6 lg:col-span-2">
 
                     <div>
                         <h3 class="text-lg font-bold text-white">عملیات سریع</h3>
-                        <p class="text-sm text-gray-500 mt-1">
+                        <p class="mt-1 text-sm text-gray-500">
                             دسترسی سریع به بخش‌های مهم
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                         {{-- خرید اشتراک --}}
                         <a href="{{ route('shop') }}"
-                           class="group p-5 rounded-2xl border border-gray-800
-                                  bg-black/30 hover:border-violet-700
-                                  hover:bg-violet-900/10 transition duration-300">
+                           class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
 
-                            <div class="flex items-center justify-between">
+                            <div class="flex w-full items-center justify-between gap-4">
 
                                 <div>
-                                    <h4 class="text-white font-semibold">خرید اشتراک</h4>
-                                    <p class="text-sm text-gray-500 mt-1">
+                                    <h4 class="font-semibold text-white">خرید اشتراک</h4>
+                                    <p class="mt-1 text-sm text-blue-100/80">
                                         مشاهده پلن‌ها و خرید
                                     </p>
                                 </div>
 
-                                <svg class="w-5 h-5 text-gray-600
-                                            group-hover:text-violet-400 transition"
+                                <svg class="h-5 w-5 text-white/90 transition group-hover:translate-x-[-2px]"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
-
                                     <path stroke-linecap="round"
                                           stroke-linejoin="round"
                                           stroke-width="2"
                                           d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-
                                 </svg>
 
                             </div>
 
                         </a>
 
-
-                        {{-- ویرایش جساب کاربری --}}
+                        {{-- ویرایش حساب کاربری --}}
                         <a href="{{ route('profile.edit') }}"
-                           class="group p-5 rounded-2xl border border-gray-800
-                                  bg-black/30 hover:border-violet-700
-                                  hover:bg-violet-900/10 transition duration-300">
+                           class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
 
-                            <div class="flex items-center justify-between">
+                            <div class="flex w-full items-center justify-between gap-4">
 
                                 <div>
-                                    <h4 class="text-white font-semibold">
+                                    <h4 class="font-semibold text-white">
                                         ویرایش پروفایل
                                     </h4>
 
-                                    <p class="text-sm text-gray-500 mt-1">
+                                    <p class="mt-1 text-sm text-blue-100/80">
                                         مدیریت اطلاعات حساب
                                     </p>
                                 </div>
 
-                                <svg class="w-5 h-5 text-gray-600
-                                            group-hover:text-violet-400 transition"
+                                <svg class="h-5 w-5 text-white/90 transition group-hover:translate-x-[-2px]"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
-
                                     <path stroke-linecap="round"
                                           stroke-linejoin="round"
                                           stroke-width="2"
                                           d="M11 5h2m-1-1v2m-7 4h14l-1 9H6l-1-9z"/>
-
                                 </svg>
 
                             </div>
@@ -359,13 +284,11 @@
 
                 </div>
 
-
-                
                 {{-- اطلاعات حساب کاربری --}}
-                <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
+                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-6">
 
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-6 bg-violet-500 rounded-full"></span>
+                        <span class="h-6 w-2 rounded-full bg-blue-500"></span>
                         <h3 class="text-lg font-bold text-white">اطلاعات حساب</h3>
                     </div>
 
@@ -373,7 +296,7 @@
 
                         <div>
                             <p class="text-xs text-gray-500">ایمیل</p>
-                            <p class="mt-1 text-sm text-gray-300 break-all font-mono">
+                            <p class="mt-1 break-all font-mono text-sm text-gray-300">
                                 {{ auth()->user()->email }}
                             </p>
                         </div>
@@ -385,7 +308,7 @@
                             </p>
                         </div>
 
-                        <div class="pt-4 border-t border-gray-800">
+                        <div class="border-t border-gray-800 pt-4">
                             <p class="text-xs text-gray-500">تاریخ عضویت</p>
                             <p class="mt-1 text-sm text-gray-300">
                                 {{ jdate(auth()->user()->created_at)->format('Y/m/d') }}

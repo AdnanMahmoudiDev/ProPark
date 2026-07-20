@@ -10,16 +10,20 @@
                 </p>
             </div>
 
-            <a href="{{ route('dashboard') }}"
-               class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-medium text-gray-300 transition-colors duration-200 hover:bg-gray-800 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-4 w-4"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor">
+            <a
+                href="{{ route('dashboard') }}"
+                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 transition duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                بازگشت
+                <span>بازگشت</span>
             </a>
         </div>
     </x-slot>
@@ -53,10 +57,7 @@
 
     <div class="min-h-screen bg-[#070913] py-8 text-gray-100 sm:py-10">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-
             <div class="overflow-hidden rounded-3xl bg-[#0f1420] shadow-lg ring-1 ring-white/5">
-
-                {{-- هدر --}}
                 <div class="bg-gradient-to-r from-[#111827] via-[#0f172a] to-[#111827] px-5 py-6 sm:px-8 sm:py-8">
                     <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                         <div>
@@ -81,15 +82,10 @@
                     </div>
                 </div>
 
-                {{-- بادی --}}
                 <div class="p-5 sm:p-8">
                     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
-                        {{-- ستون اول --}}
                         <div class="space-y-6">
-
-                            {{-- اطلاعات پلن --}}
-                            <div class="rounded-2xl bg-[#111827] p-5 sm:p-6 ring-1 ring-white/5">
+                            <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     اطلاعات پلن
                                 </h4>
@@ -122,8 +118,7 @@
                                 </div>
                             </div>
 
-                            {{-- تاریخ ها --}}
-                            <div class="rounded-2xl bg-[#111827] p-5 sm:p-6 ring-1 ring-white/5">
+                            <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     بازه زمانی اشتراک
                                 </h4>
@@ -145,11 +140,8 @@
                             </div>
                         </div>
 
-                        <!-- ستون دوم -->
                         <div class="space-y-6">
-
-                            {{-- اطلاعات لایسنس --}}
-                            <div class="rounded-2xl bg-[#111827] p-5 sm:p-6 ring-1 ring-white/5">
+                            <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     اطلاعات لایسنس
                                 </h4>
@@ -157,7 +149,7 @@
                                 <div class="mb-5">
                                     <span class="mb-2 block text-xs text-gray-500">کد لایسنس</span>
                                     <div class="flex items-center justify-center gap-3 rounded-xl bg-[#0b1120] p-4 ring-1 ring-white/5">
-                                        <code class="select-all break-all font-mono text-sm tracking-wide text-violet-300">
+                                        <code class="select-all break-all font-mono text-sm tracking-wide text-blue-300">
                                             {{ $licenseKey }}
                                         </code>
                                     </div>
@@ -175,36 +167,45 @@
                                     @endforeach
                                 </div>
 
-                                {{-- دکمه ی مدیریت دستگاه ها --}}
                                 <div class="mt-5">
-                                    <a href="{{ route('user.devices.index') }}"
-                                       class="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-800/70 bg-violet-900/20 px-4 py-3 text-sm font-semibold text-violet-300 transition duration-200 hover:border-violet-700 hover:bg-violet-800/30 hover:text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="h-5 w-5"
-                                             fill="none"
-                                             viewBox="0 0 24 24"
-                                             stroke="currentColor">
-                                            <path stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                  stroke-width="1.8"
-                                                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M4 13h16M5 5h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                                    <a
+                                        href="{{ route('user.devices.index') }}"
+                                        class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/20 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/35 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="h-5 w-5 transition duration-300 group-hover:scale-110"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="1.8"
+                                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M4 13h16M5 5h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+                                            />
                                         </svg>
-                                        مدیریت دستگاه‌ها
+                                        <span>مدیریت دستگاه‌ها</span>
                                     </a>
                                 </div>
 
                                 <div class="mt-5 border-t border-white/5 pt-4">
-                                    <div class="flex items-start gap-3 rounded-xl bg-violet-500/5 p-4 ring-1 ring-violet-400/10">
-                                        <div class="rounded-lg bg-violet-500/10 p-2 text-violet-400">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="h-5 w-5"
-                                                 fill="none"
-                                                 viewBox="0 0 24 24"
-                                                 stroke="currentColor">
-                                                <path stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    <div class="flex items-start gap-3 rounded-xl bg-blue-500/5 p-4 ring-1 ring-blue-400/10">
+                                        <div class="rounded-lg bg-blue-500/10 p-2 text-blue-400">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-5 w-5"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                                />
                                             </svg>
                                         </div>
 
@@ -212,7 +213,7 @@
                                             <p class="text-xs font-bold text-gray-200">اتصال دستگاه‌ها</p>
                                             <p class="mt-1 text-[11px] leading-5 text-gray-400">
                                                 این لایسنس روی
-                                                <span class="font-bold text-violet-400">{{ $connectedDevicesCount }}</span>
+                                                <span class="font-bold text-blue-400">{{ $connectedDevicesCount }}</span>
                                                 دستگاه فعال است و تا سقف
                                                 <span class="font-bold text-white">{{ $maxAllowedDevices }}</span>
                                                 دستگاه را پشتیبانی می‌کند.
@@ -222,8 +223,7 @@
                                 </div>
                             </div>
 
-                            {{-- اطلاعات پرداخت --}}
-                            <div class="rounded-2xl bg-[#111827] p-5 sm:p-6 ring-1 ring-white/5">
+                            <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     اطلاعات پرداخت
                                 </h4>
@@ -243,20 +243,23 @@
                             </div>
                         </div>
                     </div>
-                    {{-- باکس نکته ی مهم --}}
-                   
+
                     <div class="mt-6 rounded-2xl bg-amber-500/5 p-5 ring-1 ring-amber-400/10 sm:mt-8">
                         <div class="flex items-start gap-3.5">
                             <div class="mt-0.5 shrink-0 rounded-lg bg-amber-500/10 p-1.5 text-amber-400">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     class="h-5 w-5"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M13 16h-1v-4h-1m1-4h.01M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"
+                                    />
                                 </svg>
                             </div>
                             <div>
@@ -269,19 +272,36 @@
                     </div>
                 </div>
 
-                {{-- قسمت فوتر --}}
                 <div class="flex flex-wrap gap-3 bg-[#0c111b] px-5 py-5 sm:px-8">
                     @if(!$isActive)
-                        <a href="{{ route('shop') }}"
-                           class="inline-flex items-center justify-center rounded-xl bg-violet-600 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-violet-500">
+                        <a
+                            href="{{ route('shop') }}"
+                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                        >
                             تمدید اشتراک
                         </a>
                     @endif
 
-                    <button type="button"
-                            onclick="window.print()"
-                            class="inline-flex items-center justify-center rounded-xl bg-gray-800 px-6 py-3 text-sm font-bold text-gray-200 transition-colors hover:bg-gray-700 hover:text-white">
-                        دریافت رسید
+                    <button
+                        type="button"
+                        onclick="window.print()"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-800/70 bg-blue-900/20 px-6 py-3 text-sm font-bold text-blue-300 shadow-lg shadow-blue-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-800/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 9V4h12v5M6 18h12v2H6zm-2-8h16a2 2 0 012 2v4H2v-4a2 2 0 012-2z"
+                            />
+                        </svg>
+                        <span>دریافت رسید</span>
                     </button>
                 </div>
             </div>
@@ -289,7 +309,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-500">
                     برای پیگیری مسائل فنی از بخش
-                    <a href="#" class="text-violet-400 transition-colors hover:text-violet-300 hover:underline">پشتیبانی</a>
+                    <a href="#" class="text-blue-400 transition-colors hover:text-blue-300 hover:underline">پشتیبانی</a>
                     اقدام کنید.
                 </p>
             </div>

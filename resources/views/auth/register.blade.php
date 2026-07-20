@@ -2,7 +2,7 @@
     <div class="flex w-full flex-col items-center">
         {{-- لوگوی پروژه پروپارک --}}
         <div class="mb-4">
-            <x-application-logo class="h-20 w-20 fill-current text-violet-500" />
+            <x-application-logo class="h-20 w-20 fill-current text-blue-500" />
         </div>
 
         {{-- عنوان صفحه با استایل مدرن --}}
@@ -18,7 +18,7 @@
                 <div class="mb-4">
                     <x-input-label for="name" class="text-gray-300 text-xs mb-2" :value="__('نام و نام خانوادگی')" />
                     <x-text-input id="name" 
-                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white placeholder-gray-600 focus:border-violet-500 focus:ring-violet-500 transition-all duration-200" 
+                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white placeholder-gray-600 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200" 
                                 type="text" 
                                 name="name" 
                                 :value="old('name')" 
@@ -33,7 +33,7 @@
                 <div class="mb-4">
                     <x-input-label for="email" class="text-gray-300 text-xs mb-2" :value="__('ایمیل')" />
                     <x-text-input id="email" 
-                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-left text-white placeholder-gray-600 focus:border-violet-500 focus:ring-violet-500 transition-all duration-200" 
+                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-left text-white placeholder-gray-600 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200" 
                                 dir="ltr"
                                 type="email" 
                                 name="email" 
@@ -48,7 +48,7 @@
                 <div class="mb-4">
                     <x-input-label for="phone_number" class="text-gray-300 text-xs mb-2" :value="__('شماره موبایل')" />
                     <x-text-input id="phone_number" 
-                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-left text-white placeholder-gray-600 focus:border-violet-500 focus:ring-violet-500 transition-all duration-200" 
+                                class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-left text-white placeholder-gray-600 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200" 
                                 dir="ltr"
                                 type="text" 
                                 name="phone_number" 
@@ -73,7 +73,7 @@
                     <div>
                         <x-input-label for="password" class="text-gray-300 text-xs mb-2" :value="__('رمز عبور')" />
                         <x-text-input id="password" 
-                                    class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white focus:border-violet-500 focus:ring-violet-500 transition-all duration-200" 
+                                    class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white focus:border-blue-500 focus:ring-blue-500 transition-all duration-200" 
                                     type="password" 
                                     name="password" 
                                     required 
@@ -84,7 +84,7 @@
                     <div>
                         <x-input-label for="password_confirmation" class="text-gray-300 text-xs mb-2" :value="__('تکرار رمز')" />
                         <x-text-input id="password_confirmation" 
-                                    class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white focus:border-violet-500 focus:ring-violet-500 transition-all duration-200" 
+                                    class="block w-full rounded-xl border-gray-800 bg-gray-950 text-sm text-white focus:border-blue-500 focus:ring-blue-500 transition-all duration-200" 
                                     type="password" 
                                     name="password_confirmation" 
                                     required 
@@ -93,9 +93,9 @@
                 </div>
 
                 {{-- راهنمای پسورد قوی با طراحی ظریف --}}
-                <div class="mb-6 p-3 bg-violet-500/5 rounded-lg border border-violet-500/10">
+                <div class="mb-6 p-3 bg-blue-500/5 rounded-lg border border-blue-500/10">
                     <p class="text-[10px] text-gray-400 leading-relaxed">
-                        <span class="text-violet-400 font-bold">امنیت حساب:</span>
+                        <span class="text-blue-400 font-bold">امنیت حساب:</span>
                         رمز عبور باید شامل <span class="text-gray-200">حروف بزرگ و کوچک</span>، <span class="text-gray-200">عدد</span> و <span class="text-gray-200">نماد (!@#)</span> باشد.
                     </p>
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-xs text-red-400" />
@@ -103,11 +103,11 @@
 
                 {{-- دکمه‌ها و لینک ورود --}}
                 <div class="flex items-center justify-between mt-8">
-                    <a class="text-xs text-gray-500 hover:text-violet-400 transition-colors duration-200" href="{{ route('login') }}">
+                    <a class="text-xs text-gray-500 hover:text-blue-400 transition-colors duration-200" href="{{ route('login') }}">
                         {{ __('قبلاً ثبت‌نام کرده‌اید؟ ورود') }}
                     </a>
 
-                    <x-primary-button class="bg-violet-600 hover:bg-violet-500 focus:bg-violet-500 active:bg-violet-700 rounded-xl px-8 py-2.5 text-xs font-bold transition-all duration-200 shadow-lg shadow-violet-600/20">
+                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 rounded-xl px-8 py-2.5 text-xs font-bold transition-all duration-200 shadow-lg shadow-blue-600/20">
                         {{ __('ثبت‌نام نهایی') }}
                     </x-primary-button>
                 </div>

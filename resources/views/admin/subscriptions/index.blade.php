@@ -10,7 +10,7 @@
                 مدیریت اشتراک‌ها
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <span class="w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span>
                     نظارت، تمدید، تغییر وضعیت و مدیریت لایسنس‌های مشترکین ProPark
                 </span>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="px-4 py-2 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 text-xs font-medium">
+            <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs font-medium">
                 تعداد کل اشتراک‌ها: {{ $subscriptions->total() }}
             </div>
         </div>
@@ -95,7 +95,7 @@
     <div class="bg-gray-900/70 border border-gray-800 rounded-3xl overflow-hidden">
 
         {{-- کارت هدر --}}
-        <div class="px-5 py-4 md:px-6 md:py-5 border-b border-gray-800 bg-gradient-to-r from-violet-900/20 to-transparent">
+        <div class="px-5 py-4 md:px-6 md:py-5 border-b border-gray-800 bg-gradient-to-r from-blue-900/20 to-transparent">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h3 class="text-base md:text-lg font-semibold text-white">
@@ -160,7 +160,7 @@
 
                                 <div>
                                     <div class="text-[11px] text-gray-500 mb-1">لایسنس</div>
-                                    <div class="text-violet-400 font-mono break-all">
+                                    <div class="text-blue-400 font-mono break-all">
                                         {{ $subscription->license->license_key ?? '—' }}
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@
 
                                 <select
                                     name="status"
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                 >
                                     <option value="active" class="bg-gray-900 text-gray-300" @selected(($subscription->status ?? null) === 'active')>Active</option>
                                     <option value="expired" class="bg-gray-900 text-gray-300" @selected(($subscription->status ?? null) === 'expired')>Expired</option>
@@ -205,7 +205,7 @@
 
                                 <button
                                     type="submit"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-violet-800 bg-violet-900/20 text-violet-300 hover:bg-violet-600 hover:text-white text-sm font-medium transition duration-200"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 hover:bg-blue-600 hover:text-white text-sm font-medium transition duration-200"
                                 >
                                     ثبت وضعیت
                                 </button>
@@ -228,7 +228,7 @@
                                     max="120"
                                     placeholder="تعداد ماه"
                                     required
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-violet-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 >
 
                                 <button
@@ -339,7 +339,7 @@
                                 </td>
 
                                 {{-- لایسنس --}}
-                                <td class="py-2.5 px-1.5 lg:px-2 text-[10px] font-mono text-violet-400 border-b border-gray-800/70">
+                                <td class="py-2.5 px-1.5 lg:px-2 text-[10px] font-mono text-blue-400 border-b border-gray-800/70">
                                     <div class="max-w-[90px] lg:max-w-[115px] truncate" title="{{ $subscription->license->license_key ?? '' }}">
                                         {{ $subscription->license->license_key ?? '—' }}
                                     </div>
@@ -357,7 +357,7 @@
 
                                         <select
                                             name="status"
-                                            class="w-[78px] lg:w-[88px] rounded-md border border-gray-800 bg-black/40 text-gray-300 text-[10px] py-1.5 px-1.5 focus:border-violet-700 focus:ring-0 focus:outline-none transition"
+                                            class="w-[78px] lg:w-[88px] rounded-md border border-gray-800 bg-black/40 text-gray-300 text-[10px] py-1.5 px-1.5 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                         >
                                             <option value="active" class="bg-gray-900 text-gray-300" @selected(($subscription->status ?? null) === 'active')>Active</option>
                                             <option value="expired" class="bg-gray-900 text-gray-300" @selected(($subscription->status ?? null) === 'expired')>Expired</option>
@@ -367,7 +367,7 @@
 
                                         <button
                                             type="submit"
-                                            class="px-2 py-1.5 rounded-md border border-violet-800 bg-violet-900/20 text-violet-300 hover:bg-violet-600 hover:text-white text-[10px] font-medium transition whitespace-nowrap"
+                                            class="px-2 py-1.5 rounded-md border border-blue-800 bg-blue-900/20 text-blue-300 hover:bg-blue-600 hover:text-white text-[10px] font-medium transition whitespace-nowrap"
                                         >
                                             ثبت
                                         </button>
@@ -390,7 +390,7 @@
                                             max="120"
                                             placeholder="ماه"
                                             required
-                                            class="w-[42px] lg:w-[48px] rounded-md border border-gray-800 bg-black/40 text-gray-300 text-[10px] py-1.5 px-1 text-center focus:border-violet-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            class="w-[42px] lg:w-[48px] rounded-md border border-gray-800 bg-black/40 text-gray-300 text-[10px] py-1.5 px-1 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         >
 
                                         <button

@@ -4,9 +4,9 @@
             <div class="flex items-center gap-3">
                 <a
                     href="{{ auth()->check() ? route('dashboard') : url('/') }}"
-                    class="inline-flex items-center gap-2 rounded-xl border border-gray-700 bg-gray-900 px-4 py-2 text-sm font-medium text-gray-200 shadow-sm transition duration-200 hover:border-violet-500/40 hover:bg-gray-800 hover:text-white"
+                    class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 >
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                     <span>بازگشت</span>
@@ -22,7 +22,7 @@
                 </p>
             </div>
 
-            <div class="hidden w-[108px] sm:block"></div>
+            <div class="hidden w-[132px] sm:block"></div>
         </div>
     </x-slot>
 
@@ -37,8 +37,6 @@
         dir="rtl"
     >
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-
-            {{-- پیام‌های سشن --}}
             @if (session('success'))
                 <div class="mb-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-400">
                     {{ session('success') }}
@@ -57,14 +55,13 @@
                 </div>
             @endif
 
-            {{-- نشانه‌گر مراحل --}}
             <div class="mb-8 sm:mb-10">
                 <div class="mx-auto flex max-w-2xl items-center justify-center gap-3 sm:gap-4">
                     <div class="flex items-center gap-3">
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold transition-all duration-300"
                             :class="step === 1
-                                ? 'border-violet-500 bg-violet-500/20 text-violet-300 shadow-lg shadow-violet-900/20'
+                                ? 'border-blue-500 bg-blue-500/20 text-blue-300 shadow-lg shadow-blue-900/20'
                                 : 'border-green-500/40 bg-green-500/10 text-green-400'"
                         >
                             <template x-if="step === 1">
@@ -84,13 +81,13 @@
                         </div>
                     </div>
 
-                    <div class="h-px w-10 bg-gray-700 sm:w-16"></div>
+                    <div class="h-px w-10 bg-gradient-to-r from-blue-500/30 to-gray-700 sm:w-16"></div>
 
                     <div class="flex items-center gap-3">
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold transition-all duration-300"
                             :class="step === 2
-                                ? 'border-violet-500 bg-violet-500/20 text-violet-300 shadow-lg shadow-violet-900/20'
+                                ? 'border-blue-500 bg-blue-500/20 text-blue-300 shadow-lg shadow-blue-900/20'
                                 : 'border-gray-700 bg-gray-900 text-gray-400'"
                         >
                             2
@@ -104,7 +101,6 @@
                 </div>
             </div>
 
-            {{-- مرحله 1: انتخاب پلن --}}
             <div x-show="step === 1" x-transition.opacity.duration.300ms>
                 <div class="mb-8 text-center">
                     <h3 class="text-2xl font-bold text-white">پلن مناسب خود را انتخاب کنید</h3>
@@ -117,12 +113,13 @@
                     <template x-for="(plan, key) in plans" :key="plan.id">
                         <div
                             @click="selectPlan(key)"
-                            class="group relative cursor-pointer overflow-hidden rounded-3xl border bg-gray-900/50 p-7 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:bg-gray-900/80 hover:shadow-violet-950/10"
+                            class="group relative cursor-pointer overflow-hidden rounded-3xl border bg-gray-900/50 p-7 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-gray-900/80 hover:shadow-blue-950/10"
                             :class="selectedPlan === key
-                                ? 'border-violet-500 bg-gradient-to-b from-violet-500/10 to-gray-900/90 ring-1 ring-violet-500/30'
+                                ? 'border-blue-500 bg-gradient-to-b from-blue-500/10 to-gray-900/90 ring-1 ring-blue-500/30'
                                 : 'border-gray-800'"
                         >
-                            <div class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-violet-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                            <div class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                            <div class="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl"></div>
 
                             <div class="relative">
                                 <div class="mb-5 flex items-start justify-between gap-4">
@@ -134,8 +131,8 @@
                                     <div
                                         class="flex h-10 w-10 items-center justify-center rounded-2xl border transition-all duration-300"
                                         :class="selectedPlan === key
-                                            ? 'border-violet-400 bg-violet-500/20 text-violet-300'
-                                            : 'border-gray-700 bg-gray-800 text-gray-400 group-hover:border-violet-500/30 group-hover:text-violet-300'"
+                                            ? 'border-blue-400 bg-blue-500/20 text-blue-300'
+                                            : 'border-gray-700 bg-gray-800 text-gray-400 group-hover:border-blue-500/30 group-hover:text-blue-300'"
                                     >
                                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
@@ -143,12 +140,12 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-6 h-px w-full bg-gradient-to-r from-violet-500/20 via-gray-700 to-transparent"></div>
+                                <div class="mb-6 h-px w-full bg-gradient-to-r from-blue-500/20 via-gray-700 to-transparent"></div>
 
                                 <ul class="space-y-3.5">
                                     <template x-for="facility in plan.facilities" :key="facility">
                                         <li class="flex items-start gap-3 text-sm text-gray-300">
-                                            <div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/10 text-violet-400">
+                                            <div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500/10 text-blue-400">
                                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                                 </svg>
@@ -158,19 +155,19 @@
                                     </template>
                                 </ul>
 
-                                <div class="mt-8 flex items-center justify-between">
+                                <div class="mt-8 flex items-center justify-between gap-4">
                                     <span class="text-xs font-medium text-gray-500">
                                         برای مشاهده قیمت‌ها کلیک کنید
                                     </span>
 
                                     <span
-                                        class="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300"
+                                        class="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-2xl bg-gradient-to-r px-4 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300"
                                         :class="selectedPlan === key
-                                            ? 'border-violet-500/40 bg-violet-500/15 text-violet-300'
-                                            : 'border-gray-700 bg-gray-800 text-gray-200 group-hover:border-violet-500/30 group-hover:text-white'"
+                                            ? 'from-blue-600 via-blue-500 to-sky-500 shadow-blue-600/30'
+                                            : 'from-blue-600/90 via-blue-500/90 to-sky-500/90 shadow-blue-900/20 group-hover:shadow-blue-500/30'"
                                     >
                                         انتخاب پلن
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <svg class="h-4 w-4 transition duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
                                         </svg>
                                     </span>
@@ -181,29 +178,27 @@
                 </div>
             </div>
 
-            {{-- مرحله 2: انتخاب بازه زمانی --}}
             <div x-show="step === 2" x-transition.opacity.duration.300ms class="mx-auto max-w-4xl">
                 <div class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/50 shadow-2xl shadow-black/20">
-                    {{-- هدر --}}
-                    <div class="border-b border-gray-800 bg-gradient-to-r from-gray-900 via-gray-900 to-violet-950/20 px-6 py-6 sm:px-8">
+                    <div class="border-b border-gray-800 bg-gradient-to-r from-gray-900 via-gray-900 to-blue-950/20 px-6 py-6 sm:px-8">
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-violet-400">
+                                <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
                                     مرحله دوم
                                 </p>
                                 <h3 class="text-xl font-bold text-white sm:text-2xl">مدت زمان اشتراک را انتخاب کنید</h3>
                                 <p class="mt-2 text-sm text-gray-400">
                                     پلن انتخاب‌شده:
-                                    <span class="font-bold text-violet-300" x-text="currentPlan()?.title"></span>
+                                    <span class="font-bold text-blue-300" x-text="currentPlan()?.title"></span>
                                 </p>
                             </div>
 
                             <button
                                 @click="changePlan()"
                                 type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-700 bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-200 transition duration-200 hover:border-violet-500/40 hover:bg-gray-700 hover:text-white"
+                                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                             >
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                                 </svg>
                                 <span>تغییر پلن</span>
@@ -211,7 +206,6 @@
                         </div>
                     </div>
 
-                    {{-- بدنه --}}
                     <div class="px-6 py-6 sm:px-8 sm:py-8">
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <template x-for="duration in currentPlan()?.prices || []" :key="duration.id">
@@ -220,22 +214,20 @@
                                     @click="selectDuration(duration.id)"
                                     class="group relative overflow-hidden rounded-3xl border p-6 text-right transition-all duration-300 hover:-translate-y-0.5"
                                     :class="selectedDuration === duration.id
-                                        ? 'border-violet-500 bg-gradient-to-br from-violet-500/10 to-gray-900 shadow-lg shadow-violet-950/20 ring-1 ring-violet-500/20'
-                                        : 'border-gray-800 bg-gray-950/40 hover:border-violet-500/30 hover:bg-gray-900/70'"
+                                        ? 'border-blue-500 bg-gradient-to-br from-blue-500/10 to-gray-900 shadow-lg shadow-blue-950/20 ring-1 ring-blue-500/20'
+                                        : 'border-gray-800 bg-gray-950/40 hover:border-blue-500/30 hover:bg-gray-900/70'"
                                 >
-                                    {{-- تخفیف --}}
                                     <template x-if="duration.discount_percent > 0">
                                         <span class="absolute left-4 top-4 rounded-full border border-red-500/30 bg-red-500/15 px-2.5 py-1 text-[11px] font-bold text-red-400">
                                             <span x-text="duration.discount_percent + '٪ تخفیف'"></span>
                                         </span>
                                     </template>
 
-                                    {{-- تیک انتخاب --}}
                                     <div
                                         class="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full border transition-all duration-300"
                                         :class="selectedDuration === duration.id
-                                            ? 'border-violet-400 bg-violet-500/20 text-violet-300'
-                                            : 'border-gray-700 bg-gray-800 text-transparent group-hover:border-violet-500/30'"
+                                            ? 'border-blue-400 bg-blue-500/20 text-blue-300'
+                                            : 'border-gray-700 bg-gray-800 text-transparent group-hover:border-blue-500/30'"
                                     >
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
@@ -274,7 +266,6 @@
                             </template>
                         </div>
 
-                        {{-- خطاها و اکشن نهایی --}}
                         <div class="mt-8 border-t border-gray-800 pt-6">
                             <p
                                 x-show="errorMessage"
@@ -292,10 +283,10 @@
                                     @click="addToCart()"
                                     type="button"
                                     :disabled="isSubmitting"
-                                    class="inline-flex items-center justify-center gap-2 rounded-2xl px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-300"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl px-8 py-3.5 text-sm font-bold text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                                     :class="selectedDuration && !isSubmitting
-                                        ? 'bg-violet-600 shadow-violet-900/30 hover:scale-[1.02] hover:bg-violet-500'
-                                        : 'cursor-not-allowed bg-gray-700 text-gray-300 opacity-60'"
+                                        ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 shadow-xl shadow-blue-600/25 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40'
+                                        : 'cursor-not-allowed bg-gray-700 text-gray-300 opacity-60 shadow-none'"
                                 >
                                     <svg
                                         x-show="!isSubmitting"
@@ -328,7 +319,6 @@
             </div>
         </div>
 
-        {{-- فرم مخفی ارسال به بک‌اند --}}
         <form x-ref="cartForm" method="POST" :action="cartStoreUrl" class="hidden">
             @csrf
             <input type="hidden" name="plan_id" :value="selectedPlanId()">

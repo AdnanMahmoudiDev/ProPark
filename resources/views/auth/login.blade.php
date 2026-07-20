@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center w-full">
         {{-- لوگو --}}
         <div class="mb-4">
-            <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
+            <x-application-logo class="w-20 h-20 fill-current text-blue-500" />
         </div>
 
         {{-- عنوان --}}
@@ -24,7 +24,7 @@
 
                     <x-text-input
                         id="email"
-                        class="block mt-2 w-full bg-gray-950 border-gray-800 text-white placeholder-gray-600 focus:border-violet-500 focus:ring-violet-500 rounded-xl"
+                        class="block mt-2 w-full bg-gray-950 border-gray-800 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         type="email"
                         name="email"
                         :value="old('email')"
@@ -45,7 +45,7 @@
                     <div class="relative mt-2">
                         <x-text-input
                             id="password"
-                            class="block w-full bg-gray-950 border-gray-800 text-white focus:border-violet-500 focus:ring-violet-500 rounded-xl ps-10"
+                            class="block w-full bg-gray-950 border-gray-800 text-white focus:border-blue-500 focus:ring-blue-500 rounded-xl ps-10"
                             x-bind:type="showPassword ? 'text' : 'password'"
                             name="password"
                             required
@@ -56,7 +56,7 @@
                         <button
                             type="button"
                             @click="showPassword = !showPassword"
-                            class="absolute inset-y-0 left-0 flex items-center px-3 text-gray-400 hover:text-violet-400 transition"
+                            class="absolute inset-y-0 left-0 flex items-center px-3 text-gray-400 hover:text-blue-400 transition"
                             tabindex="-1"
                         >
                             {{-- چشم باز --}}
@@ -84,7 +84,7 @@
                         <input
                             id="remember_me"
                             type="checkbox"
-                            class="rounded bg-gray-950 border-gray-800 text-violet-600 shadow-sm focus:ring-violet-500 focus:ring-offset-gray-900"
+                            class="rounded bg-gray-950 border-gray-800 text-blue-600 shadow-sm focus:ring-blue-500 focus:ring-offset-gray-900"
                             name="remember"
                         >
                         <span class="ms-2 text-sm text-gray-400">{{ __('مرا به خاطر بسپار') }}</span>
@@ -95,14 +95,14 @@
                 <div class="flex items-center justify-between mt-8 gap-4">
                     @if (Route::has('password.request'))
                         <a
-                            class="text-sm text-gray-500 hover:text-violet-400 transition"
+                            class="text-sm text-gray-500 hover:text-blue-400 transition"
                             href="{{ route('password.request') }}"
                         >
                             {{ __('رمز عبور خود را فراموش کرده‌اید؟') }}
                         </a>
                     @endif
 
-                    <x-primary-button class="bg-violet-600 hover:bg-violet-500 rounded-xl px-6 py-2.5 shadow-lg shadow-violet-900/20 transition-all duration-200">
+                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 rounded-xl px-6 py-2.5 shadow-lg shadow-blue-900/20 transition-all duration-200">
                         {{ __('ورود') }}
                     </x-primary-button>
                 </div>
@@ -110,7 +110,7 @@
                 {{-- ساخت حساب --}}
                 <div class="mt-8 pt-6 border-t border-gray-800 text-center text-sm text-gray-400">
                     {{ __('حساب کاربری ندارید؟') }}
-                    <a href="{{ route('register') }}" class="text-violet-400 hover:text-violet-300 font-semibold transition">
+                    <a href="{{ route('register') }}" class="text-blue-400 hover:text-blue-300 font-semibold transition">
                         {{ __('ساخت حساب کاربری') }}
                     </a>
                 </div>

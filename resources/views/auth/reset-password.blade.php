@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center w-full">
          {{-- لوگو  --}}
         <div class="mb-4">
-            <x-application-logo class="w-20 h-20 fill-current text-violet-500" />
+            <x-application-logo class="w-20 h-20 fill-current text-blue-500" />
         </div>
 
         <h2 class="text-2xl font-bold text-white mb-6">تعیین رمز عبور جدید</h2>
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="flex items-center justify-end mt-8">
-                    <x-primary-button class="bg-violet-600 hover:bg-violet-500 rounded-xl px-6 py-2 shadow-lg shadow-violet-900/20 transition-all duration-200">
+                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 rounded-xl px-6 py-2 shadow-lg shadow-blue-900/20 transition-all duration-200">
                         {{ __('ذخیره رمز عبور') }}
                     </x-primary-button>
                 </div>

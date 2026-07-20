@@ -10,7 +10,7 @@
 </head>
 
 <body class="font-sans antialiased text-gray-100" x-data="{ mobileMenu: false }">
-    <div class="min-h-screen bg-gradient-to-br from-violet-950 via-gray-950 to-gray-950">
+    <div class="min-h-screen bg-gradient-to-br from-blue-950 via-gray-950 to-gray-950">
 
         {{-- نوبار --}}
         <nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
@@ -23,7 +23,7 @@
                         {{-- لوگو --}}
                         <a href="{{ route('admin.dashboard') }}"
                            class="text-lg font-bold text-white tracking-tight">
-                            ProPark <span class="text-violet-400">Admin</span>
+                            ProPark <span class="text-blue-400">Admin</span>
                         </a>
 
                         {{-- منوی دسکتاپ --}}
@@ -65,7 +65,7 @@
 
                         {{-- ساخت لایسنس --}}
                         <a href="{{ route('admin.licenses.create') }}"
-                           class="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition">
+                           class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition">
                             ایجاد لایسنس جدید
                         </a>
 
@@ -163,7 +163,7 @@
                     </a>
 
                     <a href="{{ route('admin.licenses.create') }}"
-                       class="block px-4 py-3 rounded-xl bg-violet-700/30 text-violet-300 hover:bg-violet-700/40 hover:text-white transition">
+                       class="block px-4 py-3 rounded-xl bg-blue-700/30 text-blue-300 hover:bg-blue-700/40 hover:text-white transition">
                         ایجاد لایسنس جدید
                     </a>
 
