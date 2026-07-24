@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'ProPark') }} | Admin</title>
+    <title>{{ config('app.name', 'AvaPark') }} | Admin</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -23,7 +23,7 @@
                         {{-- لوگو --}}
                         <a href="{{ route('admin.dashboard') }}"
                            class="text-lg font-bold text-white tracking-tight">
-                            ProPark <span class="text-blue-400">Admin</span>
+                            AvaPark <span class="text-blue-400">Admin</span>
                         </a>
 
                         {{-- منوی دسکتاپ --}}

@@ -11,7 +11,7 @@
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                <span>ویرایش گروهی قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه ProPark</span>
+                <span>ویرایش گروهی قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه AvaPark</span>
             </div>
         </div>
 

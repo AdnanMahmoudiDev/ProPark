@@ -82,7 +82,7 @@
                 سامانه هوشمند مدیریت پارکینگ
                 <br>
                 <span class="bg-gradient-to-r from-blue-400 to-sky-400 bg-clip-text text-transparent">
-                    ProPark
+                    AvaPark
                 </span>
             </h1>
 
@@ -124,7 +124,7 @@
                                         <span class="w-2 h-2 rounded-full bg-yellow-500/40"></span>
                                         <span class="w-2 h-2 rounded-full bg-green-500/40"></span>
                                     </div>
-                                    <span class="text-[8px] sm:text-[9px] text-gray-500 font-medium uppercase tracking-[0.12em] select-none">ProPark Interface</span>
+                                    <span class="text-[8px] sm:text-[9px] text-gray-500 font-medium uppercase tracking-[0.12em] select-none">AvaPark Interface</span>
                                     <div class="w-8 md:w-10"></div>
                                 </div>
 
@@ -204,9 +204,9 @@
                 <div class="grid md:grid-cols-2 gap-12 md:gap-16 text-right">
                     {{-- توضیحات درباره ما --}}
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">درباره ProPark</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">درباره AvaPark</h2>
                         <p class="text-gray-400 leading-8 mb-8 text-sm sm:text-base">
-                            پروپارک (ProPark) با هدف ارائه راهکارهای مدرن برای مدیریت هوشمند لایسنس و کنترل تردد توسعه یافته است. این سامانه با برقراری ارتباط مداوم میان کلاینت‌های لوکال پایتون و سرور، بستری امن را فراهم می‌کند.
+                            پروپارک (AvaPark) با هدف ارائه راهکارهای مدرن برای مدیریت هوشمند لایسنس و کنترل تردد توسعه یافته است. این سامانه با برقراری ارتباط مداوم میان کلاینت‌های لوکال پایتون و سرور، بستری امن را فراهم می‌کند.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-6 sm:gap-8">
                             <div class="border-r-2 border-blue-500/50 pr-5">
@@ -223,7 +223,7 @@
                     {{-- کارت چرا ما --}}
                     <div class="bg-white/[0.04] border border-white/10 p-7 md:p-10 rounded-[2rem] md:rounded-[3rem] relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-32 h-32 md:w-40 md:h-40 bg-blue-600 rounded-full blur-3xl opacity-10"></div>
-                        <h3 class="text-lg md:text-xl font-bold text-white mb-7 relative">چرا ProPark را انتخاب کنید؟</h3>
+                        <h3 class="text-lg md:text-xl font-bold text-white mb-7 relative">چرا AvaPark را انتخاب کنید؟</h3>
                         <ul class="space-y-5 relative">
                             <li class="flex items-center text-gray-300 group">
                                 <span class="w-1.5 h-1.5 rounded-full bg-blue-500 ml-4"></span> پایداری و امنیت در هسته سیستم
@@ -240,7 +240,7 @@
             </section>
 
             <div class="pt-8 border-t border-white/5 text-gray-600">
-                تمام حقوق برای ProPark محفوظ است &copy; {{ date('Y') }}
+                تمام حقوق برای AvaPark محفوظ است &copy; {{ date('Y') }}
             </div>
         </footer>
 

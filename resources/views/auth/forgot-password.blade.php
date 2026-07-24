@@ -5,7 +5,7 @@
         <div class="mb-4">
             <x-application-logo class="w-20 h-20 fill-current text-blue-500" />
         </div>
-        <h2 class="text-2xl font-bold text-white">ورود به ProPark</h2>
+        <h2 class="text-2xl font-bold text-white">ورود به AvaPark</h2>
         <br>
 
         {{--  کارت اصلی صفحه  --}}

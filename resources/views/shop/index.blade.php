@@ -15,7 +15,7 @@
 
             <div class="flex-1 text-center">
                 <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
-                    انتخاب اشتراک ProPark
+                    انتخاب اشتراک AvaPark
                 </h2>
                 <p class="mt-1 text-xs text-gray-400 sm:text-sm">
                     پلن مناسب خود را انتخاب کنید و اشتراک‌تان را فعال کنید

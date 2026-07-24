@@ -12,7 +12,7 @@
 
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                 <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                <span>لیست کلیه کاربران ثبت‌شده در سامانه ProPark</span>
+                <span>لیست کلیه کاربران ثبت‌شده در سامانه AvaPark</span>
             </div>
         </div>
 

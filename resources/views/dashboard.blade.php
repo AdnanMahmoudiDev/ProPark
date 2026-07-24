@@ -20,7 +20,7 @@
 
             <div class="hidden items-center gap-3 sm:flex">
                 <div class="rounded-xl border border-blue-800 bg-blue-900/20 px-4 py-2 text-xs text-blue-300">
-                    ProPark Panel
+                    AvaPark Panel
                 </div>
             </div>
 
@@ -63,7 +63,7 @@
                                 </h3>
 
                                 <p class="mt-1 text-sm text-gray-400">
-                                    مدیریت حساب و اشتراک ProPark
+                                    مدیریت حساب و اشتراک AvaPark
                                 </p>
                             </div>
 
@@ -258,22 +258,22 @@
 
                                 <div>
                                     <h4 class="font-semibold text-white">
-                                        ویرایش پروفایل
+                                        ویرایش حساب کاربری
                                     </h4>
-
-                                    <p class="mt-1 text-sm text-blue-100/80">
-                                        مدیریت اطلاعات حساب
-                                    </p>
                                 </div>
 
-                                <svg class="h-5 w-5 text-white/90 transition group-hover:translate-x-[-2px]"
+                                <svg class="h-6 w-6 text-white/90 transition duration-300 group-hover:rotate-90"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
                                     <path stroke-linecap="round"
                                           stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M11 5h2m-1-1v2m-7 4h14l-1 9H6l-1-9z"/>
+                                          stroke-width="1.8"
+                                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="1.8"
+                                          d="M12 15.25A3.25 3.25 0 1012 8.75a3.25 3.25 0 000 6.5z"/>
                                 </svg>
 
                             </div>

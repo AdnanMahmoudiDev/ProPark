@@ -6,7 +6,7 @@
         </div>
 
         {{-- عنوان صفحه با استایل مدرن --}}
-        <h2 class="mb-2 text-2xl font-bold text-white">ثبت‌نام در ProPark</h2>
+        <h2 class="mb-2 text-2xl font-bold text-white">ثبت‌نام در AvaPark</h2>
         <p class="mb-8 text-sm text-gray-500">اطلاعات خود را برای ایجاد حساب کاربری وارد کنید</p>
 
         {{-- کارت فرم ثبت‌ نام --}}

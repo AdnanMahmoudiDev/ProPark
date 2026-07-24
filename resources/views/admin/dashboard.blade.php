@@ -20,7 +20,7 @@
 
         <div class="flex items-center gap-3">
             <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs">
-                ProPark Admin Panel
+                AvaPark Admin Panel
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
                             خوش آمدی، {{ auth()->user()->name }}
                         </h3>
                         <p class="text-sm text-gray-400 mt-1">
-                            پنل کنترل و نظارت بر تراکنش‌ها، کاربران و لایسنس‌های ProPark
+                            پنل کنترل و نظارت بر تراکنش‌ها، کاربران و لایسنس‌های AvaPark
                         </p>
                     </div>
                 </div>

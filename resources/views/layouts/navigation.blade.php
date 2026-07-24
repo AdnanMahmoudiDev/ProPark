@@ -6,7 +6,7 @@
         <div class="flex items-center">
             <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="flex items-center gap-3 shrink-0">
                 <x-application-logo class="block h-16 w-16 fill-current text-blue-500" />
-                <span class="text-xl font-bold tracking-tight text-blue-400">ProPark</span>
+                <span class="text-xl font-bold tracking-tight text-blue-400">AvaPark</span>
             </a>
         </div>
 

@@ -6,7 +6,7 @@
         </div>
 
         {{-- عنوان --}}
-        <h2 class="text-2xl font-bold text-white mb-2">ورود به ProPark</h2>
+        <h2 class="text-2xl font-bold text-white mb-2">ورود به AvaPark</h2>
         <p class="text-sm text-gray-400 mb-6 text-center">
             برای ورود به حساب کاربری، اطلاعات خود را وارد کنید.
         </p>
