@@ -37,7 +37,7 @@
                         </li>
                     @endguest
                     <li>
-                        <a href="/pricing" class="hover:text-blue-400 transition-colors duration-200">تعرفه‌ها و پلن‌ها</a>
+                        <a href="/shop" class="hover:text-blue-400 transition-colors duration-200">تعرفه‌ها و پلن‌ها</a>
                     </li>
                 </ul>
             </div>
