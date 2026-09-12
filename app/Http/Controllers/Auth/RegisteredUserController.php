@@ -45,8 +45,7 @@ class RegisteredUserController extends Controller
                     ->letters()
                     ->mixedCase()
                     ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
+                    ,
             ],
         ], [
             // پیام‌های اعتبارسنجی نام و ایمیل

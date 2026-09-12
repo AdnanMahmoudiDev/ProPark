@@ -1,77 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="relative overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-4 sm:p-6 backdrop-blur-2xl shadow-2xl shadow-black/50">
-            {{-- افکت نوری ملایم درون هدر --}}
-            <div class="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
-
-            <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                
-                {{-- دکمه بازگشت --}}
-                <div class="flex items-center justify-between sm:justify-start">
-                    <a
-                        href="{{ auth()->check() ? route('dashboard') : url('/') }}"
-                        class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/25 ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                    >
-                        <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        <span>بازگشت به پنل</span>
-                    </a>
-
-                    {{-- نمایش وضعیت در موبایل --}}
-                    <div class="flex items-center gap-1.5 sm:hidden rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-[11px] font-medium text-blue-300">
-                        <span class="relative flex h-2 w-2">
-                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
-                        </span>
-                        <span>فروشگاه لایسنس</span>
-                    </div>
-                </div>
-
-                {{-- عنوان و توضیحات --}}
-                <div class="text-right sm:text-center">
-                    <div class="hidden sm:inline-flex items-center gap-2 mb-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 shadow-inner">
-                        <span class="relative flex h-2 w-2">
-                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
-                        </span>
-                        <span>تعرفه و ارتقای اشتراک</span>
-                    </div>
-
-                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white">
-                        انتخاب و خرید اشتراک
-                        <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-200 bg-clip-text text-transparent">AvaPark</span>
-                    </h2>
-                    
-                    <p class="mt-1.5 text-xs sm:text-sm text-gray-400 font-normal leading-relaxed">
-                        پلن متناسب با کسب‌وکار خود را انتخاب کرده و دسترسی آنی لایسنس را دریافت نمایید
-                    </p>
-                </div>
-
-                {{-- المان تضمین و اعتبار شیشه‌ای --}}
-                <div class="hidden sm:flex items-center justify-end">
-                    <div class="inline-flex items-center gap-2.5 rounded-2xl border border-gray-800/80 bg-gray-900/70 px-4 py-2 text-xs text-gray-300 shadow-inner">
-                        <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                        </div>
-                        <div class="text-right leading-tight">
-                            <p class="font-bold text-white text-[11px]">فعال‌سازی آنی</p>
-                            <p class="text-[10px] text-gray-400">تضمین لایسنس ابری</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </x-slot>
-
-    {{-- استایل x-cloak جهت جلوگیری از پرش‌های بارگذاری اولیه --}}
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-
     <div
         x-cloak
         x-data="shopPlans({
@@ -80,7 +7,7 @@
             loginUrl: @js(route('login')),
             cartStoreUrl: @js(route('user.cart.store')),
         })"
-        class="relative min-h-screen py-8 sm:py-12 overflow-hidden bg-gray-950 font-sans antialiased text-gray-100"
+        class="relative min-h-screen py-6 sm:py-10 overflow-hidden bg-gray-950 font-sans antialiased text-gray-100"
         dir="rtl"
     >
         {{-- افکت‌های نوری محیطی --}}
@@ -90,11 +17,75 @@
             <div class="absolute bottom-10 right-1/3 h-80 w-80 rounded-full bg-indigo-600/10 blur-[120px]"></div>
         </div>
 
-        <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
             
+            {{-- باکس هدر که همراه با اسکرول بالا رفته و مخفی می‌شود --}}
+            <div class="relative overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-4 sm:p-6 backdrop-blur-2xl shadow-2xl shadow-black/50">
+                <div class="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+
+                <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    {{-- دکمه بازگشت --}}
+                    <div class="flex items-center justify-between sm:justify-start">
+                        <a
+                            href="{{ auth()->check() ? route('dashboard') : url('/') }}"
+                            class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/25 ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                        >
+                            <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span>بازگشت به پنل</span>
+                        </a>
+
+                        {{-- نمایش وضعیت در موبایل --}}
+                        <div class="flex items-center gap-1.5 sm:hidden rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-[11px] font-medium text-blue-300">
+                            <span class="relative flex h-2 w-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+                            </span>
+                            <span>فروشگاه لایسنس</span>
+                        </div>
+                    </div>
+
+                    {{-- عنوان و توضیحات --}}
+                    <div class="text-right sm:text-center">
+                        <div class="hidden sm:inline-flex items-center gap-2 mb-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 shadow-inner">
+                            <span class="relative flex h-2 w-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+                            </span>
+                            <span>تعرفه و ارتقای اشتراک</span>
+                        </div>
+
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white">
+                            انتخاب و خرید اشتراک
+                            <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-200 bg-clip-text text-transparent">AvaPark</span>
+                        </h2>
+                        
+                        <p class="mt-1.5 text-xs sm:text-sm text-gray-400 font-normal leading-relaxed">
+                            پلن متناسب با کسب‌وکار خود را انتخاب کرده و دسترسی آنی لایسنس را دریافت نمایید
+                        </p>
+                    </div>
+
+                    {{-- المان تضمین و اعتبار شیشه‌ای --}}
+                    <div class="hidden sm:flex items-center justify-end">
+                        <div class="inline-flex items-center gap-2.5 rounded-2xl border border-gray-800/80 bg-gray-900/70 px-4 py-2 text-xs text-gray-300 shadow-inner">
+                            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div class="text-right leading-tight">
+                                <p class="font-bold text-white text-[11px]">فعال‌سازی آنی</p>
+                                <p class="text-[10px] text-gray-400">تضمین لایسنس ابری</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{-- پیام‌های نشست (Session Alerts) --}}
             @if (session('success'))
-                <div class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-emerald-400 backdrop-blur-xl shadow-lg shadow-emerald-950/20">
+                <div class="flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-emerald-400 backdrop-blur-xl shadow-lg shadow-emerald-950/20">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -103,7 +94,7 @@
             @endif
 
             @if (session('warning'))
-                <div class="mb-6 flex items-center gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-amber-400 backdrop-blur-xl shadow-lg shadow-amber-950/20">
+                <div class="flex items-center gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-amber-400 backdrop-blur-xl shadow-lg shadow-amber-950/20">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
@@ -112,7 +103,7 @@
             @endif
 
             @if (session('error'))
-                <div class="mb-6 flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-rose-400 backdrop-blur-xl shadow-lg shadow-rose-950/20">
+                <div class="flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-rose-400 backdrop-blur-xl shadow-lg shadow-rose-950/20">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -121,9 +112,8 @@
             @endif
 
             {{-- استپر تعاملی مدرن --}}
-            <div class="mb-10">
+            <div>
                 <div class="mx-auto flex max-w-xl items-center justify-between rounded-3xl border border-gray-800/80 bg-gray-900/60 p-3 sm:p-4 backdrop-blur-2xl shadow-xl shadow-black/40">
-                    
                     {{-- مرحله اول --}}
                     <div class="flex items-center gap-3 pr-2 sm:pr-4">
                         <div
@@ -170,7 +160,6 @@
                             <p class="text-[11px] text-gray-500">دوره اعتبار لایسنس</p>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -267,7 +256,6 @@
                 class="mx-auto max-w-4xl"
             >
                 <div class="overflow-hidden rounded-3xl border border-gray-800/90 bg-gray-900/60 backdrop-blur-2xl shadow-2xl shadow-black/40">
-                    
                     {{-- هدر باکس گام ۲ --}}
                     <div class="border-b border-gray-800/80 bg-gradient-to-r from-gray-900 via-gray-900/95 to-blue-950/30 px-6 py-6 sm:px-8">
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -307,7 +295,7 @@
                                         ? 'border-blue-500 bg-gradient-to-br from-blue-600/15 via-gray-900/90 to-gray-950 shadow-xl shadow-blue-950/40 ring-1 ring-blue-500/50'
                                         : 'border-gray-800/80 bg-gray-950/40 hover:border-gray-700 hover:bg-gray-900/80'"
                                 >
-                                    {{-- تگ تخفیف (دقیقاً همان نسخه فعلی شما، فقط اعداد انگلیسی) --}}
+                                    {{-- تگ تخفیف --}}
                                     <template x-if="duration.discount_percent > 0">
                                         <div class="absolute left-4 top-4 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1.5 text-xs font-black text-rose-300 shadow-lg shadow-rose-950/40 backdrop-blur-md">
                                             <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
@@ -447,7 +435,6 @@
                 loginUrl,
                 cartStoreUrl,
 
-                // تبدیل اعداد فارسی/عربی به انگلیسی (برای نمایش)
                 toEn(str) {
                     return String(str)
                         .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)])

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // User Controllers
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
 use App\Http\Controllers\User\CartController; // کنترلر سبد خرید
@@ -25,6 +26,14 @@ Route::get('/', function () {
 // فروشگاه
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
+// درباره ما
+Route::get('/about', [PageController::class, 'about'])->name('about');
+// پشتیبانی
+Route::get('/support', [PageController::class, 'support'])->name('support');
+// مسیر صفحه شرایط و قوانین
+Route::get('/terms', [PageController::class, 'terms'])->name('terms');
+// مسیر صفحه حریم خصوصی
+Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 // مسیر های کاربر عادی 
 Route::middleware(['auth', 'verified'])->group(function () {
 

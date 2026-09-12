@@ -1,37 +1,83 @@
 <x-guest-layout>
-    <div class="flex flex-col items-center w-full">
-        {{--  لوگو  --}}
-        <div class="mb-4">
-            <x-application-logo class="w-20 h-20 fill-current text-blue-500" />
-        </div>
+    <div class="w-full max-w-5xl bg-gray-900 border border-gray-800/90 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[620px]">
+        
+        {{-- ستون برندینگ و مشخصات سامانه --}}
+        <div class="lg:col-span-5 bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950/40 p-6 sm:p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-l border-gray-800/80">
+            <div>
+                {{-- لوگو و نام برند AvaPark به عنوان لینک بازگشت به صفحه اصلی --}}
+                <a href="{{ url('/') }}" class="group inline-flex items-center gap-3 mb-6 transition focus:outline-none">
+                    <div class="h-11 w-11 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-500 shadow-inner transition-transform duration-200 group-hover:scale-105 group-hover:border-blue-500/40">
+                        <x-application-logo class="h-6 w-6 fill-current" />
+                    </div>
+                    <div>
+                        <span class="text-base font-black tracking-wide text-white block transition-colors duration-200 group-hover:text-blue-400">AvaPark</span>
+                    </div>
+                </a>
 
-        <h2 class="text-2xl font-bold text-white mb-6">تایید امنیتی</h2>
-
-         {{-- کارت اصلی  --}}
-        <div class="w-full sm:max-w-md px-6 py-8 overflow-hidden sm:rounded-2xl">
-            
-            <div class="mb-6 text-sm text-gray-400 leading-relaxed">
-                {{ __('این یک بخش امن از برنامه است. لطفاً قبل از ادامه، رمز عبور خود را تایید کنید.') }}
+                <h2 class="text-xl sm:text-2xl font-black text-white leading-snug mb-3">
+                    تاییدیه امنیتی <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">بخش‌های حساس</span>
+                </h2>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    این یک بخش امن از برنامه است. جهت دسترسی، لطفاً هویت خود را تایید کنید.
+                </p>
             </div>
 
-            <form method="POST" action="{{ route('password.confirm') }}">
+            {{-- ویژگی‌ها --}}
+            <div class="space-y-3.5 my-6">
+                <div class="flex items-center gap-3 p-3 rounded-2xl bg-gray-900/90 border border-gray-800">
+                    <div class="h-8 w-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-200">حفاظت از حریم داده‌ها</p>
+                        <p class="text-[10px] text-gray-500">تایید مجدد رمز عبور برای عملیات‌های بحرانی</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500">
+                <span class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    سامانه ایمن است
+                </span>
+            </div>
+        </div>
+
+        {{-- ستون فرم تایید --}}
+        <div class="lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-gray-900">
+            <div class="mb-6">
+                <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight">تایید هویت کاربری</h3>
+                <p class="text-xs text-gray-400 mt-2">
+                    {{ __('این یک بخش امن از برنامه است. لطفاً قبل از ادامه، رمز عبور خود را تایید کنید.') }}
+                </p>
+            </div>
+
+            <form method="POST" action="{{ route('password.confirm') }}" class="space-y-4">
                 @csrf
 
-                {{--  پسورد  --}}
+                {{-- رمز عبور --}}
                 <div>
-                    <x-input-label for="password" class="text-gray-300" :value="__('رمز عبور')" />
-                    <x-text-input id="password" 
-                                  class="block mt-2 w-full bg-gray-950 border-gray-800 text-white focus:border-blue-500 focus:ring-blue-500 rounded-xl"
-                                  type="password"
-                                  name="password"
-                                  required 
-                                  autocomplete="current-password" />
-                    
-                    <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400" />
+                    <x-input-label for="password" class="text-gray-300 text-xs font-semibold mb-1.5" :value="__('رمز عبور فعلی')" />
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <x-text-input id="password" 
+                                    class="block w-full pl-10 pr-3.5 py-2.5 rounded-xl border-gray-800 bg-gray-950 text-sm text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200" 
+                                    dir="ltr"
+                                    type="password" 
+                                    name="password" 
+                                    placeholder="••••••••"
+                                    required 
+                                    autocomplete="current-password" />
+                    </div>
+                    <x-input-error :messages="$errors->get('password')" class="mt-1 text-xs text-red-400" />
                 </div>
 
-                <div class="flex justify-end mt-8">
-                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 rounded-xl px-6 py-2 shadow-lg shadow-blue-900/20 transition-all duration-200">
+                {{-- اکشن‌ها --}}
+                <div class="flex items-center justify-end pt-3 border-t border-gray-800">
+                    <x-primary-button class="bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 rounded-xl px-7 py-2.5 text-xs font-bold transition-all duration-200 shadow-lg shadow-blue-600/25">
                         {{ __('تایید و ادامه') }}
                     </x-primary-button>
                 </div>
