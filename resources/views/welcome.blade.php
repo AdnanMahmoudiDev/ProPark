@@ -84,27 +84,13 @@
 
         {{-- Hero Section --}}
         <section class="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 text-center pt-4 md:pt-8 pb-16 md:pb-24">
-            <div
-                data-reveal
-                class="inline-flex items-center gap-2.5 py-2 px-5 rounded-full bg-blue-950/40 text-blue-200 text-xs sm:text-sm font-medium border border-blue-500/30 shadow-lg shadow-blue-950/20 backdrop-blur-xl"
-            >
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-
-                <span class="font-bold text-blue-100">نسخه ۱.۰.۰ منتشر شد</span>
-                <span class="w-px h-3.5 bg-blue-500/40"></span>
-                <span class="text-blue-300/90">پلتفرم نسل جدید</span>
-            </div>
-
             <h1
                 data-reveal
                 data-reveal-delay="120"
                 class="mt-6 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 md:mb-8 tracking-tight leading-[1.2] sm:leading-[1.25]"
             >
                 سامانه هوشمند و یکپارچه
-                <br>
+                <br><br>
                 <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-sm">
                     مدیریت پارکینگ AvaPark
                 </span>
@@ -262,17 +248,18 @@
                         class="group relative rounded-3xl border border-gray-800/90 bg-gradient-to-b from-gray-900/60 to-gray-950/60 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-950/40 md:p-8"
                     >
                         <div class="mb-6 flex items-center justify-between">
-                            <div class="flex h-13 w-13 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-600/10 text-blue-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-blue-600/30">
+                            {{-- سایز بزرگتر کانتینر آیکون (w-16 h-16) به همراه سایز متناسب آیکون (w-7 h-7) --}}
+                            <div class="flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-600/10 text-blue-400 transition-all duration-300 group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-blue-600/40">
                                 @if ($feature['icon'] === 'key')
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                     </svg>
                                 @elseif ($feature['icon'] === 'layout')
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 12a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
                                     </svg>
                                 @else
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
                                 @endif
@@ -397,94 +384,4 @@
             </div>
         </div>
     </main>
-
-    <style>
-        [data-reveal] {
-            opacity: 0;
-            transform: translateY(36px);
-            transition:
-                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: var(--reveal-delay, 0ms);
-            will-change: opacity, transform;
-        }
-
-        [data-reveal].is-revealed {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-            will-change: auto;
-        }
-
-        @media (max-width: 767px) {
-            [data-reveal] {
-                transform: translateY(18px);
-                transition-duration: 0.45s;
-                transition-delay: 0ms;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            [data-reveal] {
-                opacity: 1 !important;
-                transform: none !important;
-                transition: none !important;
-            }
-        }
-
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
-
-    <noscript>
-        <style>
-            [data-reveal] {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-        </style>
-    </noscript>
-
-    <script>
-        (function () {
-            var isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-            var revealElements = document.querySelectorAll('[data-reveal]');
-
-            if (!('IntersectionObserver' in window)) {
-                revealElements.forEach(function (el) {
-                    el.classList.add('is-revealed');
-                });
-                return;
-            }
-
-            var MAX_DELAY_MOBILE = 40;
-
-            var observer = new IntersectionObserver(function (entries, self) {
-                entries.forEach(function (entry) {
-                    if (!entry.isIntersecting) return;
-
-                    var el = entry.target;
-                    var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
-
-                    if (isMobile) {
-                        delay = Math.min(delay, MAX_DELAY_MOBILE);
-                    }
-
-                    if (delay > 0) {
-                        el.style.setProperty('--reveal-delay', delay + 'ms');
-                    }
-
-                    el.classList.add('is-revealed');
-                    self.unobserve(el);
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px 0px 0px'
-            });
-
-            revealElements.forEach(function (el) {
-                observer.observe(el);
-            });
-        })();
-    </script>
 </x-app-layout>
