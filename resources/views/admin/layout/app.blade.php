@@ -125,6 +125,14 @@
                             >
                                 فروشگاه
                             </a>
+                            
+                            <a
+                                href="{{ route('admin.database.index') }}"
+                                class="transition {{ request()->routeIs('admin.database.*') ? 'text-blue-400' : 'hover:text-white' }}"
+                            >
+                                دیتابیس
+                            </a>
+
 
                             {{-- خروج از حساب در دسکتاپ --}}
                             <form

@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\LicenseCreationController;
+use App\Http\Controllers\Admin\DatabaseBackupController;
+
 
 
 // صفحه اصلی
@@ -117,6 +119,13 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::post('/new-license/{user}', [LicenseCreationController::class, 'store'])
             ->name('new-licenses.store');
+
+        // مدیریت دیتابیس (بک‌آپ و ریستور)
+        Route::prefix('database')->name('database.')->group(function () {
+            Route::get('/', [DatabaseBackupController::class, 'index'])->name('index');
+            Route::get('/export', [DatabaseBackupController::class, 'export'])->name('export');
+            Route::post('/import', [DatabaseBackupController::class, 'import'])->name('import');
+        });
     });
 
 require __DIR__ . '/auth.php';
