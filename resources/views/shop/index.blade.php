@@ -1,4 +1,5 @@
 <x-app-layout>
+
     <div
         x-cloak
         x-data="shopPlans({
@@ -18,11 +19,9 @@
         </div>
 
         <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
-            
             {{-- باکس هدر که همراه با اسکرول بالا رفته و مخفی می‌شود --}}
             <div class="relative overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-4 sm:p-6 backdrop-blur-2xl shadow-2xl shadow-black/50">
                 <div class="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
-
                 <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     {{-- دکمه بازگشت --}}
                     <div class="flex items-center justify-between sm:justify-start">
@@ -60,7 +59,7 @@
                             انتخاب و خرید اشتراک
                             <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-200 bg-clip-text text-transparent">AvaPark</span>
                         </h2>
-                        
+
                         <p class="mt-1.5 text-xs sm:text-sm text-gray-400 font-normal leading-relaxed">
                             پلن متناسب با کسب‌وکار خود را انتخاب کرده و دسترسی آنی لایسنس را دریافت نمایید
                         </p>
@@ -74,6 +73,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                             </div>
+
                             <div class="text-right leading-tight">
                                 <p class="font-bold text-white text-[11px]">فعال‌سازی آنی</p>
                                 <p class="text-[10px] text-gray-400">تضمین لایسنس ابری</p>
@@ -125,12 +125,14 @@
                             <template x-if="step === 1">
                                 <span>1</span>
                             </template>
+
                             <template x-if="step !== 1">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </template>
                         </div>
+
                         <div class="text-right">
                             <p class="text-xs sm:text-sm font-bold text-white tracking-tight">انتخاب پلن</p>
                             <p class="text-[11px] text-gray-400">نوع اشتراک نرم‌افزار</p>
@@ -155,6 +157,7 @@
                         >
                             <span>2</span>
                         </div>
+
                         <div class="text-right">
                             <p class="text-xs sm:text-sm font-bold" :class="step === 2 ? 'text-white' : 'text-gray-400'">مدت زمان</p>
                             <p class="text-[11px] text-gray-500">دوره اعتبار لایسنس</p>
@@ -219,6 +222,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                                 </svg>
                                             </div>
+
                                             <span class="leading-6" x-text="facility"></span>
                                         </li>
                                     </template>
@@ -237,6 +241,7 @@
                                         : 'from-blue-600/90 via-blue-500/90 to-sky-500/90 shadow-blue-900/20 group-hover:shadow-blue-500/30'"
                                 >
                                     انتخاب پلن
+
                                     <svg class="h-4 w-4 transition duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
                                     </svg>
@@ -263,10 +268,15 @@
                                 <span class="inline-block rounded-lg bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 text-[11px] font-bold text-blue-400 mb-2">
                                     گام دوم و پایانی
                                 </span>
+
                                 <h3 class="text-xl font-black text-white sm:text-2xl tracking-tight">مدت زمان اشتراک را انتخاب کنید</h3>
+
                                 <p class="mt-1 text-xs sm:text-sm text-gray-400">
                                     پلن انتخاب‌شده:
-                                    <span class="font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-lg ml-1" x-text="currentPlan()?.title"></span>
+                                    <span
+                                        class="font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-lg ml-1"
+                                        x-text="currentPlan()?.title"
+                                    ></span>
                                 </p>
                             </div>
 
@@ -278,6 +288,7 @@
                                 <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                                 </svg>
+
                                 <span>تغییر پلن</span>
                             </button>
                         </div>
@@ -317,6 +328,7 @@
 
                                     <div class="pr-10">
                                         <h4 class="text-base sm:text-lg font-black text-white" x-text="toEn(duration.duration_months) + ' ماهه'"></h4>
+
                                         <p class="mt-1 text-xs text-gray-400">
                                             مناسب برای فعال‌سازی اشتراک در این بازه زمانی
                                         </p>
@@ -329,6 +341,7 @@
                                                         class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight"
                                                         x-text="formatPrice(getFinalPrice(duration.price, duration.discount_percent))"
                                                     ></div>
+
                                                     <div
                                                         class="text-xs text-gray-500 line-through"
                                                         x-text="formatPrice(duration.price)"
@@ -362,12 +375,22 @@
                                     <template x-if="selectedDuration">
                                         <span>
                                             دوره انتخابی:
-                                            <strong class="text-white font-bold" x-text="' ' + toEn(selectedDurationObject()?.duration_months) + ' ماهه'"></strong>
+                                            <strong
+                                                class="text-white font-bold"
+                                                x-text="' ' + toEn(selectedDurationObject()?.duration_months) + ' ماهه'"
+                                            ></strong>
+
                                             &nbsp;|&nbsp;
+
                                             مبلغ قابل پرداخت:
-                                            <strong class="text-emerald-400 text-sm font-black" x-text="selectedDurationObject() ? formatPrice(getFinalPrice(selectedDurationObject().price, selectedDurationObject().discount_percent)) : '-'"></strong>
+
+                                            <strong
+                                                class="text-emerald-400 text-sm font-black"
+                                                x-text="selectedDurationObject() ? formatPrice(getFinalPrice(selectedDurationObject().price, selectedDurationObject().discount_percent)) : '-'"
+                                            ></strong>
                                         </span>
                                     </template>
+
                                     <template x-if="!selectedDuration">
                                         <span>پس از انتخاب بازه زمانی، اشتراک به سبد خرید اضافه خواهد شد.</span>
                                     </template>
@@ -424,69 +447,106 @@
 
     <script>
         function shopPlans({ plans, isAuthenticated, loginUrl, cartStoreUrl }) {
+            /*
+             * بهینه‌سازی:
+             * - ساخت Index برای پلن‌ها
+             * - ساخت Map برای durationها
+             * - حذف find()های تکراری
+             * - Cache کردن پلن و duration انتخاب‌شده
+             * - جلوگیری از submit دوباره
+             * - اصلاح تبدیل اعداد فارسی و عربی
+             */
+
+            const planList = Array.isArray(plans) ? plans : [];
+
+            planList.forEach(plan => {
+                const durationMap = Object.create(null);
+
+                if (Array.isArray(plan.prices)) {
+                    plan.prices.forEach(duration => {
+                        durationMap[String(duration.id)] = duration;
+                    });
+                }
+
+                plan._durationMap = durationMap;
+            });
+
             return {
                 selectedPlan: null,
                 selectedDuration: null,
                 step: 1,
                 errorMessage: '',
                 isSubmitting: false,
-                plans,
+
+                plans: planList,
                 isAuthenticated,
                 loginUrl,
                 cartStoreUrl,
 
+                _currentPlan: null,
+                _selectedDurationObject: null,
+
                 toEn(str) {
-                    return String(str)
-                        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)])
-                        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+                    return String(str ?? '')
+                        .replace(/[۰-۹]/g, d =>
+                            '0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)]
+                        )
+                        .replace(/[٠-٩]/g, d =>
+                            '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]
+                        );
                 },
 
                 formatPrice(price) {
-                    return Number(price).toLocaleString('en-US') + ' تومان';
+                    const value = Number(price);
+
+                    if (!Number.isFinite(value)) {
+                        return '0 تومان';
+                    }
+
+                    return value.toLocaleString('en-US') + ' تومان';
                 },
 
                 getFinalPrice(price, discount) {
-                    return Math.round(price - ((price * discount) / 100));
+                    return Math.round(
+                        Number(price) -
+                        ((Number(price) * Number(discount)) / 100)
+                    );
                 },
 
                 currentPlan() {
-                    if (this.selectedPlan === null || this.selectedPlan === undefined) {
-                        return null;
-                    }
-
-                    return this.plans[this.selectedPlan] ?? null;
+                    return this._currentPlan;
                 },
 
                 selectedPlanId() {
-                    const plan = this.currentPlan();
-                    return plan ? plan.id : '';
+                    return this._currentPlan ? this._currentPlan.id : '';
                 },
 
                 selectedDurationObject() {
-                    const plan = this.currentPlan();
-
-                    if (!plan || !plan.prices) {
-                        return null;
-                    }
-
-                    return plan.prices.find(price => Number(price.id) === Number(this.selectedDuration)) ?? null;
+                    return this._selectedDurationObject;
                 },
 
                 selectedDurationMonths() {
-                    const duration = this.selectedDurationObject();
-                    return duration ? duration.duration_months : '';
+                    return this._selectedDurationObject
+                        ? this._selectedDurationObject.duration_months
+                        : '';
                 },
 
                 selectPlan(key) {
                     this.selectedPlan = key;
                     this.selectedDuration = null;
                     this.errorMessage = '';
+
+                    this._currentPlan = this.plans[key] ?? null;
+                    this._selectedDurationObject = null;
+
                     this.step = 2;
 
                     this.$nextTick(() => {
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
+                        requestAnimationFrame(() => {
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
                         });
                     });
                 },
@@ -497,10 +557,15 @@
                     this.selectedDuration = null;
                     this.errorMessage = '';
 
+                    this._currentPlan = null;
+                    this._selectedDurationObject = null;
+
                     this.$nextTick(() => {
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
+                        requestAnimationFrame(() => {
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
                         });
                     });
                 },
@@ -508,15 +573,24 @@
                 selectDuration(durationId) {
                     this.selectedDuration = durationId;
                     this.errorMessage = '';
+
+                    const plan = this._currentPlan;
+
+                    this._selectedDurationObject =
+                        plan?._durationMap?.[String(durationId)] ?? null;
                 },
 
                 addToCart() {
+                    if (this.isSubmitting) {
+                        return;
+                    }
+
                     if (!this.isAuthenticated) {
                         window.location.href = this.loginUrl;
                         return;
                     }
 
-                    if (!this.currentPlan()) {
+                    if (!this._currentPlan) {
                         this.errorMessage = 'ابتدا باید یک پلن را انتخاب کنید.';
                         return;
                     }
@@ -526,14 +600,22 @@
                         return;
                     }
 
+                    if (!this._selectedDurationObject) {
+                        this.errorMessage = 'بازه زمانی انتخاب‌شده معتبر نیست.';
+                        return;
+                    }
+
                     this.errorMessage = '';
                     this.isSubmitting = true;
 
                     this.$nextTick(() => {
-                        this.$refs.cartForm.submit();
+                        requestAnimationFrame(() => {
+                            this.$refs.cartForm.submit();
+                        });
                     });
                 }
-            }
+            };
         }
     </script>
+
 </x-app-layout>
