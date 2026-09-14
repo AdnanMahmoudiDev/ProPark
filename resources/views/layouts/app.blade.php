@@ -2,15 +2,19 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#030712">
 
-    <title>{{ config('app.name', 'AvaPark') }}</title>
+    {{-- مدیریت انعطاف‌پذیر ربات‌ها برای صفحات عمومی و پنل --}}
+    <meta name="robots" content="@yield('robots', 'index, follow')">
 
-    <!-- Scripts & Tailwind Vite (کلیه اسکریپت‌ها از جمله Alpine.js و استایل‌ها به صورت محلی لود می‌شوند) -->
+    <title>@yield('title', config('app.name', 'AvaPark'))</title>
+
+    <!-- Scripts & Tailwind Vite (کلیه اسکریپت‌ها و استایل‌ها به صورت محلی لود می‌شوند) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- استایل‌ها: انیمیشن‌ها اختصاصاً فقط برای دسکتاپ (min-width: 768px) -->
+    <!-- بهینه‌سازی عملکرد استایل‌ها: تفکیک دقیق دسکتاپ و موبایل -->
     <style>
         [x-cloak] {
             display: none !important;
@@ -57,7 +61,7 @@
             }
         }
 
-        /* موبایل (زیر ۷۶۸ پیکسل): کاملاً استاتیک، صفر انیمیشن و سبک‌ترین حالت ممکن */
+        /* موبایل (زیر ۷۶۸ پیکسل): عملکرد حداکثری و کاملاً بدون افت فریم */
         @media (max-width: 767px) {
             main,
             [data-reveal],
@@ -79,23 +83,27 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-100 min-h-screen bg-gradient-to-br from-blue-900 via-gray-950 to-gray-950 selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
+<body class="font-sans antialiased text-gray-100 min-h-screen bg-gradient-to-br from-blue-950 via-gray-950 to-gray-950 selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
     
-    <!-- لایه شبکه نقطه‌ای و هاله‌های نوری پس‌زمینه -->
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:28px_28px] opacity-20"></div>
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[1100px] h-[300px] md:h-[450px] bg-blue-600/20 rounded-full blur-[100px] md:blur-[140px]"></div>
-        <div class="absolute top-1/3 -right-40 w-[350px] h-[350px] bg-indigo-600/15 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-1/4 -left-40 w-[400px] h-[400px] bg-sky-600/15 rounded-full blur-[130px]"></div>
+    <!-- لایه شبکه نقطه‌ای و هاله‌های نوری پس‌زمینه با ایزوله‌سازی GPU -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden transform-gpu" aria-hidden="true">
+        {{-- پترن نقطه‌ای سبک --}}
+        <div class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:28px_28px] opacity-15 sm:opacity-20"></div>
+        
+        {{-- هاله‌های بلور سنگین منحصراً برای دسکتاپ رندر می‌شوند تا موبایل کاملاً روان بماند --}}
+        <div class="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-blue-600/20 rounded-full blur-[140px]"></div>
+        <div class="hidden md:block absolute top-1/3 -right-40 w-[350px] h-[350px] bg-indigo-600/15 rounded-full blur-[120px]"></div>
+        <div class="hidden md:block absolute bottom-1/4 -left-40 w-[400px] h-[400px] bg-sky-600/15 rounded-full blur-[130px]"></div>
     </div>
 
-    <!-- کانتینر محتوا -->
+    <!-- کانتینر اصلی محتوا -->
     <div class="relative z-10 min-h-screen flex flex-col justify-between">
         <div>
             @include('layouts.navigation')
 
             @isset($header)
-                <header class="bg-gray-900/50 border-b border-gray-800 backdrop-blur-sm sticky top-0 z-30">
+                {{-- هدر با بهینه‌سازی بلور موبایل --}}
+                <header class="bg-gray-950 sm:bg-gray-900/50 border-b border-gray-800 sm:backdrop-blur-sm sticky top-0 z-30 transform-gpu">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -112,10 +120,10 @@
         @endif
     </div>
 
-    <!-- اسکریپت رصدگر اسکرول (فقط روی دسکتاپ اجرا می‌شود) -->
+    <!-- اسکریپت رصدگر اسکرول (منحصراً برای دسکتاپ) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // گارد قاطع موبایل: روی دستگاه‌های زیر 768px هیچ کدی اجرا نمی‌شود
+            // گارد قاطع برای موبایل
             if (window.innerWidth < 768) {
                 return;
             }
