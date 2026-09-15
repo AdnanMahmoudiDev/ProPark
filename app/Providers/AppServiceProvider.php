@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use App\Models\Cart;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,18 +21,23 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-public function boot(): void
-{
-    // این کد باعث می‌شود متغیر $pendingCartCount در همه ویوهای داخل layouts در دسترس باشد
-    View::composer('layouts.navigation', function ($view) {
-        $count = 0;
-        if (Auth::check()) {
-            // چک می‌کنیم آیا کاربر سبد خرید فعال دارد یا خیر
-            $count = Cart::where('user_id', Auth::id())
-                ->where('status', Cart::STATUS_PENDING)
-                ->exists() ? 1 : 0;
+    public function boot(): void
+    {
+        // اجبار به تولید لینک‌ها و اکشن فرم‌ها با پروتکل امن HTTPS
+        if (config('app.env') === 'production' || str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
         }
-        $view->with('pendingCartCount', $count);
-    });
-}
+
+        // این کد باعث می‌شود متغیر $pendingCartCount در همه ویوهای داخل layouts در دسترس باشد
+        View::composer('layouts.navigation', function ($view) {
+            $count = 0;
+            if (Auth::check()) {
+                // چک می‌کنیم آیا کاربر سبد خرید فعال دارد یا خیر
+                $count = Cart::where('user_id', Auth::id())
+                    ->where('status', Cart::STATUS_PENDING)
+                    ->exists() ? 1 : 0;
+            }
+            $view->with('pendingCartCount', $count);
+        });
+    }
 }
