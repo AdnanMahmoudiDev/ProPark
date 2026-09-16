@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
+use App\Models\PlanPrice;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,9 @@ class SubscriptionController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('admin.subscriptions.index', compact('subscriptions'));
+        $plans = Plan::with('prices')->get();
+
+        return view('admin.subscriptions.index', compact('subscriptions', 'plans'));
     }
 
     public function updateStatus(Request $request, Subscription $subscription)
@@ -30,6 +34,26 @@ class SubscriptionController extends Controller
         ]);
 
         return back()->with('success', 'وضعیت اشتراک بروزرسانی شد');
+    }
+
+    /**
+     * تغییر پلن اشتراک توسط ادمین
+     */
+    public function updatePlan(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'plan_price_id' => ['required', 'exists:plan_prices,id'],
+        ]);
+
+        // یافتن پلن متناظر با قیمت انتخابی جهت ذخیره دقیق هر دو فیلد
+        $planPrice = PlanPrice::findOrFail($validated['plan_price_id']);
+
+        $subscription->update([
+            'plan_id'       => $planPrice->plan_id,
+            'plan_price_id' => $planPrice->id,
+        ]);
+
+        return back()->with('success', 'پلن اشتراک با موفقیت تغییر کرد.');
     }
 
     public function renew(Request $request, Subscription $subscription)

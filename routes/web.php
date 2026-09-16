@@ -94,6 +94,9 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::patch('/subscriptions/{subscription}/status', [SubscriptionController::class, 'updateStatus'])
             ->name('subscriptions.update-status');
 
+        Route::patch('/subscriptions/{subscription}/plan', [SubscriptionController::class, 'updatePlan'])
+            ->name('subscriptions.update-plan');
+        
         Route::post('/subscriptions/{subscription}/renew', [SubscriptionController::class, 'renew'])
             ->name('subscriptions.renew');
 
