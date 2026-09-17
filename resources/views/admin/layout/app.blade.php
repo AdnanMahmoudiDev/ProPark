@@ -100,30 +100,38 @@
 
                             <a
                                 href="{{ route('admin.dashboard') }}"
-                                class="transition hover:text-white"
+                                class="transition {{ request()->routeIs('admin.dashboard') ? 'text-blue-400' : 'hover:text-white' }}"
                             >
                                 داشبورد
                             </a>
 
                             <a
                                 href="{{ route('admin.users.index') }}"
-                                class="transition hover:text-white"
+                                class="transition {{ request()->routeIs('admin.users.*') ? 'text-blue-400' : 'hover:text-white' }}"
                             >
                                 کاربران
                             </a>
 
                             <a
                                 href="{{ route('admin.subscriptions.index') }}"
-                                class="transition hover:text-white"
+                                class="transition {{ request()->routeIs('admin.subscriptions.*') ? 'text-blue-400' : 'hover:text-white' }}"
                             >
                                 اشتراک‌ها
                             </a>
 
                             <a
                                 href="{{ route('admin.store.index') }}"
-                                class="transition hover:text-white"
+                                class="transition {{ request()->routeIs('admin.store.*') ? 'text-blue-400' : 'hover:text-white' }}"
                             >
                                 فروشگاه
+                            </a>
+
+                            {{-- لینک مدیریت مقالات (وبلاگ) --}}
+                            <a
+                                href="{{ route('admin.posts.index') }}"
+                                class="transition {{ request()->routeIs('admin.posts.*') ? 'text-blue-400' : 'hover:text-white' }}"
+                            >
+                                مقالات
                             </a>
                             
                             <a
@@ -132,7 +140,6 @@
                             >
                                 دیتابیس
                             </a>
-
 
                             {{-- خروج از حساب در دسکتاپ --}}
                             <form
@@ -257,30 +264,45 @@
 
                     <a
                         href="{{ route('admin.dashboard') }}"
-                        class="block rounded-xl bg-gray-800/50 px-4 py-3 text-gray-200 transition hover:bg-gray-700"
+                        class="block rounded-xl {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
                     >
                         داشبورد
                     </a>
 
                     <a
                         href="{{ route('admin.users.index') }}"
-                        class="block rounded-xl bg-gray-800/50 px-4 py-3 text-gray-200 transition hover:bg-gray-700"
+                        class="block rounded-xl {{ request()->routeIs('admin.users.*') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
                     >
                         کاربران
                     </a>
 
                     <a
                         href="{{ route('admin.subscriptions.index') }}"
-                        class="block rounded-xl bg-gray-800/50 px-4 py-3 text-gray-200 transition hover:bg-gray-700"
+                        class="block rounded-xl {{ request()->routeIs('admin.subscriptions.*') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
                     >
                         اشتراک‌ها
                     </a>
 
                     <a
                         href="{{ route('admin.store.index') }}"
-                        class="block rounded-xl bg-gray-800/50 px-4 py-3 text-gray-200 transition hover:bg-gray-700"
+                        class="block rounded-xl {{ request()->routeIs('admin.store.*') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
                     >
                         فروشگاه
+                    </a>
+
+                    {{-- لینک مقالات در موبایل --}}
+                    <a
+                        href="{{ route('admin.posts.index') }}"
+                        class="block rounded-xl {{ request()->routeIs('admin.posts.*') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
+                    >
+                        مقالات
+                    </a>
+
+                    <a
+                        href="{{ route('admin.database.index') }}"
+                        class="block rounded-xl {{ request()->routeIs('admin.database.*') ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-800/50 text-gray-200' }} px-4 py-3 transition hover:bg-gray-700"
+                    >
+                        دیتابیس
                     </a>
 
                     <a

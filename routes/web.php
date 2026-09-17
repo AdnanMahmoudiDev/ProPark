@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\BlogController; // کنترلر عمومی وبلاگ
 use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
-use App\Http\Controllers\User\CartController; // کنترلر سبد خرید
+use App\Http\Controllers\User\CartController; 
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
@@ -17,8 +18,8 @@ use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\LicenseCreationController;
 use App\Http\Controllers\Admin\DatabaseBackupController;
-
-
+use App\Http\Controllers\Admin\CategoryController; 
+use App\Http\Controllers\Admin\PostController; 
 
 // صفحه اصلی
 Route::get('/', function () {
@@ -28,6 +29,10 @@ Route::get('/', function () {
 // فروشگاه
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
+// وبلاگ عمومی
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
 // درباره ما
 Route::get('/about', [PageController::class, 'about'])->name('about');
 // پشتیبانی
@@ -36,6 +41,7 @@ Route::get('/support', [PageController::class, 'support'])->name('support');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 // مسیر صفحه حریم خصوصی
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+
 // مسیر های کاربر عادی 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -56,10 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // مدیریت سبد خرید 
     Route::prefix('cart')->name('user.cart.')->controller(CartController::class)->group(function () {
-        Route::get('/', 'index')->name('index');             // نمایش سبد خرید
-        Route::post('/store', 'store')->name('store');       // افزودن محصول به سبد خرید
-        Route::delete('/cancel', 'destroy')->name('cancel'); // لغو و خالی کردن سبد خرید
-        Route::post('/checkout', 'checkout')->name('checkout'); // پرداخت و نهایی‌سازی خرید
+        Route::get('/', 'index')->name('index');             
+        Route::post('/store', 'store')->name('store');       
+        Route::delete('/cancel', 'destroy')->name('cancel'); 
+        Route::post('/checkout', 'checkout')->name('checkout'); 
     });
 
     // مدیریت پروفایل
@@ -129,6 +135,13 @@ Route::middleware(['auth', 'verified', 'admin'])
             Route::get('/export', [DatabaseBackupController::class, 'export'])->name('export');
             Route::post('/import', [DatabaseBackupController::class, 'import'])->name('import');
         });
+
+        // مدیریت دسته‌بندی‌های وبلاگ (لیست، ایجاد، ویرایش، بروزرسانی و حذف)
+        Route::resource('categories', CategoryController::class)->except(['create', 'show']);
+
+        // مدیریت مقالات وبلاگ
+        Route::resource('posts', PostController::class);
+        Route::post('posts/upload-image', [PostController::class, 'uploadContentImage'])->name('posts.upload-image');
     });
 
 require __DIR__ . '/auth.php';
