@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Subscription;
 use App\Models\Cart;
 use App\Models\License;
+use App\Notifications\CustomVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -27,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone_number',
         'role',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,12 +49,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => 'string'
+            'role' => 'string',
         ];
     }
+
+    /**
+     * Send the custom email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new CustomVerifyEmail);
+    }
+
     public function subscriptions()
     {
-    return $this->hasMany(Subscription::class);
+        return $this->hasMany(Subscription::class);
     }
 
     public function carts()
@@ -65,3 +76,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(License::class);
     }
 }
+
