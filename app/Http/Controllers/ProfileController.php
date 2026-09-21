@@ -34,7 +34,9 @@ class ProfileController extends Controller
         ));
     }
 
-    // نمایش فرم اطلاعات کاربری
+    /**
+     * نمایش فرم اطلاعات کاربری
+     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -47,7 +49,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        /** @var User $user 
+        /** @var User $user */
         $user = $request->user();
 
         $validated = $request->validated();
@@ -71,7 +73,9 @@ class ProfileController extends Controller
             ->with('status', $status);
     }
 
-    // حذف حساب کاربری
+    /**
+     * حذف حساب کاربری
+     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
