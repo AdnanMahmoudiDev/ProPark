@@ -1,7 +1,12 @@
-<section>
+@php
+    $isRtl = app()->getLocale() === 'fa';
+    $align = $isRtl ? 'text-right' : 'text-left';
+@endphp
+
+<section dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
     <header>
-        <div class="flex items-start gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300 shadow-lg shadow-blue-950/20">
+        <div class="flex items-start gap-3 {{ $align }}">
+            <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300 shadow-lg shadow-blue-950/20">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      class="h-5 w-5"
                      fill="none"
@@ -16,11 +21,11 @@
 
             <div>
                 <h2 class="text-lg font-bold tracking-tight text-white">
-                    {{ __('تغییر رمز عبور') }}
+                    {{ __('update_password_title') }}
                 </h2>
 
                 <p class="mt-1 text-sm leading-6 text-gray-400">
-                    {{ __('برای امنیت بیشتر، از یک رمز عبور طولانی، قوی و غیرقابل حدس استفاده کنید.') }}
+                    {{ __('update_password_desc') }}
                 </p>
             </div>
         </div>
@@ -34,8 +39,8 @@
             x-init="setTimeout(() => show = false, 3000)"
             class="mt-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-300 shadow-sm"
         >
-            <div class="flex items-start gap-3">
-                <div class="mt-0.5 rounded-xl bg-emerald-500/15 p-2 text-emerald-400">
+            <div class="flex items-start gap-3 {{ $align }}">
+                <div class="mt-0.5 rounded-xl bg-emerald-500/15 p-2 text-emerald-400 flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          class="h-4 w-4"
                          fill="none"
@@ -49,7 +54,7 @@
                 </div>
 
                 <p class="font-medium">
-                    {{ __('رمز عبور با موفقیت تغییر کرد.') }}
+                    {{ __('update_password_success') }}
                 </p>
             </div>
         </div>
@@ -59,10 +64,10 @@
         @csrf
         @method('put')
 
-        <div>
+        <div class="{{ $align }}">
             <x-input-label
                 for="update_password_current_password"
-                :value="__('رمز عبور فعلی')"
+                :value="__('update_password_current_label')"
                 class="text-gray-300"
             />
 
@@ -77,10 +82,10 @@
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
-        <div>
+        <div class="{{ $align }}">
             <x-input-label
                 for="update_password_password"
-                :value="__('رمز عبور جدید')"
+                :value="__('update_password_new_label')"
                 class="text-gray-300"
             />
 
@@ -95,10 +100,10 @@
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
-        <div>
+        <div class="{{ $align }}">
             <x-input-label
                 for="update_password_password_confirmation"
-                :value="__('تکرار رمز عبور جدید')"
+                :value="__('update_password_confirm_label')"
                 class="text-gray-300"
             />
 
@@ -115,7 +120,7 @@
 
         <div class="flex items-center gap-4 pt-2">
             <x-primary-button class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold !text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:from-blue-500 hover:via-sky-500 hover:to-cyan-400 hover:shadow-blue-500/40 focus:ring-2 focus:ring-blue-400/60">
-                {{ __('ذخیره رمز عبور') }}
+                {{ __('update_password_save_button') }}
             </x-primary-button>
         </div>
     </form>

@@ -7,9 +7,13 @@
             isAuthenticated: @js(auth()->check()),
             loginUrl: @js(route('login')),
             cartStoreUrl: @js(route('user.cart.store')),
+            currency: @js(__('shop_currency')),
+            monthsSuffix: @js(__('shop_months')),
+            errSelectPlan: @js(__('shop_err_select_plan')),
+            errSelectDuration: @js(__('shop_err_select_duration')),
+            errInvalidDuration: @js(__('shop_err_invalid_duration'))
         })"
         class="relative min-h-screen py-6 sm:py-10 overflow-hidden bg-gray-950 font-sans antialiased text-gray-100"
-        dir="rtl"
     >
         {{-- افکت‌های نوری محیطی --}}
         <div class="pointer-events-none fixed inset-0 overflow-hidden">
@@ -29,10 +33,10 @@
                             href="{{ auth()->check() ? route('dashboard') : url('/') }}"
                             class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/25 ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                         >
-                            <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <svg class="h-4 w-4 rtl:rotate-0 ltr:rotate-180 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                             </svg>
-                            <span>بازگشت به پنل</span>
+                            <span>{{ __('shop_back_to_panel') }}</span>
                         </a>
 
                         {{-- نمایش وضعیت در موبایل --}}
@@ -41,27 +45,27 @@
                                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
                             </span>
-                            <span>فروشگاه لایسنس</span>
+                            <span>{{ __('shop_license_store') }}</span>
                         </div>
                     </div>
 
                     {{-- عنوان و توضیحات --}}
-                    <div class="text-right sm:text-center">
+                    <div class="text-start sm:text-center">
                         <div class="hidden sm:inline-flex items-center gap-2 mb-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 shadow-inner">
                             <span class="relative flex h-2 w-2">
                                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
                             </span>
-                            <span>تعرفه و ارتقای اشتراک</span>
+                            <span>{{ __('shop_tariff_upgrade') }}</span>
                         </div>
 
                         <h2 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white">
-                            انتخاب و خرید اشتراک
+                            {{ __('shop_title') }}
                             <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-200 bg-clip-text text-transparent">AvaPark</span>
                         </h2>
 
                         <p class="mt-1.5 text-xs sm:text-sm text-gray-400 font-normal leading-relaxed">
-                            پلن متناسب با کسب‌وکار خود را انتخاب کرده و دسترسی آنی لایسنس را دریافت نمایید
+                            {{ __('shop_subtitle') }}
                         </p>
                     </div>
 
@@ -74,9 +78,9 @@
                                 </svg>
                             </div>
 
-                            <div class="text-right leading-tight">
-                                <p class="font-bold text-white text-[11px]">فعال‌سازی آنی</p>
-                                <p class="text-[10px] text-gray-400">تضمین لایسنس ابری</p>
+                            <div class="text-start leading-tight">
+                                <p class="font-bold text-white text-[11px]">{{ __('shop_instant_activation') }}</p>
+                                <p class="text-[10px] text-gray-400">{{ __('shop_cloud_guarantee') }}</p>
                             </div>
                         </div>
                     </div>
@@ -115,7 +119,7 @@
             <div>
                 <div class="mx-auto flex max-w-xl items-center justify-between rounded-3xl border border-gray-800/80 bg-gray-900/60 p-3 sm:p-4 backdrop-blur-2xl shadow-xl shadow-black/40">
                     {{-- مرحله اول --}}
-                    <div class="flex items-center gap-3 pr-2 sm:pr-4">
+                    <div class="flex items-center gap-3 pe-2 sm:pe-4">
                         <div
                             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-xs font-black transition-all duration-300"
                             :class="step === 1
@@ -133,9 +137,9 @@
                             </template>
                         </div>
 
-                        <div class="text-right">
-                            <p class="text-xs sm:text-sm font-bold text-white tracking-tight">انتخاب پلن</p>
-                            <p class="text-[11px] text-gray-400">نوع اشتراک نرم‌افزار</p>
+                        <div class="text-start">
+                            <p class="text-xs sm:text-sm font-bold text-white tracking-tight">{{ __('shop_step1_title') }}</p>
+                            <p class="text-[11px] text-gray-400">{{ __('shop_step1_desc') }}</p>
                         </div>
                     </div>
 
@@ -148,7 +152,7 @@
                     </div>
 
                     {{-- مرحله دوم --}}
-                    <div class="flex items-center gap-3 pl-2 sm:pl-4">
+                    <div class="flex items-center gap-3 ps-2 sm:ps-4">
                         <div
                             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-xs font-black transition-all duration-300"
                             :class="step === 2
@@ -158,9 +162,9 @@
                             <span>2</span>
                         </div>
 
-                        <div class="text-right">
-                            <p class="text-xs sm:text-sm font-bold" :class="step === 2 ? 'text-white' : 'text-gray-400'">مدت زمان</p>
-                            <p class="text-[11px] text-gray-500">دوره اعتبار لایسنس</p>
+                        <div class="text-start">
+                            <p class="text-xs sm:text-sm font-bold" :class="step === 2 ? 'text-white' : 'text-gray-400'">{{ __('shop_step2_title') }}</p>
+                            <p class="text-[11px] text-gray-500">{{ __('shop_step2_desc') }}</p>
                         </div>
                     </div>
                 </div>
@@ -174,9 +178,9 @@
                 x-transition:leave-end="opacity-0"
             >
                 <div class="mb-8 text-center">
-                    <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">پلن مناسب خود را انتخاب کنید</h3>
+                    <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_choose_plan_heading') }}</h3>
                     <p class="mt-2 text-xs sm:text-sm text-gray-400">
-                        هر پلن بر اساس نیاز شما طراحی شده است. برای ادامه یکی را انتخاب کنید.
+                        {{ __('shop_choose_plan_subheading') }}
                     </p>
                 </div>
 
@@ -231,7 +235,7 @@
 
                             <div class="mt-8 pt-6 border-t border-gray-800/60 flex items-center justify-between gap-4">
                                 <span class="text-xs font-medium text-gray-500">
-                                    مشاهده قیمت‌ها و انتخاب
+                                    {{ __('shop_view_prices') }}
                                 </span>
 
                                 <span
@@ -240,9 +244,9 @@
                                         ? 'from-blue-600 via-blue-500 to-sky-500 shadow-blue-600/30'
                                         : 'from-blue-600/90 via-blue-500/90 to-sky-500/90 shadow-blue-900/20 group-hover:shadow-blue-500/30'"
                                 >
-                                    انتخاب پلن
+                                    {{ __('shop_select_plan_btn') }}
 
-                                    <svg class="h-4 w-4 transition duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <svg class="h-4 w-4 rtl:rotate-0 ltr:rotate-180 transition duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </span>
@@ -266,15 +270,15 @@
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <span class="inline-block rounded-lg bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 text-[11px] font-bold text-blue-400 mb-2">
-                                    گام دوم و پایانی
+                                    {{ __('shop_step2_badge') }}
                                 </span>
 
-                                <h3 class="text-xl font-black text-white sm:text-2xl tracking-tight">مدت زمان اشتراک را انتخاب کنید</h3>
+                                <h3 class="text-xl font-black text-white sm:text-2xl tracking-tight">{{ __('shop_choose_duration_heading') }}</h3>
 
                                 <p class="mt-1 text-xs sm:text-sm text-gray-400">
-                                    پلن انتخاب‌شده:
+                                    {{ __('shop_selected_plan_label') }}
                                     <span
-                                        class="font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-lg ml-1"
+                                        class="font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-lg ms-1"
                                         x-text="currentPlan()?.title"
                                     ></span>
                                 </p>
@@ -283,13 +287,14 @@
                             <button
                                 @click="changePlan()"
                                 type="button"
-                                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer"
+                                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19/60 cursor-pointer"
                             >
-                                <svg class="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <svg class="h-4 w-4 rtl:rotate-0 ltr:rotate-180 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                                 </svg>
 
-                                <span>تغییر پلن</span>
+                                <span>{{ __('shop_change_plan_btn') }}</span>
                             </button>
                         </div>
                     </div>
@@ -301,22 +306,22 @@
                                 <button
                                     type="button"
                                     @click="selectDuration(duration.id)"
-                                    class="group relative overflow-hidden rounded-3xl border p-6 text-right transition-all duration-300 hover:-translate-y-1 cursor-pointer w-full"
+                                    class="group relative overflow-hidden rounded-3xl border p-6 text-start transition-all duration-300 hover:-translate-y-1 cursor-pointer w-full"
                                     :class="selectedDuration === duration.id
                                         ? 'border-blue-500 bg-gradient-to-br from-blue-600/15 via-gray-900/90 to-gray-950 shadow-xl shadow-blue-950/40 ring-1 ring-blue-500/50'
                                         : 'border-gray-800/80 bg-gray-950/40 hover:border-gray-700 hover:bg-gray-900/80'"
                                 >
                                     {{-- تگ تخفیف --}}
                                     <template x-if="duration.discount_percent > 0">
-                                        <div class="absolute left-4 top-4 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1.5 text-xs font-black text-rose-300 shadow-lg shadow-rose-950/40 backdrop-blur-md">
+                                        <div class="absolute end-4 top-4 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1.5 text-xs font-black text-rose-300 shadow-lg shadow-rose-950/40 backdrop-blur-md">
                                             <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
-                                            <span x-text="toEn(duration.discount_percent) + '% تخفیف '"></span>
+                                            <span x-text="toEn(duration.discount_percent) + ' ' + @js(__('shop_discount_off'))"></span>
                                         </div>
                                     </template>
 
                                     {{-- آیکون تیک انتخاب --}}
                                     <div
-                                        class="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full border transition-all duration-300"
+                                        class="absolute start-4 top-4 flex h-7 w-7 items-center justify-center rounded-full border transition-all duration-300"
                                         :class="selectedDuration === duration.id
                                             ? 'border-blue-400 bg-blue-500 text-white shadow-md shadow-blue-500/50'
                                             : 'border-gray-700 bg-gray-800 text-transparent group-hover:border-gray-600'"
@@ -326,11 +331,11 @@
                                         </svg>
                                     </div>
 
-                                    <div class="pr-10">
-                                        <h4 class="text-base sm:text-lg font-black text-white" x-text="toEn(duration.duration_months) + ' ماهه'"></h4>
+                                    <div class="ps-10">
+                                        <h4 class="text-base sm:text-lg font-black text-white" x-text="toEn(duration.duration_months) + ' ' + monthsSuffix"></h4>
 
                                         <p class="mt-1 text-xs text-gray-400">
-                                            مناسب برای فعال‌سازی اشتراک در این بازه زمانی
+                                            {{ __('shop_duration_desc') }}
                                         </p>
 
                                         {{-- نمایش قیمت‌ها --}}
@@ -374,15 +379,15 @@
                                 <div class="text-xs text-gray-400">
                                     <template x-if="selectedDuration">
                                         <span>
-                                            دوره انتخابی:
+                                            {{ __('shop_selected_period') }}
                                             <strong
                                                 class="text-white font-bold"
-                                                x-text="' ' + toEn(selectedDurationObject()?.duration_months) + ' ماهه'"
+                                                x-text="' ' + toEn(selectedDurationObject()?.duration_months) + ' ' + monthsSuffix"
                                             ></strong>
 
                                             &nbsp;|&nbsp;
 
-                                            مبلغ قابل پرداخت:
+                                            {{ __('shop_payable_amount') }}
 
                                             <strong
                                                 class="text-emerald-400 text-sm font-black"
@@ -392,7 +397,7 @@
                                     </template>
 
                                     <template x-if="!selectedDuration">
-                                        <span>پس از انتخاب بازه زمانی، اشتراک به سبد خرید اضافه خواهد شد.</span>
+                                        <span>{{ __('shop_select_period_hint') }}</span>
                                     </template>
                                 </div>
 
@@ -428,7 +433,7 @@
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                     </svg>
 
-                                    <span x-text="isSubmitting ? 'در حال انتقال به سبد خرید...' : 'افزودن به سبد خرید'"></span>
+                                    <span x-text="isSubmitting ? @js(__('shop_adding_to_cart')) : @js(__('shop_add_to_cart'))"></span>
                                 </button>
                             </div>
                         </div>
@@ -446,7 +451,17 @@
     </div>
 
     <script>
-        function shopPlans({ plans, isAuthenticated, loginUrl, cartStoreUrl }) {
+        function shopPlans({
+            plans,
+            isAuthenticated,
+            loginUrl,
+            cartStoreUrl,
+            currency = 'تومان',
+            monthsSuffix = 'ماهه',
+            errSelectPlan = '',
+            errSelectDuration = '',
+            errInvalidDuration = ''
+        }) {
             /*
              * بهینه‌سازی:
              * - ساخت Index برای پلن‌ها
@@ -482,6 +497,11 @@
                 isAuthenticated,
                 loginUrl,
                 cartStoreUrl,
+                currency,
+                monthsSuffix,
+                errSelectPlan,
+                errSelectDuration,
+                errInvalidDuration,
 
                 _currentPlan: null,
                 _selectedDurationObject: null,
@@ -500,10 +520,10 @@
                     const value = Number(price);
 
                     if (!Number.isFinite(value)) {
-                        return '0 تومان';
+                        return '0 ' + this.currency;
                     }
 
-                    return value.toLocaleString('en-US') + ' تومان';
+                    return value.toLocaleString('en-US') + ' ' + this.currency;
                 },
 
                 getFinalPrice(price, discount) {
@@ -591,17 +611,17 @@
                     }
 
                     if (!this._currentPlan) {
-                        this.errorMessage = 'ابتدا باید یک پلن را انتخاب کنید.';
+                        this.errorMessage = this.errSelectPlan;
                         return;
                     }
 
                     if (!this.selectedDuration) {
-                        this.errorMessage = 'باید بازه زمانی پلن خود را انتخاب کنید.';
+                        this.errorMessage = this.errSelectDuration;
                         return;
                     }
 
                     if (!this._selectedDurationObject) {
-                        this.errorMessage = 'بازه زمانی انتخاب‌شده معتبر نیست.';
+                        this.errorMessage = this.errInvalidDuration;
                         return;
                     }
 

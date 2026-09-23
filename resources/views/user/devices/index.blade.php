@@ -1,12 +1,16 @@
+@php
+    $isRtl = app()->isLocale('fa');
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h2 class="text-2xl font-bold tracking-tight text-gray-100">
-                    مدیریت دستگاه‌ها
+                    {{ __('dev_manage_title') }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-400">
-                    مشاهده و حذف دستگاه‌های متصل به لایسنس شما
+                    {{ __('dev_manage_desc') }}
                 </p>
             </div>
 
@@ -15,7 +19,7 @@
                 class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
             >
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-4 w-4 transition duration-300 group-hover:translate-x-1"
+                     class="h-4 w-4 transition duration-300 group-hover:translate-x-1 {{ $isRtl ? 'rotate-180' : '' }}"
                      fill="none"
                      viewBox="0 0 24 24"
                      stroke="currentColor">
@@ -24,7 +28,7 @@
                           stroke-width="2"
                           d="M15 19l-7-7 7-7" />
                 </svg>
-                <span>بازگشت به جزئیات اشتراک</span>
+                <span>{{ __('dev_back_to_sub') }}</span>
             </a>
         </div>
     </x-slot>
@@ -51,7 +55,7 @@
 
                         <div>
                             <p class="text-sm font-semibold">
-                                عملیات با موفقیت انجام شد
+                                {{ __('dev_success_title') }}
                             </p>
                             <p class="mt-1 text-sm text-emerald-200/90">
                                 {{ session('success') }}
@@ -80,17 +84,17 @@
 
                             <div>
                                 <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
-                                    دستگاه‌های متصل
+                                    {{ __('dev_connected_devices') }}
                                 </h1>
                                 <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
-                                    در این بخش می‌توانید دستگاه‌های متصل به لایسنس خود را مشاهده کرده و در صورت نیاز آن‌ها را حذف کنید.
+                                    {{ __('dev_manage_hint') }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="inline-flex items-center gap-2 self-start rounded-full border border-blue-500/10 bg-blue-500/5 px-4 py-2 text-xs font-semibold text-blue-200">
                             <span class="inline-block h-2 w-2 rounded-full bg-blue-400"></span>
-                            {{ $devices->count() }} دستگاه ثبت‌شده
+                            {{ __('dev_registered_count', ['count' => $devices->count()]) }}
                         </div>
                     </div>
                 </div>
@@ -112,20 +116,20 @@
                             </div>
 
                             <h3 class="mt-6 text-lg font-bold text-white">
-                                دستگاهی ثبت نشده است
+                                {{ __('dev_no_devices_title') }}
                             </h3>
 
                             <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-gray-400">
-                                در حال حاضر هیچ دستگاه فعالی برای این حساب شناسایی نشده است. پس از فعال‌سازی لایسنس روی دستگاه‌های مختلف، اطلاعات آن‌ها در این بخش نمایش داده می‌شود.
+                                {{ __('dev_no_devices_desc') }}
                             </p>
 
                             <div class="mt-8">
                                 <a
                                     href="{{ route('subscription.details') }}"
-                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-800/70 bg-blue-900/20 px-5 py-3 text-sm font-bold text-blue-300 shadow-lg shadow-blue-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-800/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-800/70 bg-blue-900/20 px-5 py-3 text-sm font-bold text-blue-300 shadow-lg shadow-blue-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-800/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400/40"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="h-5 w-5"
+                                         class="h-5 w-5 {{ $isRtl ? 'rotate-180' : '' }}"
                                          fill="none"
                                          viewBox="0 0 24 24"
                                          stroke="currentColor">
@@ -134,7 +138,7 @@
                                               stroke-width="2"
                                               d="M15 19l-7-7 7-7" />
                                     </svg>
-                                    بازگشت به جزئیات اشتراک
+                                    {{ __('dev_back_to_sub') }}
                                 </a>
                             </div>
                         </div>
@@ -160,45 +164,45 @@
 
                                             <div>
                                                 <h3 class="text-sm font-bold text-white">
-                                                    کامپیوتر {{ $device->seat_number ?? '—' }}
+                                                    {{ __('dev_pc_name') }} {{ $device->seat_number ?? '—' }}
                                                 </h3>
                                                 <p class="mt-1 text-xs text-gray-500">
-                                                    ردیف {{ $index + 1 }} • ID: {{ $device->id }}
+                                                    {{ __('dev_row') }} {{ $index + 1 }} • ID: {{ $device->id }}
                                                 </p>
                                             </div>
                                         </div>
 
                                         <span class="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold text-blue-300">
-                                            دستگاه
+                                            {{ __('dev_badge') }}
                                         </span>
                                     </div>
 
                                     <div class="mt-4 space-y-3">
                                         <div class="rounded-xl bg-gray-900/70 p-3 ring-1 ring-white/5">
                                             <p class="text-[11px] font-bold tracking-wide text-gray-500">
-                                                شناسه سخت‌افزاری
+                                                {{ __('dev_hw_id') }}
                                             </p>
                                             <p class="mt-2 break-all font-mono text-xs leading-6 text-blue-300">
-                                                {{ $device->machine_fingerprint ?? 'نامشخص' }}
+                                                {{ $device->machine_fingerprint ?? __('dev_unknown') }}
                                             </p>
                                         </div>
 
                                         <div class="grid grid-cols-1 gap-3">
                                             <div class="rounded-xl border border-gray-800 bg-gray-900/40 p-3">
                                                 <p class="text-[11px] font-bold text-gray-500">
-                                                    زمان فعال‌سازی
+                                                    {{ __('dev_activation_time') }}
                                                 </p>
                                                 <p class="mt-2 text-sm text-gray-200">
-                                                    {{ $device->activated_at ? jdate($device->activated_at)->format('Y/m/d H:i') : '—' }}
+                                                    {{ $device->activated_at ? ($isRtl ? jdate($device->activated_at)->format('Y/m/d H:i') : \Carbon\Carbon::parse($device->activated_at)->format('Y-m-d H:i')) : '—' }}
                                                 </p>
                                             </div>
 
                                             <div class="rounded-xl border border-gray-800 bg-gray-900/40 p-3">
                                                 <p class="text-[11px] font-bold text-gray-500">
-                                                    تاریخ ثبت
+                                                    {{ __('dev_created_at') }}
                                                 </p>
                                                 <p class="mt-2 text-sm text-gray-200">
-                                                    {{ $device->created_at ? jdate($device->created_at)->format('Y/m/d H:i') : '—' }}
+                                                    {{ $device->created_at ? ($isRtl ? jdate($device->created_at)->format('Y/m/d H:i') : \Carbon\Carbon::parse($device->created_at)->format('Y-m-d H:i')) : '—' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -207,7 +211,7 @@
                                     <div class="mt-4 border-t border-gray-800 pt-4">
                                         <form action="{{ route('user.devices.destroy', $device) }}"
                                               method="POST"
-                                              onsubmit="return confirm('آیا از حذف این دستگاه مطمئن هستید؟');">
+                                              onsubmit="return confirm('{{ __('dev_confirm_delete') }}');">
                                             @csrf
                                             @method('DELETE')
 
@@ -225,7 +229,7 @@
                                                           stroke-width="2"
                                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0h8m-1-2a1 1 0 00-1-1h-2a1 1 0 00-1 1l-.2 1h4.4L15 5z" />
                                                 </svg>
-                                                حذف دستگاه
+                                                {{ __('dev_delete') }}
                                             </button>
                                         </form>
                                     </div>
@@ -243,19 +247,19 @@
                                                 #
                                             </th>
                                             <th class="px-4 py-4 text-right text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                شماره کامپیوتر
+                                                {{ __('dev_pc_name') }}
                                             </th>
                                             <th class="px-4 py-4 text-right text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                شناسه سخت‌افزاری (Fingerprint)
+                                                {{ __('dev_hw_id') }}
                                             </th>
                                             <th class="px-4 py-4 text-right text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                زمان فعال‌سازی
+                                                {{ __('dev_activation_time') }}
                                             </th>
                                             <th class="px-4 py-4 text-right text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                تاریخ ثبت
+                                                {{ __('dev_created_at') }}
                                             </th>
                                             <th class="px-4 py-4 text-right text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                عملیات
+                                                {{ __('dev_action') }}
                                             </th>
                                         </tr>
                                     </thead>
@@ -284,7 +288,7 @@
 
                                                         <div>
                                                             <p class="text-sm font-semibold text-white">
-                                                                کامپیوتر {{ $device->seat_number ?? '—' }}
+                                                                {{ __('dev_pc_name') }} {{ $device->seat_number ?? '—' }}
                                                             </p>
                                                             <p class="mt-1 text-xs text-gray-500">
                                                                 ID: {{ $device->id }}
@@ -296,22 +300,22 @@
                                                 <td class="px-4 py-5">
                                                     <code class="inline-block max-w-[320px] truncate rounded-lg bg-gray-900 px-3 py-2 font-mono text-xs text-blue-300 ring-1 ring-white/5"
                                                           title="{{ $device->machine_fingerprint }}">
-                                                        {{ $device->machine_fingerprint ?? 'نامشخص' }}
+                                                        {{ $device->machine_fingerprint ?? __('dev_unknown') }}
                                                     </code>
                                                 </td>
 
                                                 <td class="whitespace-nowrap px-4 py-5 text-sm text-gray-300">
-                                                    {{ $device->activated_at ? jdate($device->activated_at)->format('Y/m/d H:i') : '—' }}
+                                                    {{ $device->activated_at ? ($isRtl ? jdate($device->activated_at)->format('Y/m/d H:i') : \Carbon\Carbon::parse($device->activated_at)->format('Y-m-d H:i')) : '—' }}
                                                 </td>
 
                                                 <td class="whitespace-nowrap px-4 py-5 text-sm text-gray-300">
-                                                    {{ $device->created_at ? jdate($device->created_at)->format('Y/m/d H:i') : '—' }}
+                                                    {{ $device->created_at ? ($isRtl ? jdate($device->created_at)->format('Y/m/d H:i') : \Carbon\Carbon::parse($device->created_at)->format('Y-m-d H:i')) : '—' }}
                                                 </td>
 
                                                 <td class="px-4 py-5">
                                                     <form action="{{ route('user.devices.destroy', $device) }}"
                                                           method="POST"
-                                                          onsubmit="return confirm('آیا از حذف این دستگاه مطمئن هستید؟');">
+                                                          onsubmit="return confirm('{{ __('dev_confirm_delete') }}');">
                                                         @csrf
                                                         @method('DELETE')
 
@@ -327,9 +331,9 @@
                                                                 <path stroke-linecap="round"
                                                                       stroke-linejoin="round"
                                                                       stroke-width="2"
-                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0h8m-1-2a1 1 0 00-1-1h-2a1 1 0 00-1 1l-.2 1h4.4L15 5z" />
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0h8m-1-2a1 1 0 00-1-1h-2a1 1 0 00-1 1l-.2 1h4.4L15 5z" />
                                                             </svg>
-                                                            حذف دستگاه
+                                                            {{ __('dev_delete') }}
                                                         </button>
                                                     </form>
                                                 </td>
@@ -357,10 +361,10 @@
 
                                 <div>
                                     <p class="text-sm font-bold text-amber-300">
-                                        توجه مهم
+                                        {{ __('dev_attention') }}
                                     </p>
                                     <p class="mt-1 text-sm leading-6 text-gray-400">
-                                        با حذف یک دستگاه، دسترسی آن سیستم به لایسنس شما لغو می‌شود. در صورت نیاز به استفاده مجدد، باید مجدداً لایسنس را بر روی آن سیستم فعال‌سازی کنید.
+                                        {{ __('dev_attention_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -371,11 +375,11 @@
 
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-500">
-                    اگر دستگاهی را نمی‌شناسید یا مشکوک به استفاده غیرمجاز هستید، آن را حذف کنید و در صورت نیاز با
+                    {{ __('dev_support_msg') }}
                     <a href="#" class="text-blue-400 transition-colors hover:text-blue-300 hover:underline">
-                        پشتیبانی
+                        {{ __('dev_support_link') }}
                     </a>
-                    تماس بگیرید.
+                    {{ __('dev_support_contact') }}
                 </p>
             </div>
         </div>
