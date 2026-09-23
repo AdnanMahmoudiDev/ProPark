@@ -1,55 +1,58 @@
 <x-app-layout>
 
     @php
+        $locale = app()->getLocale();
+        $isRtl = $locale === 'fa';
+
         $screens = [
             [
                 'image' => asset('images/app-screenshots/slide1.png'),
-                'title' => 'داشبورد اصلی نرم‌افزار ویندوزی',
-                'desc' => 'مدیریت و نظارت یکپارچه بر پارکینگ، جایگاه‌های خالی و پر، وضعیت دوربین‌ها و رویدادهای زنده سیستم.',
-                'badge' => 'کنترل مرکزی',
+                'title' => __('Main Windows Software Dashboard'),
+                'desc' => __('Integrated management and monitoring of parking lots, occupied/free spaces, camera status, and live system events.'),
+                'badge' => __('Central Control'),
             ],
             [
                 'image' => asset('images/app-screenshots/slide2.png'),
-                'title' => 'سیستم تعریف تعرفه و قیمت‌گذاری',
-                'desc' => 'تنظیم دقیق تعرفه‌های پلکانی، نرخ پایه روزانه/شبانه، پارکینگ ویژه و تخفیف‌های وفاداری و مناسبتی.',
-                'badge' => 'مالی و تعرفه',
+                'title' => __('Tariff and Pricing Definition System'),
+                'desc' => __('Precise configuration of progressive tariffs, daily/nightly base rates, special parking, and loyalty/promotional discounts.'),
+                'badge' => __('Financial & Tariff'),
             ],
             [
                 'image' => asset('images/app-screenshots/slide3.png'),
-                'title' => 'سیستم مدیریت کاربران برنامه',
-                'desc' => 'سطوح دسترسی تفکیک‌شده برای ادمین‌ها، اپراتورها و پرسنل شیفت با امنیت بالا.',
-                'badge' => 'امنیت و دسترسی',
+                'title' => __('Application User Management System'),
+                'desc' => __('Segregated access levels for administrators, operators, and shift personnel with high security.'),
+                'badge' => __('Security & Access'),
             ],
             [
                 'image' => asset('images/app-screenshots/slide4.png'),
-                'title' => 'تنظیمات جایگاه‌ها و ظرفیت',
-                'desc' => 'پیکربندی داینامیک بلوک‌ها، ظرفیت طبقات و تخصیص هوشمند فضاهای پارک به خودروها.',
-                'badge' => 'مدیریت فضا',
+                'title' => __('Slots and Capacity Settings'),
+                'desc' => __('Dynamic configuration of blocks, floor capacities, and intelligent allocation of parking spaces to vehicles.'),
+                'badge' => __('Space Management'),
             ],
             [
                 'image' => asset('images/app-screenshots/slide5.png'),
-                'title' => 'گزارش‌گیری جامع و کنترل سامانه',
-                'desc' => 'خروجی‌های آماری دقیق، نمودارهای درآمدی و تحلیل ترافیک روزانه برای مدیران پارکینگ.',
-                'badge' => 'آنالیز داده',
+                'title' => __('Comprehensive Reporting and System Control'),
+                'desc' => __('Precise statistical outputs, revenue charts, and daily traffic analysis for parking managers.'),
+                'badge' => __('Data Analytics'),
             ],
         ];
 
         $features = [
             [
-                'title' => 'مدیریت آنلاین لایسنس',
-                'desc' => 'اعتبارسنجی آنی، کنترل دستگاه‌های فعال و تمدید خودکار اشتراک‌ها بدون وقفه در عملکرد سامانه.',
+                'title' => __('Online License Management'),
+                'desc' => __('Real-time validation, control of active devices, and automatic subscription renewals without system downtime.'),
                 'icon' => 'key',
                 'tag' => 'Smart License',
             ],
             [
-                'title' => 'داشبورد ابری هوشمند',
-                'desc' => 'دسترسی در هر لحظه و از هر مکان به آمار زنده تردد، گزارش‌های مالی و وضعیت کلی گیت‌ها.',
+                'title' => __('Smart Cloud Dashboard'),
+                'desc' => __('Instant access anytime and anywhere to live traffic statistics, financial reports, and overall gate status.'),
                 'icon' => 'layout',
                 'tag' => 'Live Analytics',
             ],
             [
-                'title' => 'اتصال امن و پرسرعت API',
-                'desc' => 'پروتکل ارتباطی سبک و رمزنگاری‌شده میان کلاینت محلی (ویندوز/پایتون) و سرور ابری لاراولی.',
+                'title' => __('Secure & High-Speed API Connection'),
+                'desc' => __('Lightweight and encrypted communication protocol between local client (Windows/Python) and Laravel cloud server.'),
                 'icon' => 'bolt',
                 'tag' => 'Fast Sync',
             ],
@@ -57,7 +60,7 @@
     @endphp
 
     <main
-        dir="rtl"
+        dir="{{ $isRtl ? 'rtl' : 'ltr' }}"
         class="relative isolate overflow-hidden py-12 md:py-20"
         x-data="{
             zoomModal: false,
@@ -115,11 +118,11 @@
                 data-reveal-delay="120"
                 class="mb-6 mt-6 text-3xl font-black leading-[1.2] tracking-tight text-white sm:text-5xl sm:leading-[1.25] md:mb-8 md:text-6xl lg:text-7xl"
             >
-                سامانه هوشمند و یکپارچه
+                {{ __('Smart and Integrated Parking Management System') }}
                 <br><br>
 
                 <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
-                    مدیریت پارکینگ AvaPark
+                    {{ __('AvaPark Parking Management') }}
                 </span>
             </h1>
 
@@ -128,7 +131,7 @@
                 data-reveal-delay="240"
                 class="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-gray-300 sm:text-lg md:mb-12 md:text-xl"
             >
-                پلتفرم جامع کنترل تردد، پایش لحظه‌ای جایگاه‌ها و صدور لایسنس نرم‌افزاری بر بستر وب و کلاینت ویندوز.
+                {{ __('Comprehensive traffic control platform, real-time slot monitoring, and software license issuance on web and Windows client.') }}
             </p>
 
             {{-- CTA --}}
@@ -141,10 +144,10 @@
                 <a
                     href="{{ route('register') }}"
                     class="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-4 text-center text-base font-bold text-white shadow-xl shadow-blue-600/25 transition-shadow duration-300 hover:shadow-blue-500/40 active:scale-[0.98] sm:w-auto"
-                    aria-label="شروع کار و ثبت‌نام در AvaPark"
+                    aria-label="{{ __('Get Started and Register in AvaPark') }}"
                 >
                     <span class="relative z-10 flex items-center justify-center gap-2">
-                        شروع کار و ثبت‌نام
+                        {{ __('Get Started & Register') }}
 
                         <svg
                             aria-hidden="true"
@@ -171,7 +174,7 @@
                 <a
                     href="{{ route('shop') }}"
                     class="group inline-flex w-full items-center justify-center gap-2.5 rounded-2xl border border-gray-700/80 bg-gray-900/70 px-8 py-4 text-base font-semibold text-gray-200 shadow-lg shadow-black/10 transition-colors duration-300 hover:border-blue-500/40 hover:bg-gray-800/90 hover:text-white active:scale-[0.98] sm:w-auto"
-                    aria-label="مشاهده تعرفه‌ها و فروشگاه AvaPark"
+                    aria-label="{{ __('View AvaPark Pricing and Store') }}"
                 >
                     <svg
                         aria-hidden="true"
@@ -188,7 +191,7 @@
                         />
                     </svg>
 
-                    مشاهده تعرفه‌ها و فروشگاه
+                    {{ __('View Pricing & Store') }}
                 </a>
 
             </div>
@@ -203,7 +206,7 @@
         >
 
             <h2 id="screenshots-title" class="sr-only">
-                امکانات و بخش‌های مختلف نرم‌افزار AvaPark
+                {{ __('Features and sections of AvaPark software') }}
             </h2>
 
             @foreach ($screens as $index => $screen)
@@ -223,7 +226,7 @@
                             type="button"
                             class="group relative block w-full cursor-zoom-in text-right focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4 focus-visible:ring-offset-gray-950"
                             @click="openZoom(@js($screen['image']), @js($screen['title']))"
-                            aria-label="بزرگ‌نمایی تصویر {{ $screen['title'] }}"
+                            aria-label="{{ __('Zoom image :title', ['title' => $screen['title']]) }}"
                         >
 
                             <div
@@ -255,7 +258,7 @@
 
                                     <img
                                         src="{{ $screen['image'] }}"
-                                        alt="{{ $screen['title'] }} - سامانه مدیریت پارکینگ AvaPark"
+                                        alt="{{ $screen['title'] }} - {{ __('AvaPark Parking Management System') }}"
                                         class="block h-auto w-full object-contain"
                                         width="1280"
                                         height="720"
@@ -287,7 +290,7 @@
                             </span>
 
                             <span class="font-mono text-xs font-bold tracking-wider text-gray-600">
-                                {{ sprintf('۰%d', $index + 1) }}
+                                {{ sprintf('%02d', $index + 1) }}
                             </span>
 
                         </div>
@@ -317,7 +320,7 @@
                                 />
                             </svg>
 
-                            <span>جهت مشاهده ابعاد کامل تصویر کلیک کنید</span>
+                            <span>{{ __('Click to view full image dimensions') }}</span>
 
                         </div>
 
@@ -342,18 +345,18 @@
             >
 
                 <span class="text-xs font-bold uppercase tracking-wider text-blue-400 sm:text-sm">
-                    ویژگی‌های هسته مرکزی
+                    {{ __('Core Features') }}
                 </span>
 
                 <h2
                     id="core-features-title"
                     class="mb-4 mt-2 text-2xl font-extrabold text-white sm:text-4xl"
                 >
-                    چرا سیستم نرم‌افزاری AvaPark؟
+                    {{ __('Why AvaPark Software System?') }}
                 </h2>
 
                 <p class="text-sm text-gray-400 sm:text-base">
-                    معماری مقیاس‌پذیر، تعامل بلادرنگ با سخت‌افزار و بالاترین ضریب اطمینان در ذخیره‌سازی اطلاعات.
+                    {{ __('Scalable architecture, real-time hardware interaction, and highest data storage reliability.') }}
                 </p>
 
             </div>
@@ -469,34 +472,34 @@
                             />
 
                             <h2 class="text-2xl font-black text-white">
-                                درباره AvaPark
+                                {{ __('About AvaPark') }}
                             </h2>
 
                         </div>
 
                         <p class="mb-8 text-sm leading-relaxed text-gray-400 sm:text-base">
-                            سامانه آواپارک (AvaPark) با هدف ارائه راهکارهای مدرن برای مدیریت هوشمند لایسنس و کنترل تردد پارکینگ‌های تجاری و مسکونی توسعه یافته است. این سیستم با ارتباط مداوم و امن کلاینت‌های لوکال و سرور مرکزی، پایداری ۱۰۰ درصدی عملکرد را تضمین می‌کند.
+                            {{ __('AvaPark system was developed to provide modern solutions for smart licensing and traffic control in commercial and residential parking lots. Continuous and secure connection between local clients and central server guarantees 100% operational uptime.') }}
                         </p>
 
                         <div class="grid grid-cols-2 gap-4">
 
                             <div class="rounded-l-xl border-r-2 border-blue-500/40 bg-blue-500/5 p-3">
                                 <h3 class="text-sm font-bold text-white">
-                                    پایداری بالا
+                                    {{ __('High Reliability') }}
                                 </h3>
 
                                 <p class="mt-1 text-xs text-gray-400">
-                                    عملکرد بدون وقفه آفلاین/آنلاین
+                                    {{ __('Uninterrupted offline/online operation') }}
                                 </p>
                             </div>
 
                             <div class="rounded-l-xl border-r-2 border-indigo-500/40 bg-indigo-500/5 p-3">
                                 <h3 class="text-sm font-bold text-white">
-                                    توسعه ماژولار
+                                    {{ __('Modular Development') }}
                                 </h3>
 
                                 <p class="mt-1 text-xs text-gray-400">
-                                    امکان اتصال به انواع دوربین پلاک‌خوان
+                                    {{ __('Ability to connect to various ANPR cameras') }}
                                 </p>
                             </div>
 
@@ -523,7 +526,7 @@
                                 class="h-2 w-2 rounded-full bg-blue-500"
                             ></span>
 
-                            مزیت‌های رقابتی AvaPark
+                            {{ __('AvaPark Competitive Advantages') }}
 
                         </h3>
 
@@ -545,7 +548,7 @@
                                     />
                                 </svg>
 
-                                اعتبارسنجی بلادرنگ لایسنس و جلوگیری از سوءاستفاده
+                                {{ __('Real-time license validation and abuse prevention') }}
                             </li>
 
                             <li class="flex items-center text-gray-300">
@@ -564,7 +567,7 @@
                                     />
                                 </svg>
 
-                                گزارش‌گیری آنی مالی، خروجی اکسل و داشبورد تفکیکی
+                                {{ __('Instant financial reporting, Excel export, and sectional dashboard') }}
                             </li>
 
                             <li class="flex items-center text-gray-300">
@@ -583,7 +586,7 @@
                                     />
                                 </svg>
 
-                                رابط کاربری مدرن، سبک و بهینه‌شده برای صفحات لمسی
+                                {{ __('Modern, lightweight UI optimized for touchscreens') }}
                             </li>
 
                         </ul>
@@ -610,7 +613,7 @@
             class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 sm:p-6"
             role="dialog"
             aria-modal="true"
-            aria-label="نمایش بزرگ تصویر"
+            aria-label="{{ __('Full image display modal') }}"
             @click="closeZoom()"
         >
 
@@ -630,7 +633,7 @@
                         type="button"
                         class="cursor-pointer rounded-full border border-gray-700 bg-gray-900/80 p-2 text-gray-400 transition hover:bg-gray-800 hover:text-white"
                         @click="closeZoom()"
-                        aria-label="بستن تصویر بزرگ"
+                        aria-label="{{ __('Close large image') }}"
                     >
 
                         <svg

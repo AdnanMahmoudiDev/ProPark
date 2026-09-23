@@ -1,6 +1,38 @@
+<?php /*
+|--------------------------------------------------------------------------
+| blog/show.blade.php — Bilingual (fa / en)
+|--------------------------------------------------------------------------
+| همه متن‌های ثابت این صفحه با کلید ترجمه (fa.json / en.json) خوانده می‌شوند
+| و هر دو زبان فقط به طریق زیر فعال می‌شوند:
+|
+| 1) مسیرها (routes/web.php):
+|    Route::prefix(app()->getLocale())->group(function () {
+|        Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+|        Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+|    });
+|
+| 2) کنترلر (قبل از return view):
+|    app()->setLocale($request->segment(1) === 'en' ? 'en' : 'fa');
+|
+| 3) کلیدهای جدید این صفحه (blog_show_*) را در انتهای فایل‌های
+|    lang/fa.json و lang/en.json (فقط فایل en.json مقادیر انگلیسی دارد)
+|    اضافه کنید — محتوای کامل آن‌ها در پایین این فایل آمده است.
+|
+| نکته: اعداد، تاریخ‌ها (jdate) و جهت صفحه (RTL/LTR) هم مستقل از
+| ترجمه‌ها با app()->getLocale() هوشمند شده‌اند.
+*/ ?>
+
 <x-app-layout>
 
     @php
+        /*
+        |--------------------------------------------------------------------------
+        | Locale
+        |--------------------------------------------------------------------------
+        */
+
+        $isRtl = app()->getLocale() !== 'en';
+
         /*
         |--------------------------------------------------------------------------
         | SEO
@@ -54,7 +86,7 @@
         |--------------------------------------------------------------------------
         */
 
-        $authorName = $post->author?->name ?? 'ProPark';
+        $authorName = $post->author?->name ?? config('app.name');
 
         /*
         |--------------------------------------------------------------------------
@@ -71,6 +103,14 @@
         */
 
         $articleUrl = route('blog.show', $post->slug);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Author Initial (for avatar circle)
+        |--------------------------------------------------------------------------
+        */
+
+        $authorInitial = mb_substr($authorName, 0, 1);
     @endphp
 
 
@@ -124,7 +164,7 @@
 
     <meta
         property="og:site_name"
-        content="ProPark"
+        content="{{ config('app.name') }}"
     >
 
     @if($categoryName)
@@ -196,7 +236,7 @@
         },
         "publisher": {
             "@type": "Organization",
-            "name": "ProPark"
+            "name": @json(config('app.name'))
         },
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -212,6 +252,7 @@
 
     <div
         class="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100"
+        dir="{{ $isRtl ? 'rtl' : 'ltr' }}"
     >
 
         {{-- Background --}}
@@ -253,7 +294,7 @@
             id="copy-toast"
             class="pointer-events-none fixed bottom-6 left-1/2 z-[110] hidden -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/95 px-5 py-3 text-sm font-medium text-white shadow-2xl backdrop-blur"
         >
-            لینک مقاله کپی شد ✓
+            {{ __('blog_show_link_copied') }} ✓
         </div>
 
 
@@ -270,18 +311,18 @@
 
                     <nav
                         class="flex min-w-0 items-center gap-2 overflow-hidden text-sm"
-                        aria-label="مسیر صفحه"
+                        aria-label="{{ __('blog_show_breadcrumb_aria') }}"
                     >
 
                         <a
                             href="{{ route('home') }}"
                             class="shrink-0 text-slate-400 transition hover:text-white"
                         >
-                            خانه
+                            {{ __('blog_show_breadcrumb_home') }}
                         </a>
 
                         <svg
-                            class="h-4 w-4 shrink-0 text-slate-600"
+                            class="h-4 w-4 shrink-0 text-slate-600 {{ $isRtl ? 'rotate-180' : '' }}"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                             aria-hidden="true"
@@ -297,13 +338,13 @@
                             href="{{ route('blog.index') }}"
                             class="shrink-0 text-slate-400 transition hover:text-white"
                         >
-                            وبلاگ
+                            {{ __('blog_show_breadcrumb_blog') }}
                         </a>
 
                         @if($categoryName)
 
                             <svg
-                                class="h-4 w-4 shrink-0 text-slate-600"
+                                class="h-4 w-4 shrink-0 text-slate-600 {{ $isRtl ? 'rotate-180' : '' }}"
                                 viewBox="0 0 20 20"
                                 fill="currentColor"
                                 aria-hidden="true"
@@ -322,14 +363,14 @@
                         @endif
 
                         <svg
-                            class="h-4 w-4 shrink-0 text-slate-600"
+                            class="h-4 w-4 shrink-0 text-slate-600 {{ $isRtl ? 'rotate-180' : '' }}"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                             aria-hidden="true"
                         >
                             <path
                                 fill-rule="evenodd"
-                                d="M7.707 14.707a1 1 0 01-1.414-1.414L10.586 9 6.293 4.707a1 1 0 010 1.414l-5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                                d="M7.707 14.707a1 1 0 01-1.414-1.414L10.586 9 6.293 4.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"
                             />
                         </svg>
@@ -403,7 +444,7 @@
                             <time
                                 datetime="{{ $post->published_at->toIso8601String() }}"
                             >
-                                {{ jdate($post->published_at)->format('Y/m/d') }}
+                                {{ $isRtl ? jdate($post->published_at)->format('Y/m/d') : $post->published_at->format('Y/m/d') }}
                             </time>
 
                         </div>
@@ -441,7 +482,7 @@
                             </svg>
 
                             <span>
-                                {{ $post->reading_time }} دقیقه مطالعه
+                                {{ $post->reading_time }} {{ __('blog_show_reading_time') }}
                             </span>
 
                         </div>
@@ -478,7 +519,7 @@
                         </svg>
 
                         <span>
-                            {{ number_format($post->views_count ?? 0) }} بازدید
+                            {{ number_format($post->views_count ?? 0) }} {{ __('blog_show_views') }}
                         </span>
 
                     </div>
@@ -516,18 +557,18 @@
                         <div
                             class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-sm font-bold text-white"
                         >
-                            {{ mb_substr($authorName, 0, 1) }}
+                            {{ $authorInitial }}
                         </div>
 
 
-                        <div class="text-right">
+                        <div class="text-start">
 
                             <div class="text-sm font-semibold text-white">
                                 {{ $authorName }}
                             </div>
 
                             <div class="text-xs text-slate-500">
-                                نویسنده مقاله
+                                {{ __('blog_show_author_role') }}
                             </div>
 
                         </div>
@@ -619,7 +660,7 @@
 
 
                                     <h2 class="text-base font-bold text-white">
-                                        خلاصه مقاله
+                                        {{ __('blog_show_summary') }}
                                     </h2>
 
                                 </div>
@@ -645,7 +686,7 @@
                             <div class="flex items-center gap-2">
 
                                 <span class="text-xs text-slate-500">
-                                    اندازه متن
+                                    {{ __('blog_show_font_size') }}
                                 </span>
 
 
@@ -653,7 +694,7 @@
                                     type="button"
                                     id="font-decrease"
                                     class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-sm text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
-                                    aria-label="کوچک کردن متن"
+                                    aria-label="{{ __('blog_show_font_decrease') }}"
                                 >
                                     A−
                                 </button>
@@ -663,7 +704,7 @@
                                     type="button"
                                     id="font-increase"
                                     class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-sm text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
-                                    aria-label="بزرگ کردن متن"
+                                    aria-label="{{ __('blog_show_font_increase') }}"
                                 >
                                     A+
                                 </button>
@@ -700,7 +741,7 @@
 
                                 </svg>
 
-                                کپی لینک
+                                {{ __('blog_show_copy_link') }}
 
                             </button>
 
@@ -735,7 +776,7 @@
                                     <div
                                         class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-xl font-black text-white shadow-lg shadow-blue-900/20"
                                     >
-                                        {{ mb_substr($authorName, 0, 1) }}
+                                        {{ $authorInitial }}
                                     </div>
 
 
@@ -744,7 +785,7 @@
                                         <p
                                             class="mb-1 text-xs font-medium text-blue-400"
                                         >
-                                            درباره نویسنده
+                                            {{ __('blog_show_about_author') }}
                                         </p>
 
 
@@ -758,7 +799,7 @@
                                         <p
                                             class="mt-2 text-sm leading-7 text-slate-400"
                                         >
-                                            نویسنده و تولیدکننده محتوای تخصصی در حوزه فناوری و پارکینگ هوشمند ProPark.
+                                            {{ __('blog_show_author_bio', ['brand' => config('app.name')]) }}
                                         </p>
 
                                     </div>
@@ -815,11 +856,11 @@
                                     <div>
 
                                         <h2 class="text-sm font-bold text-white">
-                                            فهرست مطالب
+                                            {{ __('blog_show_toc_title') }}
                                         </h2>
 
                                         <p class="mt-1 text-xs text-slate-500">
-                                            مرور سریع مقاله
+                                            {{ __('blog_show_toc_desc') }}
                                         </p>
 
                                     </div>
@@ -830,10 +871,10 @@
                                 <nav
                                     id="toc"
                                     class="max-h-[60vh] overflow-y-auto"
-                                    aria-label="فهرست مطالب مقاله"
+                                    aria-label="{{ __('blog_show_toc_aria') }}"
                                 >
                                     <p class="text-sm leading-7 text-slate-500">
-                                        در حال ساخت فهرست مطالب...
+                                        {{ __('blog_show_toc_loading') }}
                                     </p>
                                 </nav>
 
@@ -851,7 +892,7 @@
                                 <h2
                                     class="mb-4 text-sm font-bold text-white"
                                 >
-                                    اطلاعات مقاله
+                                    {{ __('blog_show_stats_title') }}
                                 </h2>
 
 
@@ -865,7 +906,7 @@
                                         <span
                                             class="text-sm text-slate-500"
                                         >
-                                            بازدید
+                                            {{ __('blog_show_views') }}
                                         </span>
 
                                         <span
@@ -887,13 +928,13 @@
                                             <span
                                                 class="text-sm text-slate-500"
                                             >
-                                                زمان مطالعه
+                                                {{ __('blog_show_reading_time_label') }}
                                             </span>
 
                                             <span
                                                 class="text-sm font-semibold text-slate-200"
                                             >
-                                                {{ $post->reading_time }} دقیقه
+                                                {{ $post->reading_time }} {{ __('blog_show_reading_time_short') }}
                                             </span>
 
                                         </div>
@@ -911,14 +952,14 @@
                                             <span
                                                 class="text-sm text-slate-500"
                                             >
-                                                انتشار
+                                                {{ __('blog_show_published_label') }}
                                             </span>
 
                                             <time
-                                                datetime="{{ jdate($post->published_at)->format('Y/m/d') }}"
+                                                datetime="{{ $post->published_at->toDateString() }}"
                                                 class="text-sm font-semibold text-slate-200"
                                             >
-                                                {{ jdate($post->published_at)->format('Y/m/d') }}
+                                                {{ $isRtl ? jdate($post->published_at)->format('Y/m/d') : $post->published_at->format('Y/m/d') }}
                                             </time>
 
                                         </div>
@@ -940,14 +981,14 @@
                                             <span
                                                 class="text-sm text-slate-500"
                                             >
-                                                بروزرسانی
+                                                {{ __('blog_show_updated_label') }}
                                             </span>
 
                                             <time
-                                                datetime="{{ jdate($post->updated_at)->format('Y/m/d') }}"
+                                                datetime="{{ $post->updated_at->toDateString() }}"
                                                 class="text-sm font-semibold text-slate-200"
                                             >
-                                                {{ jdate($post->updated_at)->format('Y/m/d') }}
+                                                {{ $isRtl ? jdate($post->updated_at)->format('Y/m/d') : $post->updated_at->format('Y/m/d') }}
                                             </time>
 
                                         </div>
@@ -1006,14 +1047,14 @@
                                     <h2
                                         class="text-lg font-black text-white"
                                     >
-                                        پارکینگ هوشمند با ProPark
+                                        {{ __('blog_show_cta_title', ['brand' => config('app.name')]) }}
                                     </h2>
 
 
                                     <p
                                         class="mt-3 text-sm leading-7 text-slate-400"
                                     >
-                                        راهکارهای هوشمند ProPark برای مدیریت و کنترل بهتر پارکینگ.
+                                        {{ __('blog_show_cta_desc', ['brand' => config('app.name')]) }}
                                     </p>
 
 
@@ -1022,10 +1063,10 @@
                                         class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500"
                                     >
 
-                                        بیشتر بدانید
+                                        {{ __('blog_show_cta_btn') }}
 
                                         <svg
-                                            class="h-4 w-4"
+                                            class="h-4 w-4 {{ $isRtl ? '' : 'rotate-180' }}"
                                             viewBox="0 0 24 24"
                                             fill="none"
                                             stroke="currentColor"
@@ -1076,14 +1117,14 @@
                                 <p
                                     class="text-sm font-semibold text-blue-400"
                                 >
-                                    ادامه مطالعه
+                                    {{ __('blog_show_related_eyebrow') }}
                                 </p>
 
 
                                 <h2
                                     class="mt-2 text-2xl font-black text-white sm:text-3xl"
                                 >
-                                    مطالب مرتبط
+                                    {{ __('blog_show_related_posts') }}
                                 </h2>
 
                             </div>
@@ -1094,10 +1135,10 @@
                                 class="inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-white"
                             >
 
-                                مشاهده همه مطالب
+                                {{ __('blog_show_related_view_all') }}
 
                                 <svg
-                                    class="h-4 w-4"
+                                    class="h-4 w-4 {{ $isRtl ? 'rotate-180' : '' }}"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -1335,7 +1376,7 @@
                         ) {
 
                             link.classList.add(
-                                'mr-4',
+                                @json(app()->getLocale() === 'en' ? 'ml-4' : 'mr-4'),
                                 'text-xs'
                             );
 

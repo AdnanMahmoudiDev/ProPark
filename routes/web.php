@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\BlogController; // کنترلر عمومی وبلاگ
+use App\Http\Controllers\LocaleController; // کنترلر تغییر زبان
 use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
 use App\Http\Controllers\User\CartController; 
@@ -25,6 +26,9 @@ use App\Http\Controllers\Admin\PostController;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// تغییر زبان سیستم
+Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
 
 // فروشگاه
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');

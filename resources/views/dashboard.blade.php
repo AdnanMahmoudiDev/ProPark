@@ -1,3 +1,7 @@
+@php
+    $isRtl = app()->isLocale('fa');
+@endphp
+
 <x-app-layout>
 
     <x-slot name="header">
@@ -5,15 +9,15 @@
 
             <div>
                 <h2 class="text-2xl font-bold leading-tight text-white">
-                    داشبورد کاربری
+                    {{ __('dashboard_title') }}
                 </h2>
 
                 <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
                     <span class="h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
 
                     <span>
-                        تاریخ امروز:
-                        {{ jdate(now())->format('Y/m/d') }}
+                        {{ __('dashboard_today_date') }}
+                        {{ $isRtl ? jdate(now())->format('Y/m/d') : now()->format('Y/m/d') }}
                     </span>
                 </div>
             </div>
@@ -58,19 +62,18 @@
 
                             <div>
                                 <h3 class="text-xl font-bold text-white">
-                                    خوش آمدی،
-                                    {{ auth()->user()->name }}
+                                    {{ __('dashboard_welcome', ['name' => auth()->user()->name]) }}
                                 </h3>
 
                                 <p class="mt-1 text-sm text-gray-400">
-                                    مدیریت حساب و اشتراک AvaPark
+                                    {{ __('dashboard_subtitle') }}
                                 </p>
                             </div>
 
                         </div>
 
                         <div class="rounded-xl border border-green-700 bg-green-900/20 px-4 py-2 text-xs font-medium text-green-400">
-                            حساب فعال
+                            {{ __('dashboard_active_account') }}
                         </div>
 
                     </div>
@@ -93,14 +96,14 @@
 
                             <div>
                                 <p class="text-sm text-gray-400">
-                                    وضعیت اشتراک
+                                    {{ __('dashboard_subscription_status') }}
                                 </p>
 
                                 <h3 class="mt-2 text-2xl font-bold text-white">
                                     @if($activeSubscription)
-                                        اشتراک فعال
+                                        {{ __('dashboard_subscription_active') }}
                                     @else
-                                        بدون اشتراک
+                                        {{ __('dashboard_subscription_none') }}
                                     @endif
                                 </h3>
                             </div>
@@ -125,24 +128,24 @@
 
                                 <div class="flex items-center gap-2 text-sm text-green-400">
                                     <span class="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-                                    اشتراک شما فعال است
+                                    {{ __('dashboard_subscription_is_active') }}
                                 </div>
 
                                 <div class="mt-3 text-sm text-gray-400">
-                                    تاریخ انقضا:
+                                    {{ __('dashboard_subscription_expires_at') }}
                                     <span class="font-medium text-white">
-                                        {{ jdate($activeSubscription->expires_at)->format('Y/m/d') }}
+                                        {{ $isRtl ? jdate($activeSubscription->expires_at)->format('Y/m/d') : \Carbon\Carbon::parse($activeSubscription->expires_at)->format('Y/m/d') }}
                                     </span>
                                 </div>
 
                                 <a href="{{ route('subscription.details') }}"
                                    class="group mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
-                                    اطلاعات بیشتر
+                                    {{ __('dashboard_more_info') }}
                                 </a>
 
                             @else
                                 <div class="text-sm text-red-400">
-                                    اشتراک فعالی ندارید
+                                    {{ __('dashboard_subscription_inactive') }}
                                 </div>
                             @endif
 
@@ -164,7 +167,7 @@
                             <div class="w-full">
 
                                 <p class="text-sm text-gray-400">
-                                    کد لایسنس
+                                    {{ __('dashboard_license_code') }}
                                 </p>
 
                                 <div class="mt-4">
@@ -194,11 +197,11 @@
                             @if($license)
                                 <div class="flex items-center gap-2 text-sm text-green-400">
                                     <span class="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-                                    لایسنس فعال
+                                    {{ __('dashboard_license_active') }}
                                 </div>
                             @else
                                 <div class="text-sm text-red-400">
-                                    لایسنسی برای شما ثبت نشده است
+                                    {{ __('dashboard_license_none') }}
                                 </div>
                             @endif
                         </div>
@@ -215,9 +218,9 @@
                 <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-6 lg:col-span-2">
 
                     <div>
-                        <h3 class="text-lg font-bold text-white">عملیات سریع</h3>
+                        <h3 class="text-lg font-bold text-white">{{ __('dashboard_quick_actions') }}</h3>
                         <p class="mt-1 text-sm text-gray-500">
-                            دسترسی سریع به بخش‌های مهم
+                            {{ __('dashboard_quick_actions_desc') }}
                         </p>
                     </div>
 
@@ -230,13 +233,13 @@
                             <div class="flex w-full items-center justify-between gap-4">
 
                                 <div>
-                                    <h4 class="font-semibold text-white">خرید اشتراک</h4>
+                                    <h4 class="font-semibold text-white">{{ __('dashboard_buy_subscription') }}</h4>
                                     <p class="mt-1 text-sm text-blue-100/80">
-                                        مشاهده پلن‌ها و خرید
+                                        {{ __('dashboard_buy_subscription_desc') }}
                                     </p>
                                 </div>
 
-                                <svg class="h-5 w-5 text-white/90 transition group-hover:translate-x-[-2px]"
+                                <svg class="h-5 w-5 text-white/90 transition rtl:rotate-180 group-hover:translate-x-[-2px] rtl:group-hover:translate-x-[2px]"
                                      fill="none"
                                      stroke="currentColor"
                                      viewBox="0 0 24 24">
@@ -258,7 +261,7 @@
 
                                 <div>
                                     <h4 class="font-semibold text-white">
-                                        ویرایش حساب کاربری
+                                        {{ __('dashboard_edit_profile') }}
                                     </h4>
                                 </div>
 
@@ -289,29 +292,29 @@
 
                     <div class="flex items-center gap-2">
                         <span class="h-6 w-2 rounded-full bg-blue-500"></span>
-                        <h3 class="text-lg font-bold text-white">اطلاعات حساب</h3>
+                        <h3 class="text-lg font-bold text-white">{{ __('dashboard_account_info') }}</h3>
                     </div>
 
                     <div class="mt-6 space-y-5">
 
                         <div>
-                            <p class="text-xs text-gray-500">ایمیل</p>
+                            <p class="text-xs text-gray-500">{{ __('dashboard_email') }}</p>
                             <p class="mt-1 break-all font-mono text-sm text-gray-300">
                                 {{ auth()->user()->email }}
                             </p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-gray-500">شماره موبایل</p>
+                            <p class="text-xs text-gray-500">{{ __('dashboard_phone') }}</p>
                             <p class="mt-1 text-sm text-gray-300">
-                                {{ auth()->user()->phone_number ?? 'ثبت نشده' }}
+                                {{ auth()->user()->phone_number ?? __('dashboard_not_set') }}
                             </p>
                         </div>
 
                         <div class="border-t border-gray-800 pt-4">
-                            <p class="text-xs text-gray-500">تاریخ عضویت</p>
+                            <p class="text-xs text-gray-500">{{ __('dashboard_joined_date') }}</p>
                             <p class="mt-1 text-sm text-gray-300">
-                                {{ jdate(auth()->user()->created_at)->format('Y/m/d') }}
+                                {{ $isRtl ? jdate(auth()->user()->created_at)->format('Y/m/d') : \Carbon\Carbon::parse(auth()->user()->created_at)->format('Y/m/d') }}
                             </p>
                         </div>
 

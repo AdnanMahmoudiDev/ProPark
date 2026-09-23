@@ -1,21 +1,24 @@
 <nav
     role="navigation"
-    aria-label="منوی اصلی سامانه AvaPark"
+    aria-label="{{ __('AvaPark main navigation') }}"
     x-data="{
         open: false,
         profileDropdown: false,
+        langDropdown: false,
+        mobileLangDropdown: false,
 
         scrollToFeatures() {
             this.open = false;
             this.profileDropdown = false;
+            this.langDropdown = false;
+            this.mobileLangDropdown = false;
 
             const target = document.getElementById('features');
 
             if (target) {
                 const headerOffset = 80;
                 const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition =
-                    elementPosition + window.pageYOffset - headerOffset;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
                 window.scrollTo({
                     top: offsetPosition,
@@ -42,7 +45,7 @@
             <a
                 href="{{ auth()->check() ? (Route::has('dashboard') ? route('dashboard') : url('/')) : url('/') }}"
                 class="group flex shrink-0 items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
-                aria-label="صفحه اصلی AvaPark"
+                aria-label="{{ __('AvaPark home page') }}"
             >
                 <div class="relative flex items-center justify-center">
                     <div class="absolute -inset-1 hidden rounded-xl bg-blue-500/20 blur-sm transition duration-300 group-hover:bg-blue-500/40 sm:block"></div>
@@ -58,108 +61,171 @@
                     </span>
 
                     <span class="-mt-1 hidden font-mono text-[11px] text-gray-400 sm:inline-block">
-                        سیستم هوشمند مدیریت پارکینگ
+                        {{ __('Intelligent Parking Management System') }}
                     </span>
                 </div>
             </a>
 
-            {{-- لینک‌های ناوبری در دسکتاپ (md به بالا) --}}
+            {{-- لینک‌های ناوبری در دسکتاپ --}}
             <div class="hidden items-center gap-5 md:flex lg:gap-6">
 
-                {{-- صفحه اصلی --}}
                 <a
                     href="{{ url('/') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('/') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('/')) aria-current="page" @endif
                 >
-                    صفحه اصلی
+                    {{ __('Home') }}
                 </a>
 
-                {{-- تعرفه‌ها --}}
                 <a
                     href="{{ url('/shop') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('shop*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('shop*')) aria-current="page" @endif
                 >
-                    تعرفه‌ها
+                    {{ __('Pricing') }}
                 </a>
 
-                {{-- امکانات سیستم --}}
                 <button
                     type="button"
                     @click="scrollToFeatures()"
                     class="cursor-pointer rounded-md text-xs font-semibold text-gray-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                 >
-                    امکانات سیستم
+                    {{ __('System Features') }}
                 </button>
 
-                {{-- وبلاگ --}}
                 <a
                     href="{{ Route::has('blog.index') ? route('blog.index') : url('/blog') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('blog*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('blog*')) aria-current="page" @endif
                 >
-                    وبلاگ
+                    {{ __('Blog') }}
                 </a>
 
-                {{-- درباره ما --}}
                 <a
                     href="{{ url('/about') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('about*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('about*')) aria-current="page" @endif
                 >
-                    درباره ما
+                    {{ __('About Us') }}
                 </a>
 
-                {{-- قوانین --}}
                 <a
                     href="{{ url('/terms') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('terms*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('terms*')) aria-current="page" @endif
                 >
-                    قوانین
+                    {{ __('Rules') }}
                 </a>
-
-                {{-- پشتیبانی --}}
+                <a
+                    href="{{ url('/privacy') }}"
+                    @click="open = false"
+                    class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('privacy*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
+                >
+                    {{ __('privacy') }}
+                </a>
                 <a
                     href="{{ url('/support') }}"
                     class="rounded-md text-xs font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('support*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                     @if(request()->is('support*')) aria-current="page" @endif
                 >
-                    پشتیبانی
+                    {{ __('Support') }}
                 </a>
             </div>
 
         </div>
 
-        {{-- بخش سمت چپ: احراز هویت دسکتاپ، سبد خرید و دکمه همبرگری موبایل --}}
-        <div class="flex items-center gap-4">
+        {{-- بخش سمت چپ: احراز هویت دسکتاپ، تغییر زبان، سبد خرید و منوی همبرگری موبایل --}}
+        <div class="flex items-center gap-3 sm:gap-4">
+
+            {{-- منوی آبشاری تغییر زبان (دسکتاپ) --}}
+            @php
+                $currentLocale = app()->getLocale();
+            @endphp
+
+            @if(Route::has('locale.switch'))
+                <div class="relative" @click.outside="langDropdown = false">
+                    <button
+                        type="button"
+                        @click="langDropdown = !langDropdown"
+                        :aria-expanded="langDropdown"
+                        aria-haspopup="true"
+                        class="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-gray-800 bg-gray-900/80 px-3 py-1.5 text-xs font-semibold text-gray-300 shadow-sm transition duration-200 hover:border-blue-500/40 hover:bg-gray-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        title="{{ __('Select Language') }}"
+                    >
+                        <svg class="h-4 w-4 shrink-0 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.6 9h16.8M3.6 15h16.8" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18" />
+                        </svg>
+
+                        <span class="font-bold uppercase tracking-wider">
+                            {{ $currentLocale === 'fa' ? 'فارسی' : 'EN' }}
+                        </span>
+
+                        <svg
+                            class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200"
+                            :class="{ 'rotate-180': langDropdown }"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div
+                        x-cloak
+                        x-show="langDropdown"
+                        x-transition:enter="transition ease-out duration-150"
+                        x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                        class="absolute left-0 z-50 mt-2 w-44 origin-top-left overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/95 p-1.5 shadow-2xl shadow-black/80 backdrop-blur-md"
+                    >
+                        <a
+                            href="{{ route('locale.switch', 'fa') }}"
+                            class="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition duration-150 {{ $currentLocale === 'fa' ? 'bg-blue-600/15 font-bold text-blue-400' : 'text-gray-300 hover:bg-gray-800/80 hover:text-white' }}"
+                        >
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">FA</span>
+                                <span>فارسی</span>
+                            </div>
+                            @if($currentLocale === 'fa')
+                                <svg class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                            @endif
+                        </a>
+
+                        <a
+                            href="{{ route('locale.switch', 'en') }}"
+                            class="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition duration-150 {{ $currentLocale === 'en' ? 'bg-blue-600/15 font-bold text-blue-400' : 'text-gray-300 hover:bg-gray-800/80 hover:text-white' }}"
+                        >
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">EN</span>
+                                <span>English</span>
+                            </div>
+                            @if($currentLocale === 'en')
+                                <svg class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                            @endif
+                        </a>
+                    </div>
+                </div>
+            @endif
 
             {{-- حالت مهمان (Guest) در دسکتاپ --}}
             @guest
                 <div class="hidden items-center gap-2.5 sm:flex">
-
                     @if(Route::has('login'))
                         <a
                             href="{{ route('login') }}"
                             class="inline-flex items-center gap-1.5 rounded-xl border border-transparent px-3.5 py-2 text-xs font-semibold text-gray-300 transition duration-200 hover:border-gray-800 hover:bg-gray-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <svg
-                                class="h-3.5 w-3.5 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                />
-                            </svg>
-
-                            <span>ورود</span>
+                            <span>{{ __('Login') }}</span>
                         </a>
                     @endif
 
@@ -168,27 +234,9 @@
                             href="{{ route('register') }}"
                             class="inline-flex items-center justify-center rounded-xl border border-blue-400/30 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-[length:200%_auto] px-4 py-2 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:bg-right hover:shadow-blue-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <span class="flex items-center gap-1.5">
-                                <svg
-                                    class="h-3.5 w-3.5 text-blue-200"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                                    />
-                                </svg>
-
-                                <span>شروع رایگان</span>
-                            </span>
+                            <span>{{ __('Start Free') }}</span>
                         </a>
                     @endif
-
                 </div>
             @endguest
 
@@ -201,23 +249,11 @@
                         <a
                             href="{{ route('user.cart.index') }}"
                             class="relative rounded-lg p-1.5 text-gray-400 transition-colors duration-200 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                            title="سبد خرید"
-                            aria-label="مشاهده سبد خرید"
+                            title="{{ __('Cart') }}"
+                            aria-label="{{ __('View shopping cart') }}"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
 
                             @if(isset($pendingCartCount) && $pendingCartCount > 0)
@@ -229,20 +265,16 @@
                     @endif
 
                     {{-- منوی کشویی پروفایل دسکتاپ --}}
-                    <div
-                        class="relative"
-                        @click.outside="profileDropdown = false"
-                    >
+                    <div class="relative" @click.outside="profileDropdown = false">
                         <button
                             type="button"
                             @click="profileDropdown = !profileDropdown"
                             :aria-expanded="profileDropdown"
                             aria-haspopup="true"
-                            class="flex cursor-pointer items-center gap-2.5 rounded-xl border border-gray-800 bg-gray-900/80 py-1.5 pl-3 pr-2 text-sm font-medium text-gray-200 shadow-sm transition-colors duration-200 hover:border-blue-500/40 hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                            class="flex cursor-pointer items-center gap-2 rounded-xl border border-gray-800 bg-gray-900/80 py-1.5 pl-3 pr-2 text-sm font-medium text-gray-200 shadow-sm transition-colors duration-200 hover:border-blue-500/40 hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
                             <div class="relative flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-xs font-bold uppercase text-white shadow-sm">
                                 {{ mb_substr(Auth::user()?->name ?? 'U', 0, 1) }}
-
                                 <span class="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-gray-950 bg-emerald-500"></span>
                             </div>
 
@@ -258,12 +290,7 @@
                                 stroke="currentColor"
                                 aria-hidden="true"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 9l-7 7-7-7"
-                                />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 
@@ -286,7 +313,7 @@
                                     </span>
 
                                     <span class="rounded border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 font-mono text-[10px] text-blue-400">
-                                        کاربر
+                                        {{ __('User') }}
                                     </span>
                                 </div>
 
@@ -296,29 +323,13 @@
                             </div>
 
                             <div class="space-y-1 p-1.5">
-
                                 @if(Route::has('user.cart.index'))
                                     <a
                                         href="{{ route('user.cart.index') }}"
                                         class="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium text-gray-300 transition duration-150 hover:bg-blue-500/10 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                                     >
                                         <div class="flex items-center gap-2.5">
-                                            <svg
-                                                class="h-4 w-4 text-blue-400"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="1.8"
-                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                                />
-                                            </svg>
-
-                                            <span>سبد خرید من</span>
+                                            <span>{{ __('My Cart') }}</span>
                                         </div>
 
                                         @if(isset($pendingCartCount) && $pendingCartCount > 0)
@@ -334,22 +345,7 @@
                                         href="{{ route('dashboard') }}"
                                         class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium text-gray-300 transition duration-150 hover:bg-blue-500/10 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                                     >
-                                        <svg
-                                            class="h-4 w-4 text-blue-400"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1.8"
-                                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2-2v-2z"
-                                            />
-                                        </svg>
-
-                                        <span>پنل مدیریت</span>
+                                        <span>{{ __('Admin Panel') }}</span>
                                     </a>
                                 @endif
 
@@ -358,108 +354,42 @@
                                         href="{{ route('profile.edit') }}"
                                         class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium text-gray-300 transition duration-150 hover:bg-blue-500/10 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                                     >
-                                        <svg
-                                            class="h-4 w-4 text-gray-400"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1.8"
-                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31.826-2.37-2.37a1.724 1.724 0 001.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                            />
-
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1.8"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                            />
-                                        </svg>
-
-                                        <span>تنظیمات حساب کاربری</span>
+                                        <span>{{ __('Account Settings') }}</span>
                                     </a>
                                 @endif
 
                                 <div class="my-1 border-t border-gray-800"></div>
 
                                 @if(Route::has('logout'))
-                                    <form
-                                        method="POST"
-                                        action="{{ route('logout') }}"
-                                        class="m-0"
-                                    >
+                                    <form method="POST" action="{{ route('logout') }}" class="m-0">
                                         @csrf
-
                                         <button
                                             type="submit"
                                             class="flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2 text-right text-xs font-semibold text-red-400 transition duration-150 hover:bg-red-500/10 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                                         >
-                                            <svg
-                                                class="h-4 w-4 text-red-400"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="1.8"
-                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                                />
-                                            </svg>
-
-                                            <span>خروج از حساب</span>
+                                            <span>{{ __('Logout') }}</span>
                                         </button>
                                     </form>
                                 @endif
-
                             </div>
                         </div>
                     </div>
                 </div>
             @endauth
 
-            {{-- دکمه منوی همبرگری برای صفحات کوچک و مرورگرهای موبایل --}}
+            {{-- دکمه منوی همبرگری برای موبایل --}}
             <div class="flex items-center sm:hidden">
                 <button
                     type="button"
                     @click="open = !open"
                     :aria-expanded="open"
                     aria-controls="mobile-navigation"
-                    aria-label="تغییر وضعیت منوی موبایل"
+                    aria-label="{{ __('Toggle mobile navigation menu') }}"
                     class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-gray-800 bg-gray-900 text-gray-300 transition duration-150 hover:border-blue-500/30 hover:bg-gray-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                 >
-                    <svg
-                        class="h-5 w-5"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                    >
-                        {{-- آیکون سه خط همبرگری --}}
-                        <path
-                            :class="{ 'hidden': open, 'inline-flex': !open }"
-                            class="inline-flex"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"
-                        />
-
-                        {{-- آیکون ضربدر هنگام باز بودن منو --}}
-                        <path
-                            :class="{ 'hidden': !open, 'inline-flex': open }"
-                            class="hidden"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
+                    <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -470,7 +400,6 @@
     {{-- محتوای پنل کشویی منوی موبایل --}}
     <div
         id="mobile-navigation"
-        x-cloak
         x-show="open"
         @click.outside="open = false"
         x-transition:enter="transition ease-out duration-200"
@@ -483,12 +412,66 @@
     >
         <div class="space-y-4 px-4 py-4">
 
-            {{-- بخش اطلاعات و تنظیمات کاربر وارد شده در موبایل --}}
+            {{-- تغییر زبان آکاردئونی (موبایل) --}}
+            @if(Route::has('locale.switch'))
+                <div class="rounded-xl border border-gray-800 bg-gray-900/60 p-2">
+                    <button
+                        type="button"
+                        @click="mobileLangDropdown = !mobileLangDropdown"
+                        class="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-xs font-semibold text-gray-200"
+                    >
+                        <div class="flex items-center gap-2.5">
+                            <svg class="h-4 w-4 shrink-0 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.6 9h16.8M3.6 15h16.8" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18" />
+                            </svg>
+                            <span>{{ __('System Language') }}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <span class="rounded-lg border border-blue-500/30 bg-blue-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-blue-400">
+                                {{ $currentLocale === 'fa' ? 'فارسی' : 'EN' }}
+                            </span>
+                            <svg class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': mobileLangDropdown }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </button>
+
+                    <div x-show="mobileLangDropdown" x-cloak class="mt-2 space-y-1 border-t border-gray-800/80 pt-2">
+                        <a
+                            href="{{ route('locale.switch', 'fa') }}"
+                            class="flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium {{ $currentLocale === 'fa' ? 'bg-blue-600/20 font-bold text-blue-400' : 'text-gray-300 hover:bg-gray-800/50' }}"
+                        >
+                            <span class="flex items-center gap-2"><span>🇮🇷</span> فارسی</span>
+                            @if($currentLocale === 'fa')
+                                <svg class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                            @endif
+                        </a>
+
+                        <a
+                            href="{{ route('locale.switch', 'en') }}"
+                            class="flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium {{ $currentLocale === 'en' ? 'bg-blue-600/20 font-bold text-blue-400' : 'text-gray-300 hover:bg-gray-800/50' }}"
+                        >
+                            <span class="flex items-center gap-2"><span>EN</span> English</span>
+                            @if($currentLocale === 'en')
+                                <svg class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                            @endif
+                        </a>
+                    </div>
+                </div>
+            @endif
+
+            {{-- اطلاعات کاربر در موبایل --}}
             @auth
                 <div class="flex items-center gap-3 rounded-2xl border border-gray-800 bg-gray-900/90 p-3">
                     <div class="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-sm font-bold uppercase text-white">
                         {{ mb_substr(Auth::user()?->name ?? 'U', 0, 1) }}
-
                         <span class="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-gray-950 bg-emerald-500"></span>
                     </div>
 
@@ -496,37 +479,20 @@
                         <div class="truncate text-sm font-semibold text-white">
                             {{ Auth::user()?->name }}
                         </div>
-
                         <div class="truncate font-mono text-xs text-gray-400">
                             {{ Auth::user()?->email }}
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-1.5 pt-1">
-
+                <div class="space-y-1.5 pt-2">
                     @if(Route::has('user.cart.index'))
                         <a
                             href="{{ route('user.cart.index') }}"
                             class="flex items-center justify-between rounded-xl border border-blue-500/20 bg-blue-600/10 px-4 py-2.5 text-xs font-medium text-blue-300 transition duration-200 hover:bg-blue-600/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
                             <div class="flex items-center gap-2.5">
-                                <svg
-                                    class="h-4 w-4 text-blue-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.8"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                    />
-                                </svg>
-
-                                <span>سبد خرید من</span>
+                                <span>{{ __('My Cart') }}</span>
                             </div>
 
                             @if(isset($pendingCartCount) && $pendingCartCount > 0)
@@ -542,22 +508,7 @@
                             href="{{ route('dashboard') }}"
                             class="flex items-center gap-2.5 rounded-xl border border-gray-800 bg-gray-900/60 px-4 py-2.5 text-xs font-medium text-gray-200 transition hover:border-blue-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <svg
-                                class="h-4 w-4 text-blue-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2-2v-2z"
-                                />
-                            </svg>
-
-                            <span>پنل مدیریت</span>
+                            <span>{{ __('Admin Panel') }}</span>
                         </a>
                     @endif
 
@@ -566,92 +517,33 @@
                             href="{{ route('profile.edit') }}"
                             class="flex items-center gap-2.5 rounded-xl border border-gray-800 bg-gray-900/60 px-4 py-2.5 text-xs font-medium text-gray-200 transition hover:border-blue-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <svg
-                                class="h-4 w-4 text-gray-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31.826-2.37-2.37a1.724 1.724 0 001.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                />
-
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                            </svg>
-
-                            <span>تنظیمات حساب</span>
+                            <span>{{ __('Account Settings') }}</span>
                         </a>
                     @endif
 
                     @if(Route::has('logout'))
-                        <form
-                            method="POST"
-                            action="{{ route('logout') }}"
-                            class="pt-2"
-                        >
+                        <form method="POST" action="{{ route('logout') }}" class="pt-2">
                             @csrf
-
                             <button
                                 type="submit"
                                 class="flex w-full cursor-pointer items-center gap-2.5 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-right text-xs font-semibold text-red-400 transition hover:bg-red-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                             >
-                                <svg
-                                    class="h-4 w-4 text-red-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.8"
-                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                    />
-                                </svg>
-
-                                <span>خروج از حساب</span>
+                                <span>{{ __('Logout') }}</span>
                             </button>
                         </form>
                     @endif
-
                 </div>
             @endauth
 
-            {{-- بخش دکمه‌های ورود و ثبت‌نام مهمان در موبایل --}}
+            {{-- مهمان در موبایل --}}
             @guest
                 <div class="grid grid-cols-2 gap-2 border-b border-gray-800 pb-3 pt-2">
-
                     @if(Route::has('login'))
                         <a
                             href="{{ route('login') }}"
                             class="flex items-center justify-center gap-1.5 rounded-xl border border-gray-800 bg-gray-900 py-2.5 text-xs font-semibold text-gray-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <svg
-                                class="h-3.5 w-3.5 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.8"
-                                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                />
-                            </svg>
-
-                            <span>ورود</span>
+                            <span>{{ __('Login') }}</span>
                         </a>
                     @endif
 
@@ -660,37 +552,20 @@
                             href="{{ route('register') }}"
                             class="flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         >
-                            <svg
-                                class="h-3.5 w-3.5 text-blue-200"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                                />
-                            </svg>
-
-                            <span>ثبت‌نام</span>
+                            <span>{{ __('Start Free') }}</span>
                         </a>
                     @endif
-
                 </div>
             @endguest
 
-            {{-- لینک‌های ناوبری اصلی درون منوی موبایل --}}
+            {{-- لینک‌های ناوبری منوی موبایل --}}
             <div class="space-y-1">
-
                 <a
                     href="{{ url('/') }}"
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('/') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    صفحه اصلی
+                    {{ __('Home') }}
                 </a>
 
                 <a
@@ -698,7 +573,7 @@
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('shop*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    تعرفه‌ها
+                    {{ __('Pricing') }}
                 </a>
 
                 <button
@@ -706,7 +581,7 @@
                     @click="scrollToFeatures()"
                     class="flex w-full cursor-pointer items-center rounded-lg px-3 py-2 text-right text-xs font-semibold text-gray-400 transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                 >
-                    امکانات سیستم
+                    {{ __('System Features') }}
                 </button>
 
                 <a
@@ -714,7 +589,7 @@
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('blog*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    وبلاگ
+                    {{ __('Blog') }}
                 </a>
 
                 <a
@@ -722,7 +597,7 @@
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('about*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    درباره ما
+                    {{ __('About Us') }}
                 </a>
 
                 <a
@@ -730,18 +605,24 @@
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('terms*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    قوانین
+                    {{ __('Rules') }}
                 </a>
-
+                <a
+                    href="{{ url('/privacy') }}"
+                    @click="open = false"
+                    class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('privacy*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
+                >
+                    {{ __('privacy') }}
+                </a>
                 <a
                     href="{{ url('/support') }}"
                     @click="open = false"
                     class="flex items-center rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {{ request()->is('support*') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}"
                 >
-                    پشتیبانی
+                    {{ __('Support') }}
                 </a>
-
             </div>
+
         </div>
     </div>
 

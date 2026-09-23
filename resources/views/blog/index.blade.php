@@ -7,7 +7,7 @@
         |--------------------------------------------------------------------------
         */
 
-        $pageTitle = 'وبلاگ و مقالات آموزشی - ' . config('app.name');
+        $pageTitle = __('blog_page_title');
 
         $searchQuery = request('search');
         $activeCategory = request('category');
@@ -40,7 +40,7 @@
 
     <meta
         name="description"
-        content="راهنماهای کاربردی، مقالات تخصصی و آموزش‌های مرتبط با سیستم‌های هوشمند مدیریت پارکینگ و فناوری‌های نوین."
+        content="{{ __('blog_meta_desc') }}"
     >
 
 
@@ -116,7 +116,7 @@
                                     class="h-1.5 w-1.5 rounded-full bg-blue-400"
                                 ></span>
 
-                                دانشنامه و وبلاگ
+                                {{ __('blog_eyebrow') }}
 
                             </span>
 
@@ -127,7 +127,7 @@
                         <h1
                             class="text-3xl font-black leading-[1.5] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
                         >
-                            آخرین مقالات و آموزش‌ها
+                            {{ __('blog_main_title') }}
                         </h1>
 
 
@@ -135,7 +135,7 @@
                         <p
                             class="mx-auto mt-6 max-w-2xl text-sm leading-8 text-slate-400 sm:text-base"
                         >
-                            راهنماهای کاربردی، مقالات تخصصی درباره سیستم‌های هوشمند مدیریت پارکینگ و آخرین مطالب حوزه فناوری.
+                            {{ __('blog_main_subtitle') }}
                         </p>
 
 
@@ -187,7 +187,7 @@
                                         type="search"
                                         name="search"
                                         value="{{ $searchQuery }}"
-                                        placeholder="در مقالات جستجو کنید..."
+                                        placeholder="{{ __('blog_search_placeholder') }}"
                                         autocomplete="off"
                                         class="h-14 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-12 pl-28 text-sm text-white shadow-2xl shadow-black/20 outline-none backdrop-blur-xl transition placeholder:text-slate-600 focus:border-blue-500/50 focus:bg-white/[0.06] focus:ring-2 focus:ring-blue-500/10"
                                     >
@@ -197,7 +197,7 @@
                                         type="submit"
                                         class="absolute left-2 inline-flex h-10 items-center justify-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white transition hover:bg-blue-500"
                                     >
-                                        جستجو
+                                        {{ __('blog_search_btn') }}
                                     </button>
 
                                 </div>
@@ -255,7 +255,7 @@
 
                             </svg>
 
-                            همه مقالات
+                            {{ __('blog_all_articles') }}
 
                         </a>
 
@@ -326,13 +326,13 @@
                                     <p
                                         class="text-xs font-semibold text-blue-400"
                                     >
-                                        نتیجه جستجو
+                                        {{ __('blog_search_result_label') }}
                                     </p>
 
                                     <h2
                                         class="mt-2 text-xl font-black text-white sm:text-2xl"
                                     >
-                                        مقالات برای «{{ $searchQuery }}»
+                                        {{ __('blog_search_heading', ['query' => $searchQuery]) }}
                                     </h2>
 
                                 @elseif($activeCategory)
@@ -340,13 +340,13 @@
                                     <p
                                         class="text-xs font-semibold text-blue-400"
                                     >
-                                        دسته‌بندی
+                                        {{ __('blog_category_label') }}
                                     </p>
 
                                     <h2
                                         class="mt-2 text-xl font-black text-white sm:text-2xl"
                                     >
-                                        مقالات این دسته‌بندی
+                                        {{ __('blog_category_heading') }}
                                     </h2>
 
                                 @else
@@ -354,13 +354,13 @@
                                     <p
                                         class="text-xs font-semibold text-blue-400"
                                     >
-                                        تازه‌ترین مطالب
+                                        {{ __('blog_latest_label') }}
                                     </p>
 
                                     <h2
                                         class="mt-2 text-xl font-black text-white sm:text-2xl"
                                     >
-                                        مقالات و آموزش‌ها
+                                        {{ __('blog_articles_heading') }}
                                     </h2>
 
                                 @endif
@@ -374,7 +374,7 @@
                                     class="text-xs text-slate-500"
                                 >
                                     {{ number_format($posts->total()) }}
-                                    مقاله
+                                    {{ __('blog_count_suffix') }}
                                 </span>
 
                             @endif
@@ -511,7 +511,7 @@
 
                                             <span>
                                                 {{ $featuredPost->reading_time }}
-                                                دقیقه مطالعه
+                                                {{ __('blog_reading_time_suffix') }}
                                             </span>
 
                                         @endif
@@ -553,7 +553,7 @@
                                             class="inline-flex items-center gap-2 text-sm font-bold text-blue-400 transition hover:text-blue-300"
                                         >
 
-                                            مطالعه مقاله
+                                            {{ __('blog_read_article') }}
 
                                             <svg
                                                 class="h-4 w-4"
@@ -700,7 +700,7 @@
                                             @else
 
                                                 <span class="text-slate-600">
-                                                    عمومی
+                                                    {{ __('blog_general') }}
                                                 </span>
 
                                             @endif
@@ -782,7 +782,7 @@
 
                                                 <span>
                                                     {{ $post->reading_time ?? 5 }}
-                                                    دقیقه
+                                                    {{ __('blog_reading_time_suffix') }}
                                                 </span>
 
                                             </div>
@@ -793,7 +793,7 @@
                                                 class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 transition hover:text-blue-300"
                                             >
 
-                                                خواندن
+                                                {{ __('blog_read_btn') }}
 
                                                 <svg
                                                     class="h-3.5 w-3.5"
@@ -856,14 +856,14 @@
                                     <h2
                                         class="mt-5 text-lg font-bold text-white"
                                     >
-                                        مقاله‌ای پیدا نشد
+                                        {{ __('blog_empty_title') }}
                                     </h2>
 
 
                                     <p
                                         class="mx-auto mt-2 max-w-md text-sm leading-7 text-slate-500"
                                     >
-                                        عبارت جستجو یا دسته‌بندی انتخاب‌شده نتیجه‌ای نداشت.
+                                        {{ __('blog_empty_desc') }}
                                     </p>
 
 
@@ -871,7 +871,7 @@
                                         href="{{ route('blog.index') }}"
                                         class="mt-6 inline-flex items-center rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-blue-500"
                                     >
-                                        مشاهده همه مقالات
+                                        {{ __('blog_view_all_btn') }}
                                     </a>
 
                                 </div>
@@ -925,13 +925,13 @@
                                         <p
                                             class="text-[11px] font-semibold text-blue-400"
                                         >
-                                            مرور موضوعات
+                                            {{ __('blog_browse_topics') }}
                                         </p>
 
                                         <h2
                                             class="mt-1 text-base font-black text-white"
                                         >
-                                            دسته‌بندی‌ها
+                                            {{ __('blog_categories_title') }}
                                         </h2>
 
                                     </div>
@@ -969,7 +969,7 @@
                                         <span
                                             class="text-xs font-semibold"
                                         >
-                                            همه مقالات
+                                            {{ __('blog_all_articles') }}
                                         </span>
 
 
@@ -1063,14 +1063,14 @@
                                     <h2
                                         class="text-lg font-black leading-8 text-white"
                                     >
-                                        دانشنامه AvaPark
+                                        {{ __('blog_encyclopedia_title') }}
                                     </h2>
 
 
                                     <p
                                         class="mt-3 text-xs leading-7 text-slate-400"
                                     >
-                                        آموزش‌ها و مطالب کاربردی درباره پارکینگ هوشمند، مدیریت پارکینگ و فناوری‌های مرتبط.
+                                        {{ __('blog_encyclopedia_desc') }}
                                     </p>
 
                                 </div>
@@ -1086,14 +1086,14 @@
                                 <p
                                     class="text-xs font-semibold text-slate-500"
                                 >
-                                    دنبال مطالب جدید هستید؟
+                                    {{ __('blog_looking_new') }}
                                 </p>
 
 
                                 <h2
                                     class="mt-2 text-base font-bold leading-7 text-white"
                                 >
-                                    مقالات جدید را دنبال کنید
+                                    {{ __('blog_follow_new') }}
                                 </h2>
 
 
@@ -1101,7 +1101,7 @@
                                     href="{{ route('home') }}"
                                     class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-xs font-bold text-slate-200 transition hover:bg-white/[0.08] hover:text-white"
                                 >
-                                    آشنایی با AvaPark
+                                    {{ __('blog_about_avapark') }}
                                 </a>
 
                             </div>
