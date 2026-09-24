@@ -3,14 +3,21 @@
 **A Laravel-based parking management, subscription, and software licensing platform**
 
 <p align="center">
+
   <img src="public/images/ProPark.png" width="220" alt="ProPark Logo">
+
 </p>
 
 <p align="center">
+
   <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?logo=laravel&logoColor=white" alt="Laravel 11">
+
   <img src="https://img.shields.io/badge/PHP-%E2%89%A58.2-777BB4?logo=php&logoColor=white" alt="PHP 8.2+">
+
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+
   <img src="https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite&logoColor=white" alt="Vite">
+
 </p>
 
 ---
@@ -25,16 +32,30 @@ A production deployment of ProPark is currently used under the **AvaPark** brand
 
 The platform works alongside a Windows desktop client, which communicates with the server through the licensing API.
 
+### Live Website
+
+The ProPark platform is currently online and operational at:
+
+**https://www.avapark.ir**
+
 ### Core Features
 
 * Software license generation and management
+
 * Subscription store with multiple plans and durations
+
 * User dashboard
+
 * Administration panel
+
 * Licensed device management
+
 * RSA-signed API responses
+
 * Blog and content management
+
 * Persian and English localization
+
 * RTL and LTR support
 
 ---
@@ -48,18 +69,26 @@ ProPark provides a subscription-based purchasing system with multiple plan level
 Features include:
 
 * Multi-level subscription plans: Eco, Pro, and Enterprise
+
 * Different features and device limits for each plan
+
 * 1, 3, 6, and 12-month subscription periods
+
 * Discount percentages and original pricing
+
 * Automatic transaction type detection:
 
   * New purchase
   * Renewal
   * Upgrade
   * Downgrade
+
 * 50% of the remaining subscription time is transferred as a bonus when upgrading
+
 * Full remaining time is preserved when downgrading
+
 * Excess registered devices are automatically removed when required by the new plan limit
+
 * Transaction-safe checkout using database transactions and `lockForUpdate`
 
 The current payment process is simulated and does not yet use a production payment gateway.
@@ -79,14 +108,23 @@ PRPK-XXXX-XXXX-XXXX-XXXX
 The licensing system includes:
 
 * Unique license key generation
+
 * License-to-subscription association
+
 * Device registration using a Machine Fingerprint
+
 * Automatic seat allocation
+
 * Device limits based on subscription plans
+
 * Active device management
+
 * Device deactivation from the user dashboard
+
 * Device deactivation through the REST API
+
 * Precise subscription validity calculation
+
 * RSA/SHA-256 signed API responses
 
 ---
@@ -96,14 +134,23 @@ The licensing system includes:
 Registered users can:
 
 * View their current subscription
+
 * Access their license key
+
 * Check remaining subscription time
+
 * View active plan information
+
 * View registered devices
+
 * Deactivate devices
+
 * Update profile information
+
 * Manage their phone number
+
 * Change their password
+
 * Delete their account
 
 Authentication is implemented using **Laravel Breeze** with a custom email verification template.
@@ -117,23 +164,41 @@ The administration panel provides tools for managing the platform.
 Administrators can:
 
 * View system statistics
+
 * Monitor users and subscriptions
+
 * View subscriptions approaching expiration
+
 * Manage users
+
 * Change user roles (`admin` / `user`)
+
 * Manage subscriptions
+
 * Change subscription status
+
 * Change subscription plans
+
 * Manually renew subscriptions
+
 * Delete subscriptions
+
 * Manually issue subscriptions and licenses
+
 * Manage store pricing
+
 * Perform bulk price updates
+
 * Create database backups
+
 * Restore the database from SQL backups
+
 * Manage blog categories
+
 * Manage blog posts
+
 * Upload blog images
+
 * Edit content using TinyMCE
 
 ---
@@ -145,18 +210,31 @@ ProPark includes a built-in blog and content management system.
 Features include:
 
 * Post categories
+
 * Search
+
 * Category filtering
+
 * Featured posts
+
 * Pagination
+
 * View counting
+
 * Session-based duplicate view prevention
+
 * Reading time calculation
+
 * Related posts
+
 * SEO titles
+
 * SEO descriptions
+
 * Canonical URLs
+
 * Open Graph images
+
 * Soft deletes
 
 ---
@@ -166,6 +244,7 @@ Features include:
 ProPark supports:
 
 * Persian
+
 * English
 
 Translations are stored in:
@@ -362,8 +441,11 @@ Common API errors include:
 
 ```text
 Invalid or inactive license
+
 Subscription expired
+
 Device limit reached
+
 This device is not registered for this license
 ```
 
@@ -399,10 +481,15 @@ The generated public key should be distributed with the Windows client for respo
 Before installing ProPark, make sure the following software is available:
 
 * PHP 8.2 or later
+
 * Composer
+
 * Node.js 20 or later
+
 * npm
+
 * MySQL or MariaDB
+
 * OpenSSL
 
 SQLite can also be used for testing.
@@ -410,7 +497,7 @@ SQLite can also be used for testing.
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/AdnanMahmoudiDev/ProPark.git
 cd ProPark
 ```
 
@@ -573,12 +660,19 @@ This can be used to run the development environment and related services togethe
 Planned improvements include:
 
 * [ ] Production payment gateway integration
+
 * [ ] Subscription expiration notifications
+
 * [ ] Email and SMS notifications
+
 * [ ] Extended Queue and Job usage
+
 * [ ] Advanced role and permission management
+
 * [ ] Swagger/OpenAPI documentation
+
 * [ ] Discount code support
+
 * [ ] Extended payment infrastructure
 
 ---
