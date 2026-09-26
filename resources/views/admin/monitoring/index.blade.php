@@ -7,7 +7,7 @@
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-white">مانیتورینگ سایت و سرور</h1>
-            <p class="mt-1 text-sm text-gray-400">بررسی آنی منابع سخت‌افزاری، سلامت دیتابیس، کانتینرها و بازدیدها</p>
+            <p class="mt-1 text-sm text-gray-400">بررسی آنی منابع سخت‌افزاری، سلامت دیتابیس، زمان پاسخگویی و آمار بازدیدها</p>
         </div>
 
         <div class="flex items-center gap-3">
@@ -55,7 +55,7 @@
                 <span class="text-xs font-medium text-gray-400">بازدیدکنندگان یکتا (Unique Visitors)</span>
                 <div class="rounded-xl bg-violet-500/10 p-2 text-violet-400">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m12 0v-2a4 4 0 00-3-3.87M12 7a4 4 0 11-8 0 4 4 0 018 0zm7 4a4 4 0 100-8" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                 <span class="text-xs font-medium text-gray-400">وضعیت اتصال به دیتابیس</span>
                 <div class="rounded-xl p-2 {{ $dbStatus === 'ok' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }}">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 3.5 3 8 3s8-1 8-3V7M4 7c0 2 3.5 3 8 3s8-1 8-3M4 7c0-2 3.5-3 8-3s8 1-8 3" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3m-16 0v10c0 1.657 3.582 3 8 3s8-1.343 8-3V7m-16 5c0 1.657 3.582 3 8 3s8-1.343 8-3" />
                     </svg>
                 </div>
             </div>
@@ -160,76 +160,27 @@
 
     </div>
 
-    {{-- نمودار بازدیدها و وضعیت داکر --}}
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-
-        {{-- نمودار آمار بازدیدهای ماهانه --}}
-        <div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-6 shadow-lg backdrop-blur-md lg:col-span-2">
-            <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h2 class="text-lg font-bold text-white">آمار و مقایسه بازدید ماه‌های اخیر</h2>
-                    <p class="text-xs text-gray-400">روند Page Views و بازدیدکنندگان یکتا در شش ماه اخیر</p>
-                </div>
-
-                <div class="text-left sm:text-right">
-                    <div class="text-xs text-gray-400">مجموع بازدید صفحات در این دوره:</div>
-                    <div class="mt-1 text-sm font-bold text-blue-400">
-                        {{ number_format(array_sum($monthlyVisits['views'])) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative h-72 w-full">
-                <canvas id="visitsChart"></canvas>
-            </div>
-        </div>
-
-        {{-- وضعیت داکرها --}}
-        <div class="flex flex-col justify-between rounded-2xl border border-gray-800 bg-gray-900/60 p-6 shadow-lg backdrop-blur-md">
+    {{-- نمودار بازدیدها (تمام‌عرض و اختصاصی) --}}
+    <div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-6 shadow-lg backdrop-blur-md">
+        <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-white">کانتینرهای داکر</h2>
-                    <span class="rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 font-mono text-[11px] text-gray-300">
-                        {{ count($dockerContainers) }} Container
-                    </span>
-                </div>
-
-                @if (!$dockerAvailable)
-                    <div class="rounded-xl border border-amber-500/20 bg-amber-500/10 p-4 text-xs text-amber-300">
-                        سرویس داکر در این محیط اجرا نیست یا وب‌سرور دسترسی مستقیم به سوکت <code>docker.sock</code> ندارد.
-                    </div>
-                @elseif (empty($dockerContainers))
-                    <div class="rounded-xl border border-gray-800 bg-gray-800/40 p-4 text-center text-xs text-gray-400">
-                        هیچ کانتینری یافت نشد.
-                    </div>
-                @else
-                    <div class="max-h-72 space-y-3 overflow-y-auto pr-1">
-                        @foreach ($dockerContainers as $container)
-                            <div class="rounded-xl border border-gray-800 bg-gray-800/40 p-3">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs font-semibold text-white">{{ $container['name'] }}</span>
-                                    <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium {{ $container['is_running'] ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border-red-500/20 bg-red-500/10 text-red-400' }}">
-                                        {{ $container['is_running'] ? 'فعال' : 'متوقف' }}
-                                    </span>
-                                </div>
-                                <div class="mt-2 truncate font-mono text-[11px] text-gray-400">
-                                    {{ $container['image'] }}
-                                </div>
-                                <div class="mt-1 text-[10px] text-gray-500">
-                                    {{ $container['status'] }}
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
+                <h2 class="text-lg font-bold text-white">آمار و مقایسه بازدید ماه‌های اخیر</h2>
+                <p class="text-xs text-gray-400">روند تفکیکی صفحات بازدیدشده (Page Views) و بازدیدکنندگان یکتا (Unique Visitors) در شش ماه اخیر</p>
             </div>
 
-            <div class="mt-4 flex items-center justify-between border-t border-gray-800 pt-4 text-[11px] text-gray-400">
-                <span class="font-mono text-blue-400">Docker Engine</span>
+            <div class="text-left sm:text-right">
+                <div class="text-xs text-gray-400">مجموع بازدید صفحات در این دوره:</div>
+                <div class="mt-1 text-sm font-bold text-blue-400">
+                    {{ number_format(array_sum($monthlyVisits['views'])) }}
+                </div>
             </div>
         </div>
 
+        <div class="relative h-80 w-full">
+            <canvas id="visitsChart"></canvas>
+        </div>
     </div>
+
 </div>
 
 {{-- Chart.js --}}
