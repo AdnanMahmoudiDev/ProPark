@@ -12,6 +12,8 @@ use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
 use App\Http\Controllers\User\CartController; 
 
+
+
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\Admin\LicenseCreationController;
 use App\Http\Controllers\Admin\DatabaseBackupController;
 use App\Http\Controllers\Admin\CategoryController; 
 use App\Http\Controllers\Admin\PostController; 
+use App\Http\Controllers\Admin\MonitoringController;
 
 // صفحه اصلی
 Route::get('/', function () {
@@ -139,6 +142,9 @@ Route::middleware(['auth', 'verified', 'admin'])
             Route::get('/export', [DatabaseBackupController::class, 'export'])->name('export');
             Route::post('/import', [DatabaseBackupController::class, 'import'])->name('import');
         });
+        
+        //مانیتورینگ سایت و سرور 
+        Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
 
         // مدیریت دسته‌بندی‌های وبلاگ (لیست، ایجاد، ویرایش، بروزرسانی و حذف)
         Route::resource('categories', CategoryController::class)->except(['create', 'show']);
