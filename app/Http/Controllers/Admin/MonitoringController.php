@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Process\Process;
 
 class MonitoringController extends Controller
 {
@@ -66,45 +65,14 @@ class MonitoringController extends Controller
             $dbStatus = 'error';
         }
 
-        // 4. وضعیت داکر
-        $dockerContainers = [];
-        $dockerAvailable = false;
-        try {
-            $process = new Process(['docker', 'ps', '-a', '--format', '{{.Names}}|{{.Status}}|{{.Image}}|{{.Ports}}']);
-            $process->setTimeout(3);
-            $process->run();
-
-            if ($process->isSuccessful()) {
-                $dockerAvailable = true;
-                $output = trim($process->getOutput());
-                if (!empty($output)) {
-                    $lines = explode("\n", $output);
-                    foreach ($lines as $line) {
-                        $parts = explode('|', $line);
-                        if (count($parts) >= 3) {
-                            $dockerContainers[] = [
-                                'name'   => $parts[0] ?? '-',
-                                'status' => $parts[1] ?? '-',
-                                'image'  => $parts[2] ?? '-',
-                                'ports'  => $parts[3] ?? '-',
-                                'is_running' => str_starts_with(strtolower($parts[1] ?? ''), 'up'),
-                            ];
-                        }
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            $dockerAvailable = false;
-        }
-
-        // 5. زمان پاسخگویی سرور
+        // 4. زمان پاسخگویی سرور
         $responseTime = round((microtime(true) - $startTime) * 1000, 2);
 
-        // 6. دریافت آمار کلی بازدیدها و کاربران یکتا
+        // 5. دریافت آمار کلی بازدیدها و کاربران یکتا
         $totalVisits = DB::table('page_visits')->count();
         $uniqueVisitors = DB::table('page_visits')->distinct('ip_address')->count('ip_address');
 
-        // 7. دریافت آمار تفکیکی ۶ ماه اخیر از دیتابیس
+        // 6. دریافت آمار تفکیکی ۶ ماه اخیر از دیتابیس
         $monthlyVisits = $this->getMonthlyVisitsData();
 
         return view('admin.monitoring.index', compact(
@@ -112,8 +80,6 @@ class MonitoringController extends Controller
             'disk',
             'dbStatus',
             'dbLatency',
-            'dockerAvailable',
-            'dockerContainers',
             'responseTime',
             'totalVisits',
             'uniqueVisitors',

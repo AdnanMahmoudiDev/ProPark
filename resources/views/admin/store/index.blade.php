@@ -11,7 +11,7 @@
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                <span>ویرایش گروهی قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه AvaPark</span>
+                <span>ویرایش گروهی مدت زمان، قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه AvaPark</span>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    {{-- پیام موفقیت بودن --}}
+    {{-- پیام موفقیت --}}
     @if(session('success'))
         <div class="flex items-center gap-3 p-4 rounded-2xl border border-green-700 bg-green-900/20 text-green-400 text-sm">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
         </div>
     @endif
 
-    {{-- ارور های اعتبار سنجی --}}
+    {{-- خطاهای اعتبارسنجی --}}
     @if($errors->any())
         <div class="p-4 rounded-2xl border border-rose-700 bg-rose-900/20 text-rose-400 text-sm space-y-2">
             <div class="flex items-center gap-2 font-bold">
@@ -49,7 +49,7 @@
         </div>
     @endif
 
-    {{-- فرم --}}
+    {{-- فرم ویرایش گروهی --}}
     <form action="{{ route('admin.store.prices.bulk-update') }}" method="POST" class="space-y-8" id="bulk-price-form">
         @csrf
         @method('PUT')
@@ -77,17 +77,14 @@
                     </div>
                 </div>
 
-                {{-- مخصوص موبایل --}}
+                {{-- نسخه موبایل --}}
                 <div class="block md:hidden p-4 space-y-4">
                     @forelse($plan->prices as $price)
                         <div class="rounded-2xl border border-gray-800 bg-black/20 p-4 space-y-4">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <div class="text-sm font-bold text-white">
-                                        بازه {{ $price->duration_months }} ماهه
-                                    </div>
-                                    <div class="mt-1 text-xs font-mono text-gray-500">
-                                        شناسه: #{{ $price->id }}
+                                        شناسه ردیف: #{{ $price->id }}
                                     </div>
                                 </div>
 
@@ -97,6 +94,31 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-4">
+                                {{-- مدت (ماه و تبدیل سال) --}}
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <label class="text-[11px] text-gray-500">
+                                            مدت اعتبار (ماه)
+                                        </label>
+                                        <span class="text-[11px] px-2 py-0.5 rounded-md border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 font-medium" data-duration-badge>
+                                            {{ $price->duration_label }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input
+                                            type="number"
+                                            name="prices[{{ $price->id }}][duration_months]"
+                                            value="{{ $price->duration_months }}"
+                                            min="1"
+                                            max="600"
+                                            required
+                                            data-duration-input
+                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        >
+                                        <span class="text-xs text-gray-500 whitespace-nowrap">ماه</span>
+                                    </div>
+                                </div>
+
                                 {{-- قیمت --}}
                                 <div>
                                     <label class="block text-[11px] text-gray-500 mb-2">
@@ -161,14 +183,14 @@
                     @endforelse
                 </div>
 
-                {{-- مخصوص موبایل --}}
+                {{-- نسخه دسکتاپ (جدول) --}}
                 <div class="hidden md:block p-4 lg:p-6">
                     <div class="overflow-x-auto">
                         <table class="w-full text-right border-collapse min-w-[760px]">
                             <thead>
                                 <tr class="border-b border-gray-800">
                                     <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">شناسه</th>
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">مدت (ماه)</th>
+                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">مدت (ماه و نمایش سال)</th>
                                     <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت</th>
                                     <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">درصد تخفیف</th>
                                     <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">وضعیت</th>
@@ -178,14 +200,29 @@
                             <tbody class="divide-y divide-gray-800/40">
                                 @forelse($plan->prices as $price)
                                     <tr class="hover:bg-gray-800/20 transition duration-150">
-                                        {{-- ایدی --}}
+                                        {{-- شناسه --}}
                                         <td class="py-4 px-2 text-sm font-mono text-gray-300 whitespace-nowrap">
                                             #{{ $price->id }}
                                         </td>
 
-                                        {{-- بازه زمانی --}}
-                                        <td class="py-4 px-2 text-sm text-white font-medium whitespace-nowrap">
-                                            {{ $price->duration_months }} ماه
+                                        {{-- بازه زمانی (قابل ویرایش با نمایش برچسب سال) --}}
+                                        <td class="py-4 px-2">
+                                            <div class="flex items-center gap-2">
+                                                <input
+                                                    type="number"
+                                                    name="prices[{{ $price->id }}][duration_months]"
+                                                    value="{{ $price->duration_months }}"
+                                                    min="1"
+                                                    max="600"
+                                                    required
+                                                    data-duration-input
+                                                    class="w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                >
+                                                <span class="text-xs text-gray-500 whitespace-nowrap">ماه</span>
+                                                <span class="text-[11px] px-2 py-1 rounded-lg border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 font-medium whitespace-nowrap" data-duration-badge>
+                                                    {{ $price->duration_label }}
+                                                </span>
+                                            </div>
                                         </td>
 
                                         {{-- قیمت --}}
@@ -220,7 +257,7 @@
                                             </div>
                                         </td>
 
-                                        {{-- فعال --}}
+                                        {{-- وضعیت فعال/غیرفعال --}}
                                         <td class="py-4 px-2">
                                             <select
                                                 name="prices[{{ $price->id }}][is_active]"
@@ -281,6 +318,34 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('bulk-price-form');
         const priceInputs = document.querySelectorAll('[data-price-input]');
+        const durationInputs = document.querySelectorAll('[data-duration-input]');
+
+        // فرمت مدت زمان به سال و ماه در جاوااسکریپت برای بازخورد آنی
+        function getDurationLabel(months) {
+            months = parseInt(months, 10);
+            if (isNaN(months) || months <= 0) return 'نامشخص';
+            if (months < 12) return months + ' ماهه';
+            
+            const years = Math.floor(months / 12);
+            const remaining = months % 12;
+
+            if (remaining === 0) {
+                return years + ' ساله';
+            }
+            return years + ' سال و ' + remaining + ' ماهه';
+        }
+
+        // رویداد تغییر مدت زمان برای به‌روزرسانی آنی برچسب
+        durationInputs.forEach((input) => {
+            const container = input.closest('td') || input.closest('.grid > div');
+            const badge = container ? container.querySelector('[data-duration-badge]') : null;
+
+            input.addEventListener('input', function () {
+                if (badge) {
+                    badge.textContent = getDurationLabel(this.value);
+                }
+            });
+        });
 
         function onlyDigits(value) {
             return value.replace(/\D/g, '');
