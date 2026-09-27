@@ -287,8 +287,7 @@
                             <button
                                 @click="changePlan()"
                                 type="button"
-                                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19/60 cursor-pointer"
+                                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer"
                             >
                                 <svg class="h-4 w-4 rtl:rotate-0 ltr:rotate-180 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -332,7 +331,8 @@
                                     </div>
 
                                     <div class="ps-10">
-                                        <h4 class="text-base sm:text-lg font-black text-white" x-text="toEn(duration.duration_months) + ' ' + monthsSuffix"></h4>
+                                        {{-- عنوان هوشمند مدت دوره (مثلاً ۱۰ ساله یا ۱ ساله) --}}
+                                        <h4 class="text-base sm:text-lg font-black text-white" x-text="getDurationLabel(duration)"></h4>
 
                                         <p class="mt-1 text-xs text-gray-400">
                                             {{ __('shop_duration_desc') }}
@@ -382,7 +382,7 @@
                                             {{ __('shop_selected_period') }}
                                             <strong
                                                 class="text-white font-bold"
-                                                x-text="' ' + toEn(selectedDurationObject()?.duration_months) + ' ' + monthsSuffix"
+                                                x-text="' ' + getDurationLabel(selectedDurationObject())"
                                             ></strong>
 
                                             &nbsp;|&nbsp;
@@ -442,7 +442,7 @@
             </div>
         </div>
 
-        {{-- فرم ارسال داده به روت سبد خرید --}}
+        {{-- فرم ارسال داده به روت سبد خرید (بدون تغییر در ماه خام عددی) --}}
         <form x-ref="cartForm" method="POST" :action="cartStoreUrl" class="hidden">
             @csrf
             <input type="hidden" name="plan_id" :value="selectedPlanId()">
@@ -462,16 +462,6 @@
             errSelectDuration = '',
             errInvalidDuration = ''
         }) {
-            /*
-             * بهینه‌سازی:
-             * - ساخت Index برای پلن‌ها
-             * - ساخت Map برای durationها
-             * - حذف find()های تکراری
-             * - Cache کردن پلن و duration انتخاب‌شده
-             * - جلوگیری از submit دوباره
-             * - اصلاح تبدیل اعداد فارسی و عربی
-             */
-
             const planList = Array.isArray(plans) ? plans : [];
 
             planList.forEach(plan => {
@@ -514,6 +504,33 @@
                         .replace(/[٠-٩]/g, d =>
                             '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]
                         );
+                },
+
+                /**
+                 * تبدیل هوشمند ماه به سال/ماهه بر اساس خروجی سرور یا فرمول فرانت
+                 */
+                getDurationLabel(duration) {
+                    if (!duration) return '';
+
+                    if (duration.duration_label) {
+                        return duration.duration_label;
+                    }
+
+                    const months = parseInt(this.toEn(duration.duration_months), 10);
+                    if (isNaN(months) || months <= 0) return '';
+
+                    if (months < 12) {
+                        return months + ' ' + this.monthsSuffix;
+                    }
+
+                    const years = Math.floor(months / 12);
+                    const remainingMonths = months % 12;
+
+                    if (remainingMonths === 0) {
+                        return years + ' ساله';
+                    }
+
+                    return years + ' سال و ' + remainingMonths + ' ' + this.monthsSuffix;
                 },
 
                 formatPrice(price) {
