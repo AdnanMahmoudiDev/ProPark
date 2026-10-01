@@ -4,42 +4,79 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Plan;
-use App\Models\PlanPrice;
 use App\Models\User;
 use Exception;
 
 class CartService
 {
+    /**
+     * گرفتن سبد خرید در انتظار کاربر
+     */
     public function getPendingCart(User $user): ?Cart
     {
         return $user->carts()
-            ->pending()
+            ->where('status', Cart::STATUS_PENDING)
             ->latest()
             ->first();
     }
 
+    /**
+     * بررسی وجود سبد خرید فعال
+     */
     public function hasPendingCart(User $user): bool
     {
         return $this->getPendingCart($user) !== null;
     }
 
-    public function createPendingCart(User $user, Plan $plan, int $durationMonths): Cart
+    /**
+     * ایجاد سبد خرید جدید برای خرید پلن
+     */
+    public function createPendingCart(User $user, Plan $plan): Cart
     {
         if ($this->hasPendingCart($user)) {
             throw new Exception('User already has a pending cart.');
         }
 
-        $planPrice = $this->resolveActivePlanPrice($plan, $durationMonths);
-
         return Cart::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
-            'plan_price_id' => $planPrice->id,
-            'type' => Cart::TYPE_PURCHASE,
-            'status' => Cart::STATUS_PENDING,
+
+            // اگر در Cart مدل ثابت جدا برای پلن داری، بهتره TYPE را دقیق‌تر کنی.
+            // فعلاً همان چیزی که خودت داشتی:
+            'type'    => Cart::TYPE_PURCHASE,
+            'status'  => Cart::STATUS_PENDING,
         ]);
     }
 
+    /**
+     * ایجاد سبد خرید جدید برای خرید پکیج پشتیبانی
+     *
+     * نکته: این متد فرض می‌کند در جدول carts ستون support_package_id وجود دارد.
+     * اگر نام ستون متفاوت است، همینجا اصلاحش کن.
+     */
+    public function createPendingSupportCart(User $user, int $supportPackageId): Cart
+    {
+        if ($this->hasPendingCart($user)) {
+            throw new Exception('User already has a pending cart.');
+        }
+
+        return Cart::create([
+            'user_id'            => $user->id,
+            'support_package_id' => $supportPackageId,
+
+            // اگر TYPE جدا برای پشتیبانی داری بهتره:
+            // 'type' => Cart::TYPE_SUPPORT,
+            // ولی چون هنوز مطمئن نیستیم، از string هم میشه استفاده کرد؛
+            // با این حال برای سازگاری با منطق کنترلر قبلی:
+            'type'               => 'support',
+
+            'status'             => Cart::STATUS_PENDING,
+        ]);
+    }
+
+    /**
+     * لغو سبد خرید pending
+     */
     public function cancelPendingCart(User $user): bool
     {
         $cart = $this->getPendingCart($user);
@@ -53,19 +90,5 @@ class CartService
         ]);
 
         return true;
-    }
-
-    private function resolveActivePlanPrice(Plan $plan, int $durationMonths): PlanPrice
-    {
-        $planPrice = $plan->prices()
-            ->where('duration_months', $durationMonths)
-            ->where('is_active', true)
-            ->first();
-
-        if (!$planPrice) {
-            throw new Exception('Selected plan price is not available.');
-        }
-
-        return $planPrice;
     }
 }

@@ -13,24 +13,28 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * داشبرد کاربری
+     * داشبورد کاربری
      */
     public function dashboard(): View
     {
         /** @var User $user */
         $user = Auth::user();
 
-        $activeSubscription = $user->subscriptions()
-            ->where('status', 'active')
-            ->where('expires_at', '>=', now())
-            ->latest()
+        // واکشی آخرین اشتراک کاربر به همراه لایسنس و پشتیبانی فعال
+        $subscription = $user->subscriptions()
+            ->with(['plan', 'license', 'activeSupport'])
+            ->latest('id')
             ->first();
 
-        $license = $activeSubscription?->license;
+        $license = $subscription?->license;
+        
+        // واکشی وضعیت پشتیبانی (در صورتی که فعال نباشد، مقدار null برمی‌گرداند)
+        $activeSupport = $subscription?->activeSupport;
 
         return view('dashboard', compact(
-            'activeSubscription',
-            'license'
+            'subscription',
+            'license',
+            'activeSupport'
         ));
     }
 

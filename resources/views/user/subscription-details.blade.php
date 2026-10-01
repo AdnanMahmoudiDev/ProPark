@@ -4,25 +4,21 @@
     $isActive = $status === 'active';
 
     $planTitle = $planTitle ?? ($subscription->plan->title ?? 'N/A');
-    $planPeriodMonths = $planPeriodMonths ?? ($subscription->planPrice->duration_months ?? null);
     $licenseKey = $licenseKey ?? ($subscription->license->license_key ?? 'N/A');
 
     $connectedDevicesCount = $connectedDevicesCount ?? ($subscription->license ? $subscription->license->devices->count() : 0);
     $maxAllowedDevices = $maxAllowedDevices ?? ($subscription->plan->max_devices ?? null);
 
-    $price = $price ?? ($subscription->planPrice->price ?? 0);
+    // دریافت وضعیت و تاریخ‌های پشتیبانی فعال
+    $activeSupport = $activeSupport ?? ($subscription->supports()->where('status', 'active')->latest('expires_at')->first() ?? null);
+    
+    $supportStartsAt = $activeSupport?->starts_at ?? $subscription->created_at;
+    $supportExpiresAt = $activeSupport?->expires_at;
+    $supportCreatedAt = $activeSupport?->created_at ?? $supportStartsAt;
 
-    $subscriptionDurationDays = $subscriptionDurationDays ?? null;
-    if ($subscriptionDurationDays === null && $subscription->started_at && $subscription->expires_at) {
-        $subscriptionDurationDays = round(
-            \Carbon\Carbon::parse($subscription->started_at)
-                ->diffInDays(\Carbon\Carbon::parse($subscription->expires_at))
-        );
-    }
-
-    $remainingDays = $remainingDays ?? null;
-    if ($remainingDays === null && $subscription->expires_at) {
-        $remainingDays = round(now()->diffInDays(\Carbon\Carbon::parse($subscription->expires_at), false));
+    $supportRemainingDays = null;
+    if ($supportExpiresAt) {
+        $supportRemainingDays = round(now()->diffInDays(\Carbon\Carbon::parse($supportExpiresAt), false));
     }
 @endphp
 
@@ -86,64 +82,67 @@
                 <div class="p-5 sm:p-8">
                     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         <div class="space-y-6">
+                            {{-- اطلاعات پلن --}}
                             <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     {{ __('sub_plan_info') }}
                                 </h4>
 
                                 <div class="space-y-4">
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4 first:border-none first:pt-0">
+                                    <div class="flex items-center justify-between gap-4">
                                         <span class="text-sm text-gray-400">{{ __('sub_plan_name') }}</span>
                                         <span class="text-left text-sm font-semibold text-white">{{ $planTitle }}</span>
-                                    </div>
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('sub_plan_period') }}</span>
-                                        <span class="text-left text-sm font-semibold text-white">{{ $planPeriodMonths ? $planPeriodMonths . ' ' . __('sub_months') : 'N/A' }}</span>
-                                    </div>
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('sub_duration') }}</span>
-                                        <span class="text-left text-sm font-semibold text-white">{{ $subscriptionDurationDays !== null ? number_format($subscriptionDurationDays) . ' ' . __('sub_days') : 'N/A' }}</span>
-                                    </div>
-
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('sub_remaining_days') }}</span>
-                                        <span class="inline-flex items-center rounded-lg px-2.5 py-1 text-sm font-bold
-                                            {{ $remainingDays !== null && $remainingDays >= 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }}">
-                                            @if($remainingDays === null)
-                                                N/A
-                                            @elseif($remainingDays < 0)
-                                                {{ __('sub_expired') }}
-                                            @else
-                                                {{ number_format($remainingDays) }} {{ __('sub_days') }}
-                                            @endif
-                                        </span>
                                     </div>
                                 </div>
                             </div>
 
+                            {{-- اطلاعات پشتیبانی --}}
                             <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                                    {{ __('sub_dates') }}
+                                    {{ __('اطلاعات پشتیبانی') }}
                                 </h4>
 
                                 <div class="space-y-4">
-                                    @foreach([
-                                        [__('sub_start_date'), $subscription->started_at],
-                                        [__('sub_expiry_date'), $subscription->expires_at],
-                                        [__('sub_register_date'), $subscription->created_at],
-                                    ] as $t)
-                                        <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4 first:border-none first:pt-0">
-                                            <span class="text-sm text-gray-400">{{ $t[0] }}</span>
-                                            <span class="font-mono text-xs font-semibold text-gray-200">
-                                                {{ $t[1] ? ($isRtl ? jdate($t[1])->format('Y/m/d H:i') : \Carbon\Carbon::parse($t[1])->format('Y-m-d H:i')) : '—' }}
-                                            </span>
-                                        </div>
-                                    @endforeach
+                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4 first:border-none first:pt-0">
+                                        <span class="text-sm text-gray-400">{{ __('روزهای باقی‌مانده پشتیبانی') }}</span>
+                                        <span class="inline-flex items-center rounded-lg px-2.5 py-1 text-sm font-bold
+                                            {{ $supportRemainingDays !== null && $supportRemainingDays >= 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }}">
+                                            @if($supportRemainingDays === null)
+                                                —
+                                            @elseif($supportRemainingDays < 0)
+                                                {{ __('منقضی شده') }}
+                                            @else
+                                                {{ number_format($supportRemainingDays) }} {{ __('روز') }}
+                                            @endif
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
+                                        <span class="text-sm text-gray-400">{{ __('تاریخ ثبت پشتیبانی') }}</span>
+                                        <span class="font-mono text-xs font-semibold text-gray-200">
+                                            {{ $supportCreatedAt ? ($isRtl ? jdate($supportCreatedAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportCreatedAt)->format('Y-m-d H:i')) : '—' }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
+                                        <span class="text-sm text-gray-400">{{ __('تاریخ شروع پشتیبانی') }}</span>
+                                        <span class="font-mono text-xs font-semibold text-gray-200">
+                                            {{ $supportStartsAt ? ($isRtl ? jdate($supportStartsAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportStartsAt)->format('Y-m-d H:i')) : '—' }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
+                                        <span class="text-sm text-gray-400">{{ __('تاریخ انقضای پشتیبانی') }}</span>
+                                        <span class="font-mono text-xs font-semibold text-gray-200">
+                                            {{ $supportExpiresAt ? ($isRtl ? jdate($supportExpiresAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportExpiresAt)->format('Y-m-d H:i')) : '—' }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="space-y-6">
+                            {{-- اطلاعات لایسنس --}}
                             <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
                                     {{ __('sub_license_info') }}
@@ -220,27 +219,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
-                                <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                                    {{ __('sub_payment_info') }}
-                                </h4>
-
-                                <div class="space-y-4">
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4 first:border-none first:pt-0">
-                                        <span class="text-sm text-gray-400">{{ __('sub_payment_amount') }}</span>
-                                        <span class="text-sm font-semibold text-gray-200">{{ number_format($price) }}</span>
-                                    </div>
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('sub_payment_id') }}</span>
-                                        <span class="text-sm font-semibold text-gray-200">{{ 'PAY-' . $subscription->id }}</span>
-                                    </div>
-                                    <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('sub_payment_method') }}</span>
-                                        <span class="text-sm font-semibold text-gray-200">{{ __('sub_online_payment') }}</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -263,9 +241,9 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-amber-300">{{ __('sub_note_title') }}</p>
+                                <p class="text-xs font-bold text-amber-300">{{ __('نکته مهم') }}</p>
                                 <p class="mt-1 text-xs leading-6 text-gray-400">
-                                    {{ __('sub_note_desc') }}
+                                    {{ __('در صورت مشکل در فعال‌سازی لایسنس، تعداد دستگاه‌ها را بررسی کنید.') }}
                                 </p>
                             </div>
                         </div>
