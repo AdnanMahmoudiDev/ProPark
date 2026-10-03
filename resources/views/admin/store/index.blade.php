@@ -3,7 +3,7 @@
 @section('content')
 <div class="space-y-8">
 
-    {{-- هدر --}}
+    {{-- هدر صفحه --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <h2 class="text-2xl font-bold text-white leading-tight">
@@ -11,7 +11,7 @@
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                <span>ویرایش گروهی مدت زمان، قیمت‌ها، تخفیف‌ها و وضعیت فعال‌بودن پلن‌های فروشگاه AvaPark</span>
+                <span>ویرایش قیمت، تخفیف، تعداد دستگاه مجاز و وضعیت فعال‌بودن لایسنس‌های ProPark</span>
             </div>
         </div>
 
@@ -49,260 +49,242 @@
         </div>
     @endif
 
-    {{-- فرم ویرایش گروهی --}}
-    <form action="{{ route('admin.store.prices.bulk-update') }}" method="POST" class="space-y-8" id="bulk-price-form">
+    {{-- فرم ویرایش گروهی پلن‌ها --}}
+    <form action="{{ route('admin.store.prices.bulk-update') }}" method="POST" class="space-y-6" id="bulk-plan-form">
         @csrf
         @method('PUT')
 
-        @forelse($plans as $plan)
-            <section class="rounded-3xl border border-gray-800 bg-gray-900/70 shadow-lg overflow-hidden">
+        {{-- کارت‌های نسخه موبایل --}}
+        <div class="block md:hidden space-y-4">
+            @forelse($plans as $plan)
+                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-5 space-y-4 shadow-lg">
+                    <div class="flex items-start justify-between gap-3 border-b border-gray-800/80 pb-3">
+                        <div>
+                            <div class="text-base font-bold text-white">
+                                {{ $plan->title }}
+                            </div>
+                            <span class="text-xs font-mono text-cyan-400/80">#{{ $plan->slug }}</span>
+                        </div>
 
-                {{-- هدر پلن --}}
-                <div class="px-4 sm:px-6 py-5 border-b border-gray-800 bg-gradient-to-r from-[#111827] via-[#0f172a] to-[#111827]">
-                    <div class="flex flex-col gap-3">
-                        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-                            <div class="min-w-0">
-                                <h3 class="text-lg font-bold text-white break-words">
-                                    {{ $plan->title }}
-                                </h3>
-                                <p class="mt-1 text-sm text-gray-400 leading-7 break-words">
-                                    {{ $plan->description ?: 'توضیحی برای این پلن ثبت نشده است.' }}
-                                </p>
+                        <div class="px-2.5 py-1 rounded-lg text-[11px] border {{ $plan->is_active ? 'border-green-700 bg-green-900/20 text-green-400' : 'border-gray-700 bg-gray-800/70 text-gray-400' }}">
+                            {{ $plan->is_active ? 'فعال' : 'غیرفعال' }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3.5">
+                        {{-- قیمت اصلی --}}
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1.5">قیمت اصلی (خط خورده)</label>
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    name="plans[{{ $plan->id }}][original_price]"
+                                    value="{{ number_format((int) ($plan->original_price ?? 0)) }}"
+                                    data-price-input
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                >
+                                <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
+                            </div>
+                        </div>
+
+                        {{-- قیمت فروش --}}
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1.5">قیمت نهایی فروش <span class="text-rose-500">*</span></label>
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    name="plans[{{ $plan->id }}][price]"
+                                    value="{{ number_format((int) $plan->price) }}"
+                                    required
+                                    data-price-input
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                >
+                                <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            {{-- درصد تخفیف --}}
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1.5">تخفیف (٪)</label>
+                                <input
+                                    type="number"
+                                    name="plans[{{ $plan->id }}][discount_percent]"
+                                    value="{{ $plan->discount_percent ?? 0 }}"
+                                    min="0"
+                                    max="100"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                >
                             </div>
 
-                            <div class="self-start md:self-auto shrink-0 px-3 py-1.5 rounded-xl border border-cyan-800 bg-cyan-900/20 text-cyan-300 text-xs whitespace-nowrap">
-                                تعداد بازه‌های قیمت: {{ $plan->prices->count() }}
+                            {{-- تعداد دستگاه --}}
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1.5">دستگاه مجاز</label>
+                                <input
+                                    type="number"
+                                    name="plans[{{ $plan->id }}][max_devices]"
+                                    value="{{ $plan->max_devices ?? 1 }}"
+                                    min="1"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            {{-- ترتیب نمایش --}}
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1.5">ترتیب نمایش</label>
+                                <input
+                                    type="number"
+                                    name="plans[{{ $plan->id }}][sort_order]"
+                                    value="{{ $plan->sort_order ?? 0 }}"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                >
+                            </div>
+
+                            {{-- وضعیت --}}
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1.5">وضعیت</label>
+                                <select
+                                    name="plans[{{ $plan->id }}][is_active]"
+                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                >
+                                    <option value="1" class="bg-gray-900 text-gray-200" {{ $plan->is_active ? 'selected' : '' }}>فعال</option>
+                                    <option value="0" class="bg-gray-900 text-gray-200" {{ !$plan->is_active ? 'selected' : '' }}>غیرفعال</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
+            @empty
+                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-8 text-center text-sm text-gray-500">
+                    هیچ پلنی یافت نشد.
+                </div>
+            @endforelse
+        </div>
 
-                {{-- نسخه موبایل --}}
-                <div class="block md:hidden p-4 space-y-4">
-                    @forelse($plan->prices as $price)
-                        <div class="rounded-2xl border border-gray-800 bg-black/20 p-4 space-y-4">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <div class="text-sm font-bold text-white">
-                                        شناسه ردیف: #{{ $price->id }}
-                                    </div>
-                                </div>
+        {{-- جدول نسخه دسکتاپ --}}
+        <div class="hidden md:block rounded-3xl border border-gray-800 bg-gray-900/70 shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse min-w-[850px]">
+                    <thead>
+                        <tr class="border-b border-gray-800 bg-gradient-to-r from-[#111827] via-[#0f172a] to-[#111827]">
+                            <th class="py-4 px-4 text-xs font-semibold text-gray-400 whitespace-nowrap">پلن</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت اصلی</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت فروش</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">تخفیف (٪)</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">دستگاه مجاز</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">ترتیب نمایش</th>
+                            <th class="py-4 px-4 text-xs font-semibold text-gray-400 whitespace-nowrap">وضعیت</th>
+                        </tr>
+                    </thead>
 
-                                <div class="px-2.5 py-1 rounded-lg text-[11px] border {{ $price->is_active ? 'border-green-700 bg-green-900/20 text-green-400' : 'border-gray-700 bg-gray-800/70 text-gray-400' }}">
-                                    {{ $price->is_active ? 'فعال' : 'غیرفعال' }}
-                                </div>
-                            </div>
+                    <tbody class="divide-y divide-gray-800/40">
+                        @forelse($plans as $plan)
+                            <tr class="hover:bg-gray-800/20 transition duration-150">
+                                {{-- مشخصات پلن --}}
+                                <td class="py-4 px-4">
+                                    <div class="font-bold text-white text-sm">{{ $plan->title }}</div>
+                                    <div class="text-[11px] font-mono text-cyan-400/80 mt-0.5">#{{ $plan->slug }}</div>
+                                </td>
 
-                            <div class="grid grid-cols-1 gap-4">
-                                {{-- مدت (ماه و تبدیل سال) --}}
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <label class="text-[11px] text-gray-500">
-                                            مدت اعتبار (ماه)
-                                        </label>
-                                        <span class="text-[11px] px-2 py-0.5 rounded-md border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 font-medium" data-duration-badge>
-                                            {{ $price->duration_label }}
-                                        </span>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <input
-                                            type="number"
-                                            name="prices[{{ $price->id }}][duration_months]"
-                                            value="{{ $price->duration_months }}"
-                                            min="1"
-                                            max="600"
-                                            required
-                                            data-duration-input
-                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                        >
-                                        <span class="text-xs text-gray-500 whitespace-nowrap">ماه</span>
-                                    </div>
-                                </div>
-
-                                {{-- قیمت --}}
-                                <div>
-                                    <label class="block text-[11px] text-gray-500 mb-2">
-                                        قیمت
-                                    </label>
+                                {{-- قیمت اصلی --}}
+                                <td class="py-4 px-3">
                                     <div class="flex items-center gap-2">
                                         <input
                                             type="text"
                                             inputmode="numeric"
-                                            name="prices[{{ $price->id }}][price]"
-                                            value="{{ number_format((int) $price->price) }}"
-                                            required
+                                            name="plans[{{ $plan->id }}][original_price]"
+                                            value="{{ number_format((int) ($plan->original_price ?? 0)) }}"
                                             data-price-input
-                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                            class="w-32 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                         >
                                         <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
                                     </div>
-                                </div>
+                                </td>
 
-                                {{-- تخفیف --}}
-                                <div>
-                                    <label class="block text-[11px] text-gray-500 mb-2">
-                                        درصد تخفیف
-                                    </label>
+                                {{-- قیمت فروش --}}
+                                <td class="py-4 px-3">
                                     <div class="flex items-center gap-2">
                                         <input
+                                            type="text"
+                                            inputmode="numeric"
+                                            name="plans[{{ $plan->id }}][price]"
+                                            value="{{ number_format((int) $plan->price) }}"
+                                            required
+                                            data-price-input
+                                            class="w-32 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                        >
+                                        <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
+                                    </div>
+                                </td>
+
+                                {{-- درصد تخفیف --}}
+                                <td class="py-4 px-3">
+                                    <div class="flex items-center gap-1.5">
+                                        <input
                                             type="number"
-                                            name="prices[{{ $price->id }}][discount_percent]"
-                                            value="{{ $price->discount_percent }}"
+                                            name="plans[{{ $plan->id }}][discount_percent]"
+                                            value="{{ $plan->discount_percent ?? 0 }}"
                                             min="0"
                                             max="100"
-                                            required
-                                            class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            class="w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-2 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         >
                                         <span class="text-xs text-gray-500 whitespace-nowrap">٪</span>
                                     </div>
-                                </div>
+                                </td>
+
+                                {{-- حداکثر دستگاه --}}
+                                <td class="py-4 px-3">
+                                    <input
+                                        type="number"
+                                        name="plans[{{ $plan->id }}][max_devices]"
+                                        value="{{ $plan->max_devices ?? 1 }}"
+                                        min="1"
+                                        class="w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-2 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    >
+                                </td>
+
+                                {{-- ترتیب نمایش --}}
+                                <td class="py-4 px-3">
+                                    <input
+                                        type="number"
+                                        name="plans[{{ $plan->id }}][sort_order]"
+                                        value="{{ $plan->sort_order ?? 0 }}"
+                                        class="w-16 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-2 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    >
+                                </td>
 
                                 {{-- وضعیت --}}
-                                <div>
-                                    <label class="block text-[11px] text-gray-500 mb-2">
-                                        وضعیت
-                                    </label>
+                                <td class="py-4 px-4">
                                     <select
-                                        name="prices[{{ $price->id }}][is_active]"
-                                        class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                        name="plans[{{ $plan->id }}][is_active]"
+                                        class="min-w-[100px] rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2 px-2.5 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                     >
-                                        <option value="1" class="bg-gray-900 text-gray-200" {{ $price->is_active ? 'selected' : '' }}>
-                                            فعال
-                                        </option>
-                                        <option value="0" class="bg-gray-900 text-gray-200" {{ !$price->is_active ? 'selected' : '' }}>
-                                            غیرفعال
-                                        </option>
+                                        <option value="1" class="bg-gray-900 text-gray-200" {{ $plan->is_active ? 'selected' : '' }}>فعال</option>
+                                        <option value="0" class="bg-gray-900 text-gray-200" {{ !$plan->is_active ? 'selected' : '' }}>غیرفعال</option>
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="rounded-2xl border border-dashed border-gray-800 bg-black/10 px-4 py-8 text-center text-sm text-gray-500">
-                            هیچ بازه قیمتی برای این پلن ثبت نشده است.
-                        </div>
-                    @endforelse
-                </div>
-
-                {{-- نسخه دسکتاپ (جدول) --}}
-                <div class="hidden md:block p-4 lg:p-6">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right border-collapse min-w-[760px]">
-                            <thead>
-                                <tr class="border-b border-gray-800">
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">شناسه</th>
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">مدت (ماه و نمایش سال)</th>
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت</th>
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">درصد تخفیف</th>
-                                    <th class="py-3 px-2 text-xs font-semibold text-gray-400 whitespace-nowrap">وضعیت</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="divide-y divide-gray-800/40">
-                                @forelse($plan->prices as $price)
-                                    <tr class="hover:bg-gray-800/20 transition duration-150">
-                                        {{-- شناسه --}}
-                                        <td class="py-4 px-2 text-sm font-mono text-gray-300 whitespace-nowrap">
-                                            #{{ $price->id }}
-                                        </td>
-
-                                        {{-- بازه زمانی (قابل ویرایش با نمایش برچسب سال) --}}
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center gap-2">
-                                                <input
-                                                    type="number"
-                                                    name="prices[{{ $price->id }}][duration_months]"
-                                                    value="{{ $price->duration_months }}"
-                                                    min="1"
-                                                    max="600"
-                                                    required
-                                                    data-duration-input
-                                                    class="w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                >
-                                                <span class="text-xs text-gray-500 whitespace-nowrap">ماه</span>
-                                                <span class="text-[11px] px-2 py-1 rounded-lg border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 font-medium whitespace-nowrap" data-duration-badge>
-                                                    {{ $price->duration_label }}
-                                                </span>
-                                            </div>
-                                        </td>
-
-                                        {{-- قیمت --}}
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center gap-3">
-                                                <input
-                                                    type="text"
-                                                    inputmode="numeric"
-                                                    name="prices[{{ $price->id }}][price]"
-                                                    value="{{ number_format((int) $price->price) }}"
-                                                    required
-                                                    data-price-input
-                                                    class="w-36 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
-                                                >
-                                                <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
-                                            </div>
-                                        </td>
-
-                                        {{-- تخفیف --}}
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center gap-3">
-                                                <input
-                                                    type="number"
-                                                    name="prices[{{ $price->id }}][discount_percent]"
-                                                    value="{{ $price->discount_percent }}"
-                                                    min="0"
-                                                    max="100"
-                                                    required
-                                                    class="w-24 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2.5 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                >
-                                                <span class="text-xs text-gray-500 whitespace-nowrap">٪</span>
-                                            </div>
-                                        </td>
-
-                                        {{-- وضعیت فعال/غیرفعال --}}
-                                        <td class="py-4 px-2">
-                                            <select
-                                                name="prices[{{ $price->id }}][is_active]"
-                                                class="min-w-[110px] rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm py-2.5 px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
-                                            >
-                                                <option value="1" class="bg-gray-900 text-gray-200" {{ $price->is_active ? 'selected' : '' }}>
-                                                    فعال
-                                                </option>
-                                                <option value="0" class="bg-gray-900 text-gray-200" {{ !$price->is_active ? 'selected' : '' }}>
-                                                    غیرفعال
-                                                </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="py-8 text-center text-sm text-gray-500">
-                                            هیچ بازه قیمتی برای این پلن ثبت نشده است.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        @empty
-            <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-10 text-center">
-                <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-800/80 flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2h-3V3.5A1.5 1.5 0 0013.5 2h-3A1.5 1.5 0 009 3.5V5H6a2 2 0 00-2 2v6m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0H4"/>
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-white">هیچ پلنی یافت نشد</h3>
-                <p class="mt-2 text-sm text-gray-500">
-                    در حال حاضر هیچ پلنی برای نمایش یا ویرایش در فروشگاه ثبت نشده است.
-                </p>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-8 text-center text-sm text-gray-500">
+                                    هیچ پلنی برای نمایش یافت نشد.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        @endforelse
+        </div>
 
         @if($plans->count())
             <div class="sticky bottom-4 z-10 flex justify-end">
                 <button
                     type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl border border-blue-800 bg-blue-900/90 backdrop-blur px-6 py-3 text-sm font-medium text-blue-300 transition duration-200 hover:bg-blue-800 hover:text-white shadow-lg"
+                    class="inline-flex items-center gap-2 rounded-2xl border border-blue-800 bg-blue-900/90 backdrop-blur px-6 py-3 text-sm font-medium text-blue-300 transition duration-200 hover:bg-blue-800 hover:text-white shadow-lg cursor-pointer"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -316,39 +298,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('bulk-price-form');
+        const form = document.getElementById('bulk-plan-form');
         const priceInputs = document.querySelectorAll('[data-price-input]');
-        const durationInputs = document.querySelectorAll('[data-duration-input]');
-
-        // فرمت مدت زمان به سال و ماه در جاوااسکریپت برای بازخورد آنی
-        function getDurationLabel(months) {
-            months = parseInt(months, 10);
-            if (isNaN(months) || months <= 0) return 'نامشخص';
-            if (months < 12) return months + ' ماهه';
-            
-            const years = Math.floor(months / 12);
-            const remaining = months % 12;
-
-            if (remaining === 0) {
-                return years + ' ساله';
-            }
-            return years + ' سال و ' + remaining + ' ماهه';
-        }
-
-        // رویداد تغییر مدت زمان برای به‌روزرسانی آنی برچسب
-        durationInputs.forEach((input) => {
-            const container = input.closest('td') || input.closest('.grid > div');
-            const badge = container ? container.querySelector('[data-duration-badge]') : null;
-
-            input.addEventListener('input', function () {
-                if (badge) {
-                    badge.textContent = getDurationLabel(this.value);
-                }
-            });
-        });
 
         function onlyDigits(value) {
-            return value.replace(/\D/g, '');
+            return (value || '').replace(/\D/g, '');
         }
 
         function formatNumber(value) {
@@ -358,7 +312,7 @@
         }
 
         priceInputs.forEach((input) => {
-            input.addEventListener('input', function (e) {
+            input.addEventListener('input', function () {
                 const oldValue = this.value;
                 const oldSelectionStart = this.selectionStart || 0;
                 const digitsBeforeCursor = onlyDigits(oldValue.slice(0, oldSelectionStart)).length;
