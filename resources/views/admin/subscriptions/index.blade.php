@@ -91,9 +91,9 @@
     {{-- ================= کارت اصلی ================= --}}
     <div class="bg-gray-900/70 border border-gray-800 rounded-3xl overflow-hidden">
 
-        {{-- هدر جدول --}}
+        {{-- هدر جدول همراه با فرم جستجو --}}
         <div class="px-5 py-4 md:px-6 md:py-5 border-b border-gray-800 bg-gradient-to-r from-blue-900/20 to-transparent">
-            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <h3 class="text-base md:text-lg font-semibold text-white">
                         لیست اشتراک‌ها
@@ -103,8 +103,36 @@
                     </p>
                 </div>
 
-                <div class="text-xs text-gray-500">
-                    مجموع نتایج این صفحه: {{ $subscriptions->count() }}
+                {{-- فرم جستجو هوشمند بر اساس نام، ایمیل، شماره تماس --}}
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <form method="GET" action="{{ route('admin.subscriptions.index') }}" class="relative flex items-center">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search', '') }}"
+                            placeholder="جستجو نام، ایمیل، شماره تماس..."
+                            class="w-full sm:w-72 h-10 pl-10 pr-4 rounded-xl border border-gray-800 bg-black/60 text-gray-200 text-xs focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition placeholder-gray-500"
+                        >
+                        <button type="submit" class="absolute left-3 text-gray-400 hover:text-blue-400 transition" title="جستجو">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    @if(request()->filled('search'))
+                        <a
+                            href="{{ route('admin.subscriptions.index') }}"
+                            class="h-10 px-3 flex items-center justify-center rounded-xl border border-rose-900/40 bg-rose-950/20 text-rose-400 hover:bg-rose-900 hover:text-white text-xs font-medium transition whitespace-nowrap"
+                            title="پاک کردن فیلتر جستجو"
+                        >
+                            پاک کردن فیلتر
+                        </a>
+                    @endif
+
+                    <div class="hidden sm:block text-xs text-gray-500 whitespace-nowrap">
+                        نتایج این صفحه: {{ $subscriptions->count() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,9 +143,26 @@
             <div class="md:hidden p-4 space-y-4">
                 @foreach($subscriptions as $subscription)
                     @php
-                        $statusValue = $subscription->effective_status ?? $subscription->status ?? '—';
-                        $statusBadge = $getStatusBadge($statusValue);
-                        $statusLabel = $getStatusLabel($statusValue);
+                        $subStatus = $subscription->effective_status ?? $subscription->status ?? '—';
+                        $subBadge = $getStatusBadge($subStatus);
+                        $subLabel = $getStatusLabel($subStatus);
+
+                        // منطق وضعیت و تاریخ پشتیبانی بر اساس آخرین رکورد پشتیبانی
+                        $latestSupport = $subscription->latestSupport;
+
+                        if (! $latestSupport) {
+                            $supportBadge = 'bg-gray-800/80 border border-gray-700 text-gray-400';
+                            $supportLabel = 'فاقد پشتیبانی';
+                            $supportExpireJalali = '—';
+                        } elseif ($latestSupport->expires_at && $latestSupport->expires_at->isPast()) {
+                            $supportBadge = 'bg-rose-900/20 border border-rose-700 text-rose-400';
+                            $supportLabel = 'منقضی شده';
+                            $supportExpireJalali = $latestSupport->expires_at_jalali ?? \Morilog\Jalali\Jalalian::fromCarbon($latestSupport->expires_at)->format('Y/m/d');
+                        } else {
+                            $supportBadge = 'bg-emerald-900/20 border border-emerald-700 text-emerald-400';
+                            $supportLabel = 'دارای پشتیبانی';
+                            $supportExpireJalali = $latestSupport->expires_at_jalali ?? ($latestSupport->expires_at ? \Morilog\Jalali\Jalalian::fromCarbon($latestSupport->expires_at)->format('Y/m/d') : '—');
+                        }
                     @endphp
 
                     <div class="rounded-2xl border border-gray-800 bg-black/20 p-4 space-y-4">
@@ -129,13 +174,21 @@
                                     {{ $subscription->user->name ?? '—' }}
                                 </div>
                                 <div class="mt-1 text-xs text-gray-400 font-mono">
-                                    ایمیل: {{ $subscription->user->email ?? '—' }}
+                                    {{ $subscription->user->email ?? '—' }}
                                 </div>
+                                @if(!empty($subscription->user->phone_number))
+                                    <div class="mt-0.5 text-[11px] text-gray-500 font-mono">
+                                        {{ $subscription->user->phone_number }}
+                                    </div>
+                                @endif
                             </div>
 
-                            <div class="shrink-0">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-medium {{ $statusBadge }}">
-                                    {{ $statusLabel }}
+                            <div class="shrink-0 flex flex-col items-end gap-1.5">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-medium {{ $subBadge }}" title="وضعیت اشتراک">
+                                    اشتراک: {{ $subLabel }}
+                                </span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-medium {{ $supportBadge }}" title="وضعیت پشتیبانی">
+                                    {{ $supportLabel }}
                                 </span>
                             </div>
                         </div>
@@ -147,11 +200,9 @@
                                 <div class="text-gray-200 font-medium break-words">
                                     {{ $subscription->plan->title ?? $subscription->plan->name ?? '—' }}
                                 </div>
-                                @if($subscription->planPrice)
-                                    <div class="text-[10px] text-gray-500 mt-0.5">
-                                        {{ $subscription->planPrice->duration_months ? $subscription->planPrice->duration_months . ' ماهه' : '—' }}
-                                    </div>
-                                @endif
+                                <div class="text-[10px] text-emerald-400 mt-0.5">
+                                    لایسنس مادام‌العمر
+                                </div>
                             </div>
 
                             <div>
@@ -162,19 +213,19 @@
                             </div>
                         </div>
 
-                        {{-- تاریخ‌ها --}}
+                        {{-- تاریخ‌ها (شروع اشتراک و انقضای پشتیبانی) --}}
                         <div class="grid grid-cols-2 gap-3 text-sm">
                             <div>
-                                <div class="text-[11px] text-gray-500 mb-1">شروع</div>
+                                <div class="text-[11px] text-gray-500 mb-1">شروع اشتراک</div>
                                 <div class="text-gray-300 font-mono text-xs">
                                     {{ $subscription->started_at_jalali ?? $subscription->starts_at_jalali ?? '—' }}
                                 </div>
                             </div>
 
                             <div>
-                                <div class="text-[11px] text-gray-500 mb-1">انقضا</div>
+                                <div class="text-[11px] text-gray-500 mb-1">انقضای پشتیبانی</div>
                                 <div class="text-gray-300 font-mono text-xs">
-                                    {{ $subscription->expires_at_jalali ?? $subscription->ends_at_jalali ?? '—' }}
+                                    {{ $supportExpireJalali }}
                                 </div>
                             </div>
                         </div>
@@ -206,21 +257,20 @@
                                 <form method="POST" action="{{ route('admin.subscriptions.update-plan', $subscription) }}" class="space-y-3">
                                     @csrf @method('PATCH')
                                     <select
-                                        name="plan_price_id"
+                                        name="plan_id"
                                         class="w-full h-11 rounded-xl border border-gray-800 bg-black/60 text-gray-200 text-sm px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                     >
                                         @foreach($plans as $plan)
-                                            <optgroup label="{{ $plan->title ?? $plan->name ?? 'پلن' }}" class="bg-gray-950 text-blue-400 font-bold">
-                                                @foreach($plan->prices as $price)
-                                                    <option
-                                                        value="{{ $price->id }}"
-                                                        class="bg-gray-900 text-gray-200 py-1"
-                                                        @selected($subscription->plan_price_id == $price->id)
-                                                    >
-                                                        {{ ($plan->title ?? $plan->name ?? 'پلن') }} - {{ $price->duration_months ? $price->duration_months . ' ماهه' : 'بازه نامشخص' }} - {{ isset($price->price) ? number_format($price->price) . ' تومان' : 'قیمت نامشخص' }}
-                                                    </option>
-                                                @endforeach
-                                            </optgroup>
+                                            <option
+                                                value="{{ $plan->id }}"
+                                                class="bg-gray-900 text-gray-200 py-1"
+                                                @selected($subscription->plan_id == $plan->id)
+                                            >
+                                                {{ $plan->title ?? $plan->name ?? ('پلن #' . $plan->id) }}
+                                                @if(isset($plan->price))
+                                                    - {{ number_format($plan->price) }} تومان
+                                                @endif
+                                            </option>
                                         @endforeach
                                     </select>
                                     <button type="submit" class="w-full h-11 rounded-xl bg-blue-600 text-white hover:bg-blue-500 text-sm font-medium transition">
@@ -229,7 +279,7 @@
                                 </form>
                             </div>
 
-                            {{-- ۲. تغییر وضعیت --}}
+                            {{-- ۲. تغییر وضعیت اشتراک --}}
                             <div class="p-4 rounded-2xl border border-gray-800 bg-gray-950/60 space-y-3">
                                 <div class="flex items-center gap-2 text-xs font-bold text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,13 +304,13 @@
                                 </form>
                             </div>
 
-                            {{-- ۳. تمدید اشتراک --}}
+                            {{-- ۳. تمدید پشتیبانی --}}
                             <div class="p-4 rounded-2xl border border-gray-800 bg-gray-950/60 space-y-3">
                                 <div class="flex items-center gap-2 text-xs font-bold text-emerald-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
-                                    تمدید اشتراک
+                                    تمدید پشتیبانی
                                 </div>
                                 <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription) }}" class="space-y-3">
                                     @csrf
@@ -274,7 +324,7 @@
                                         class="w-full h-11 rounded-xl border border-gray-800 bg-black/40 text-gray-300 text-sm px-3 focus:border-emerald-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     >
                                     <button type="submit" class="w-full h-11 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 text-sm font-medium transition">
-                                        تمدید اشتراک
+                                        تمدید
                                     </button>
                                 </form>
                             </div>
@@ -312,9 +362,10 @@
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">اشتراک</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">کاربر</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">پلن فعلی</th>
-                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">وضعیت</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800 text-center">وضعیت اشتراک</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800 text-center">وضعیت پشتیبانی</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">شروع</th>
-                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">انقضا</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">انقضای پشتیبانی</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800">لایسنس</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 border-b border-gray-800 text-center">مدیریت</th>
                         </tr>
@@ -323,9 +374,26 @@
                     <tbody>
                         @foreach($subscriptions as $subscription)
                             @php
-                                $statusValue = $subscription->effective_status ?? $subscription->status ?? '—';
-                                $statusBadge = $getStatusBadge($statusValue);
-                                $statusLabel = $getStatusLabel($statusValue);
+                                $subStatus = $subscription->effective_status ?? $subscription->status ?? '—';
+                                $subBadge = $getStatusBadge($subStatus);
+                                $subLabel = $getStatusLabel($subStatus);
+
+                                // منطق وضعیت و تاریخ پشتیبانی بر اساس آخرین رکورد پشتیبانی
+                                $latestSupport = $subscription->latestSupport;
+
+                                if (! $latestSupport) {
+                                    $supportBadge = 'bg-gray-800/80 border border-gray-700 text-gray-400';
+                                    $supportLabel = 'فاقد پشتیبانی';
+                                    $supportExpireJalali = '—';
+                                } elseif ($latestSupport->expires_at && $latestSupport->expires_at->isPast()) {
+                                    $supportBadge = 'bg-rose-900/20 border border-rose-700 text-rose-400';
+                                    $supportLabel = 'منقضی شده';
+                                    $supportExpireJalali = $latestSupport->expires_at_jalali ?? \Morilog\Jalali\Jalalian::fromCarbon($latestSupport->expires_at)->format('Y/m/d');
+                                } else {
+                                    $supportBadge = 'bg-emerald-900/20 border border-emerald-700 text-emerald-400';
+                                    $supportLabel = 'دارای پشتیبانی';
+                                    $supportExpireJalali = $latestSupport->expires_at_jalali ?? ($latestSupport->expires_at ? \Morilog\Jalali\Jalalian::fromCarbon($latestSupport->expires_at)->format('Y/m/d') : '—');
+                                }
                             @endphp
 
                             {{-- ردیف اصلی اطلاعات --}}
@@ -342,6 +410,11 @@
                                         <span class="text-[11px] text-gray-500 font-mono">
                                             {{ $subscription->user->email ?? '—' }}
                                         </span>
+                                        @if(!empty($subscription->user->phone_number))
+                                            <span class="text-[10px] text-gray-600 font-mono">
+                                                {{ $subscription->user->phone_number }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
 
@@ -349,14 +422,22 @@
                                     <div class="text-sm text-gray-200 font-medium">
                                         {{ $subscription->plan->title ?? $subscription->plan->name ?? '—' }}
                                     </div>
-                                    <div class="text-[11px] text-gray-500 mt-0.5">
-                                        {{ $subscription->planPrice->duration_months ? $subscription->planPrice->duration_months . ' ماهه' : '—' }}
+                                    <div class="text-[10px] text-emerald-400 mt-0.5">
+                                        لایسنس مادام‌العمر
                                     </div>
                                 </td>
 
-                                <td class="py-4 px-3 border-b border-gray-800/50">
-                                    <span class="inline-flex px-2.5 py-1 rounded-lg text-[11px] font-medium {{ $statusBadge }}">
-                                        {{ $statusLabel }}
+                                {{-- وضعیت اشتراک --}}
+                                <td class="py-4 px-3 border-b border-gray-800/50 text-center">
+                                    <span class="inline-flex px-2.5 py-1 rounded-lg text-[11px] font-medium {{ $subBadge }}">
+                                        {{ $subLabel }}
+                                    </span>
+                                </td>
+
+                                {{-- وضعیت پشتیبانی --}}
+                                <td class="py-4 px-3 border-b border-gray-800/50 text-center">
+                                    <span class="inline-flex px-2.5 py-1 rounded-lg text-[11px] font-medium {{ $supportBadge }}">
+                                        {{ $supportLabel }}
                                     </span>
                                 </td>
 
@@ -366,9 +447,10 @@
                                     </span>
                                 </td>
 
+                                {{-- انقضای پشتیبانی --}}
                                 <td class="py-4 px-3 border-b border-gray-800/50">
                                     <span class="text-xs text-gray-300 font-mono whitespace-nowrap">
-                                        {{ $subscription->expires_at_jalali ?? $subscription->ends_at_jalali ?? '—' }}
+                                        {{ $supportExpireJalali }}
                                     </span>
                                 </td>
 
@@ -395,7 +477,7 @@
 
                             {{-- ردیف مخفی عملیات (Accordion) با ۴ کارت مجزا --}}
                             <tr id="actions-{{ $subscription->id }}" class="hidden bg-blue-950/10">
-                                <td colspan="8" class="p-6 border-b border-gray-800 bg-gray-950/40">
+                                <td colspan="9" class="p-6 border-b border-gray-800 bg-gray-950/40">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-[fadeIn_0.3s_ease] items-stretch">
 
                                         {{-- ===== کارت ۱: تغییر پلن ===== --}}
@@ -411,23 +493,22 @@
                                                 @csrf @method('PATCH')
 
                                                 <div>
-                                                    <label class="block text-[11px] text-gray-400 mb-2">انتخاب پلن و دوره</label>
+                                                    <label class="block text-[11px] text-gray-400 mb-2">انتخاب پلن</label>
                                                     <select
-                                                        name="plan_price_id"
+                                                        name="plan_id"
                                                         class="w-full h-11 rounded-xl border border-gray-800 bg-black/60 text-gray-200 text-sm px-3 focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                                     >
                                                         @foreach($plans as $plan)
-                                                            <optgroup label="{{ $plan->title ?? $plan->name ?? 'پلن' }}" class="bg-gray-950 text-blue-400 font-bold">
-                                                                @foreach($plan->prices as $price)
-                                                                    <option
-                                                                        value="{{ $price->id }}"
-                                                                        class="bg-gray-900 text-gray-200 py-1"
-                                                                        @selected($subscription->plan_price_id == $price->id)
-                                                                    >
-                                                                        {{ ($plan->title ?? $plan->name ?? 'پلن') }} - {{ $price->duration_months ? $price->duration_months . ' ماهه' : 'بازه نامشخص' }} - {{ isset($price->price) ? number_format($price->price) . ' تومان' : 'قیمت نامشخص' }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </optgroup>
+                                                            <option
+                                                                value="{{ $plan->id }}"
+                                                                class="bg-gray-900 text-gray-200 py-1"
+                                                                @selected($subscription->plan_id == $plan->id)
+                                                            >
+                                                                {{ $plan->title ?? $plan->name ?? ('پلن #' . $plan->id) }}
+                                                                @if(isset($plan->price))
+                                                                    - {{ number_format($plan->price) }} تومان
+                                                                @endif
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -438,13 +519,13 @@
                                             </form>
                                         </div>
 
-                                        {{-- ===== کارت ۲: تغییر وضعیت ===== --}}
+                                        {{-- ===== کارت ۲: تغییر وضعیت اشتراک ===== --}}
                                         <div class="flex flex-col h-full rounded-2xl border border-gray-800 bg-gray-900/70 p-5">
                                             <div class="flex items-center gap-2 h-10 pb-3 border-b border-gray-800">
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                 </svg>
-                                                <span class="text-xs font-bold text-gray-400">تغییر وضعیت</span>
+                                                <span class="text-xs font-bold text-gray-400">تغییر وضعیت اشتراک</span>
                                             </div>
 
                                             <form method="POST" action="{{ route('admin.subscriptions.update-status', $subscription) }}" class="flex flex-col flex-1 justify-between gap-4 pt-4">
@@ -469,13 +550,13 @@
                                             </form>
                                         </div>
 
-                                        {{-- ===== کارت ۳: تمدید اشتراک ===== --}}
+                                        {{-- ===== کارت ۳: تمدید پشتیبانی ===== --}}
                                         <div class="flex flex-col h-full rounded-2xl border border-gray-800 bg-gray-900/70 p-5">
                                             <div class="flex items-center gap-2 h-10 pb-3 border-b border-gray-800">
                                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                                 </svg>
-                                                <span class="text-xs font-bold text-emerald-400">تمدید اشتراک</span>
+                                                <span class="text-xs font-bold text-emerald-400">تمدید پشتیبانی</span>
                                             </div>
 
                                             <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription) }}" class="flex flex-col flex-1 justify-between gap-4 pt-4">
@@ -488,14 +569,14 @@
                                                         name="months"
                                                         min="1"
                                                         max="120"
-                                                        placeholder="مثال: 3"
+                                                        placeholder="مثال: 6"
                                                         required
                                                         class="w-full h-11 rounded-xl border border-gray-800 bg-black/60 text-gray-300 text-sm px-3 focus:border-emerald-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     >
                                                 </div>
 
                                                 <button type="submit" class="mt-auto w-full h-11 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 text-sm font-medium transition duration-200 flex items-center justify-center gap-2">
-                                                    تمدید اشتراک
+                                                    تمدید پشتیبانی
                                                 </button>
                                             </form>
                                         </div>
@@ -556,12 +637,31 @@
                 </div>
 
                 <h3 class="text-lg font-semibold text-white mb-2">
-                    هیچ اشتراکی یافت نشد
+                    @if(request()->filled('search'))
+                        نتیجه‌ای برای «{{ request('search') }}» یافت نشد
+                    @else
+                        هیچ اشتراکی یافت نشد
+                    @endif
                 </h3>
 
                 <p class="text-sm text-gray-500">
-                    در حال حاضر هیچ اشتراکی برای نمایش در این بخش وجود ندارد.
+                    @if(request()->filled('search'))
+                        عبارت مورد نظر با نام، ایمیل یا شماره تماس هیچ کاربری همخوانی ندارد.
+                    @else
+                        در حال حاضر هیچ اشتراکی برای نمایش در این بخش وجود ندارد.
+                    @endif
                 </p>
+
+                @if(request()->filled('search'))
+                    <div class="mt-4">
+                        <a
+                            href="{{ route('admin.subscriptions.index') }}"
+                            class="inline-flex items-center px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition"
+                        >
+                            مشاهده تمام اشتراک‌ها
+                        </a>
+                    </div>
+                @endif
             </div>
 
         @endif

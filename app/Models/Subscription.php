@@ -157,4 +157,11 @@ class Subscription extends Model
 
         return Jalalian::fromCarbon($this->expires_at)->format('Y/m/d H:i');
     }
+            /**
+     * آخرین رکورد پشتیبانی ثبت‌شده برای این اشتراک (چه فعال باشد چه منقضی)
+     */
+    public function latestSupport(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SubscriptionSupport::class)->latestOfMany();
+    }
 }

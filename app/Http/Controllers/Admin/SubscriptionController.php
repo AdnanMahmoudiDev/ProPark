@@ -4,36 +4,53 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
-use App\Models\PlanPrice;
 use App\Models\Subscription;
+use App\Models\SubscriptionSupport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim($request->get('search', ''));
+
         $subscriptions = Subscription::query()
-            ->with(['user', 'plan', 'planPrice', 'license'])
+            ->with([
+                'user',
+                'plan',
+                'license',
+                'activeSupport',  // فقط پشتیبانی فعال
+                'latestSupport',  // آخرین پشتیبانی (حتی منقضی) جهت استخراج دقیق وضعیت و تاریخ
+            ])
+            ->when($search, function ($query, $search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhere('phone_number', 'like', "%{$search}%");
+                });
+            })
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->appends(['search' => $search]); // جایگزین ایمن و بدون خطای withQueryString
 
-        $plans = Plan::with('prices')->get();
+        $plans = Plan::all();
 
-        return view('admin.subscriptions.index', compact('subscriptions', 'plans'));
+        return view('admin.subscriptions.index', compact('subscriptions', 'plans', 'search'));
     }
 
     public function updateStatus(Request $request, Subscription $subscription)
     {
         $data = $request->validate([
-            'status' => ['required', 'in:active,expired,cancelled,suspended']
+            'status' => ['required', 'in:active,expired,cancelled,suspended'],
         ]);
 
         $subscription->update([
-            'status' => $data['status']
+            'status' => $data['status'],
         ]);
 
-        return back()->with('success', 'وضعیت اشتراک بروزرسانی شد');
+        return back()->with('success', 'وضعیت اشتراک بروزرسانی شد.');
     }
 
     /**
@@ -42,66 +59,76 @@ class SubscriptionController extends Controller
     public function updatePlan(Request $request, Subscription $subscription)
     {
         $validated = $request->validate([
-            'plan_price_id' => ['required', 'exists:plan_prices,id'],
+            'plan_id' => ['required', 'exists:plans,id'],
         ]);
 
-        // یافتن پلن متناظر با قیمت انتخابی جهت ذخیره دقیق هر دو فیلد
-        $planPrice = PlanPrice::findOrFail($validated['plan_price_id']);
-
         $subscription->update([
-            'plan_id'       => $planPrice->plan_id,
-            'plan_price_id' => $planPrice->id,
+            'plan_id' => $validated['plan_id'],
         ]);
 
         return back()->with('success', 'پلن اشتراک با موفقیت تغییر کرد.');
     }
 
+    /**
+     * تمدید پشتیبانی اشتراک مادام‌العمر بدون ایجاد رکورد تکراری
+     */
     public function renew(Request $request, Subscription $subscription)
     {
-        $request->validate([
-            'months' => ['required', 'integer', 'min:1', 'max:120']
+        $validated = $request->validate([
+            'months' => ['required', 'integer', 'min:1', 'max:120'],
         ]);
 
-        $months = (int) $request->months;
+        $months = (int) $validated['months'];
 
-        if ($subscription->expires_at && $subscription->expires_at->isFuture()) {
-            $newExpire = $subscription->expires_at->copy()->addMonths($months);
-        } else {
-            $newExpire = now()->addMonths($months);
-        }
+        DB::transaction(function () use ($subscription, $months) {
+            $support = $subscription->latestSupport;
 
-        $subscription->update([
-            'expires_at' => $newExpire,
-            'status' => 'active',
-        ]);
+            if ($support) {
+                // اگر پشتیبانی فعال باشد ماه‌ها به انتهای انقضا اضافه می‌شود، در غیر این صورت از تاریخ جاری
+                $baseDate = ($support->expires_at && Carbon::parse($support->expires_at)->isFuture())
+                    ? Carbon::parse($support->expires_at)
+                    : now();
 
-        if ($subscription->license) {
-            $subscription->license->update([
-                'is_active' => true
+                $support->update([
+                    'expires_at' => $baseDate->copy()->addMonths($months),
+                    'status'     => SubscriptionSupport::STATUS_ACTIVE,
+                ]);
+            } else {
+                // ایجاد اولین رکورد پشتیبانی در صورت نبود رکورد قبلی
+                $subscription->supports()->create([
+                    'starts_at'  => now(),
+                    'expires_at' => now()->addMonths($months),
+                    'status'     => SubscriptionSupport::STATUS_ACTIVE,
+                ]);
+            }
+
+            // تضمین فعال بودن اشتراک و لایسنس
+            $subscription->update([
+                'status' => 'active',
             ]);
-        }
 
-        return back()->with('success', "اشتراک برای مدت  {$months} ماه تمدید شد.");
+            if ($subscription->license) {
+                $subscription->license->update([
+                    'is_active' => true,
+                ]);
+            }
+        });
+
+        return back()->with('success', "پشتیبانی اشتراک با موفقیت به مدت {$months} ماه تمدید شد.");
     }
 
     public function destroy(Subscription $subscription)
     {
         DB::transaction(function () use ($subscription) {
-
-            // اگر لایسنس وجود دارد
             if ($subscription->license) {
-
-                // حذف دستگاه‌های متصل به لایسنس
                 $subscription->license->devices()->delete();
-
-                // حذف لایسنس
                 $subscription->license->delete();
             }
 
-            // حذف اشتراک
+            $subscription->supports()->delete();
             $subscription->delete();
         });
 
-        return back()->with('success', 'اشتراک و همچنین لایسنس مرتبط و دستگاه های متصل به آن با موفقت حذف شدند');
+        return back()->with('success', 'اشتراک، لایسنس مرتبط و دستگاه‌های متصل با موفقیت حذف شدند.');
     }
 }

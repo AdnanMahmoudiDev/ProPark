@@ -15,7 +15,7 @@ class LicenseService
     private function generateFormattedKey(): string
     {
         return sprintf(
-            'PRPK-%s-%s-%s-%s',
+            'AVPK-%s-%s-%s-%s',
             strtoupper(Str::random(4)),
             strtoupper(Str::random(4)),
             strtoupper(Str::random(4)),
