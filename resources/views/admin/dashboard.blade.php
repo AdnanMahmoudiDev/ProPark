@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-8">
 
     {{-- هدر --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    {{-- باکس خوش امد گویی --}}
+    {{-- باکس خوش آمد گویی --}}
     <div class="relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-800 rounded-3xl p-7 shadow-2xl">
         <div class="absolute top-0 right-0 w-72 h-72 bg-blue-700/10 blur-3xl rounded-full"></div>
         <div class="relative z-10">
@@ -41,7 +41,7 @@
                             خوش آمدی، {{ auth()->user()->name }}
                         </h3>
                         <p class="text-sm text-gray-400 mt-1">
-                            پنل کنترل و نظارت بر تراکنش‌ها، کاربران و لایسنس‌های AvaPark
+                            پنل کنترل و نظارت بر تراکنش‌ها، کاربران، لایسنس‌ها و پشتیبانی AvaPark
                         </p>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    {{-- قسمت کاربران --}}
+    {{-- آمار کاربران --}}
     <div>
         <div class="flex items-center gap-2 mb-4">
             <span class="w-1.5 h-5 bg-blue-500 rounded-full"></span>
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            {{-- کاربر های جدید --}}
+            {{-- کاربران جدید --}}
             <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-blue-700/50 transition duration-300">
                 <div class="absolute top-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
                 <div class="relative z-10 flex items-center justify-between">
@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            {{-- نرخ تبدیل --}}
+            {{-- نرخ تبدیل کاربران --}}
             <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-6 hover:border-blue-700/50 transition duration-300">
                 <div class="absolute top-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
                 <div class="relative z-10 flex items-center justify-between">
@@ -110,18 +110,18 @@
         </div>
     </div>
 
-    {{-- قسمت اشتراک ها --}}
+    {{-- آمار اشتراک‌ها (لایسنس‌ها) --}}
     <div>
         <div class="flex items-center gap-2 mb-4">
             <span class="w-1.5 h-5 bg-blue-500 rounded-full"></span>
-            <h3 class="text-base font-bold text-white">آمار اشتراک‌ها</h3>
+            <h3 class="text-base font-bold text-white">آمار لایسنس‌ها (اشتراک‌ها)</h3>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {{-- کل اشتراک ها --}}
             <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
-                    <p class="text-xs text-gray-400">کل اشتراک‌ها</p>
+                    <p class="text-xs text-gray-400">کل لایسنس‌ها</p>
                     <h3 class="mt-2 text-2xl font-bold text-white">{{ $totalSubscriptions }}</h3>
                 </div>
             </div>
@@ -129,16 +129,8 @@
             {{-- اشتراک های فعال --}}
             <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
                 <div class="relative z-10">
-                    <p class="text-xs text-gray-400">فعال</p>
+                    <p class="text-xs text-gray-400">فعال (مادام‌العمر)</p>
                     <h3 class="mt-2 text-2xl font-bold text-emerald-400">{{ $activeSubscriptions }}</h3>
-                </div>
-            </div>
-
-            {{-- اشتراک های منقضی شده --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
-                <div class="relative z-10">
-                    <p class="text-xs text-gray-400">منقضی شده</p>
-                    <h3 class="mt-2 text-2xl font-bold text-rose-400">{{ $expiredSubscriptions }}</h3>
                 </div>
             </div>
 
@@ -149,20 +141,71 @@
                     <h3 class="mt-2 text-2xl font-bold text-cyan-400">{{ $newSubscriptionsLast7Days }}</h3>
                 </div>
             </div>
+        </div>
+    </div>
 
-            {{-- در استانه انقضا --}}
-            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-blue-700/50 transition duration-300">
+    {{-- آمار پشتیبانی‌ها --}}
+    <div>
+        <div class="flex items-center gap-2 mb-4">
+            <span class="w-1.5 h-5 bg-indigo-500 rounded-full"></span>
+            <h3 class="text-base font-bold text-white">آمار پشتیبانی‌ها</h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            {{-- کل پشتیبانی ها --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-indigo-700/50 transition duration-300">
                 <div class="relative z-10">
-                    <p class="text-xs text-gray-400">در آستانه انقضا</p>
-                    <h3 class="mt-2 text-2xl font-bold text-amber-400">{{ $expiringSoonSubscriptions }}</h3>
+                    <p class="text-xs text-gray-400">کل پشتیبانی‌ها</p>
+                    <h3 class="mt-2 text-2xl font-bold text-white">{{ $totalSupports }}</h3>
+                </div>
+            </div>
+
+            {{-- فعال --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-emerald-700/50 transition duration-300">
+                <div class="relative z-10">
+                    <p class="text-xs text-gray-400">فعال</p>
+                    <h3 class="mt-2 text-2xl font-bold text-emerald-400">{{ $activeSupports }}</h3>
+                </div>
+            </div>
+
+            {{-- منقضی شده --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-rose-700/50 transition duration-300">
+                <div class="relative z-10">
+                    <p class="text-xs text-gray-400">منقضی شده</p>
+                    <h3 class="mt-2 text-2xl font-bold text-rose-400">{{ $expiredSupports }}</h3>
+                </div>
+            </div>
+
+            {{-- در آستانه انقضا --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-amber-700/50 transition duration-300">
+                <div class="relative z-10">
+                    <p class="text-xs text-gray-400">در آستانه انقضا (۷ روز)</p>
+                    <h3 class="mt-2 text-2xl font-bold text-amber-400">{{ $expiringSoonSupports }}</h3>
+                </div>
+            </div>
+
+            {{-- جدید (۷ روز اخیر) --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-cyan-700/50 transition duration-300">
+                <div class="relative z-10">
+                    <p class="text-xs text-gray-400">جدید (۷ روز اخیر)</p>
+                    <h3 class="mt-2 text-2xl font-bold text-cyan-400">{{ $newSupportsLast7Days }}</h3>
+                </div>
+            </div>
+
+            {{-- کارت نرخ تبدیل پشتیبانی --}}
+            <div class="relative overflow-hidden bg-gray-900/70 border border-gray-800 rounded-3xl p-5 hover:border-violet-700/50 transition duration-300">
+                <div class="relative z-10">
+                    <p class="text-xs text-gray-400">نرخ تبدیل پشتیبانی</p>
+                    <h3 class="mt-2 text-2xl font-bold text-violet-400">{{ $supportConversionRate ?? 0 }}%</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {{-- جدول‌های آخرین اطلاعات --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- اخرین کاربر ها --}}
+        {{-- آخرین کاربران --}}
         <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
             <div class="flex items-center gap-2 mb-4">
                 <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span>
@@ -175,7 +218,6 @@
                         <tr class="border-b border-gray-800">
                             <th class="py-3 text-xs font-semibold text-gray-400">شناسه</th>
                             <th class="py-3 text-xs font-semibold text-gray-400">نام</th>
-                            <th class="py-3 text-xs font-semibold text-gray-400">ایمیل</th>
                             <th class="py-3 text-xs font-semibold text-gray-400">تاریخ عضویت</th>
                         </tr>
                     </thead>
@@ -184,14 +226,13 @@
                             <tr class="hover:bg-gray-800/20 transition duration-150">
                                 <td class="py-3.5 text-sm font-mono text-gray-300">{{ $user->id }}</td>
                                 <td class="py-3.5 text-sm font-medium text-white">{{ $user->name }}</td>
-                                <td class="py-3.5 text-sm font-mono text-gray-400 break-all">{{ $user->email }}</td>
                                 <td class="py-3.5 text-sm text-gray-400">
                                     {{ jdate($user->created_at)->format('Y/m/d') }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-8 text-center text-sm text-gray-500">
+                                <td colspan="3" class="py-8 text-center text-sm text-gray-500">
                                     هیچ کاربری ثبت نشده است.
                                 </td>
                             </tr>
@@ -201,10 +242,10 @@
             </div>
         </div>
 
-        {{-- اخرین اشتراک ها --}}
+        {{-- آخرین اشتراک‌ها (لایسنس‌ها) --}}
         <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
             <div class="flex items-center gap-2 mb-4">
-                <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span>
+                <span class="w-1.5 h-6 bg-cyan-500 rounded-full"></span>
                 <h3 class="text-lg font-bold text-white">آخرین اشتراک‌ها</h3>
             </div>
 
@@ -215,13 +256,13 @@
                             <th class="py-3 text-xs font-semibold text-gray-400">شناسه</th>
                             <th class="py-3 text-xs font-semibold text-gray-400">کاربر</th>
                             <th class="py-3 text-xs font-semibold text-gray-400">وضعیت</th>
-                            <th class="py-3 text-xs font-semibold text-gray-400">تاریخ انقضا</th>
+                            <th class="py-3 text-xs font-semibold text-gray-400">تاریخ ثبت</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-800/40">
                         @forelse($latestSubscriptions as $subscription)
                             @php
-                                $status = strtolower($subscription->effective_status ?? '');
+                                $status = strtolower($subscription->status ?? '');
                                 $statusBadge = 'bg-gray-900/20 border border-gray-800 text-gray-400';
                                 
                                 if ($status === 'active') {
@@ -239,17 +280,68 @@
                                 </td>
                                 <td class="py-3.5 text-sm">
                                     <span class="px-2.5 py-1 rounded-lg text-xs font-medium {{ $statusBadge }}">
-                                        {{ $subscription->effective_status }}
+                                        {{ $subscription->status === 'active' ? 'فعال' : $subscription->status }}
                                     </span>
                                 </td>
                                 <td class="py-3.5 text-sm font-mono text-gray-400">
-                                    {{ $subscription->expires_at_jalali }}
+                                    {{ jdate($subscription->created_at)->format('Y/m/d') }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="4" class="py-8 text-center text-sm text-gray-500">
                                     هیچ اشتراکی ثبت نشده است.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- آخرین پشتیبانی‌ها --}}
+        <div class="bg-gray-900/70 border border-gray-800 rounded-3xl p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
+                <h3 class="text-lg font-bold text-white">آخرین پشتیبانی‌ها</h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-800">
+                            <th class="py-3 text-xs font-semibold text-gray-400">شناسه</th>
+                            <th class="py-3 text-xs font-semibold text-gray-400">کاربر</th>
+                            <th class="py-3 text-xs font-semibold text-gray-400">وضعیت</th>
+                            <th class="py-3 text-xs font-semibold text-gray-400">تاریخ انقضا</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800/40">
+                        @forelse($latestSupports as $support)
+                            @php
+                                $isSupportActive = $support->status === 'active' && $support->expires_at && \Illuminate\Support\Carbon::parse($support->expires_at)->isFuture();
+                                $supportBadge = $isSupportActive 
+                                    ? 'bg-green-900/20 border border-green-700 text-green-400' 
+                                    : 'bg-red-900/20 border border-red-700 text-red-400';
+                            @endphp
+                            <tr class="hover:bg-gray-800/20 transition duration-150">
+                                <td class="py-3.5 text-sm font-mono text-gray-300">#{{ $support->id }}</td>
+                                <td class="py-3.5 text-sm font-medium text-white">
+                                    {{ $support->user->name ?? 'کاربر ناشناس' }}
+                                </td>
+                                <td class="py-3.5 text-sm">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-medium {{ $supportBadge }}">
+                                        {{ $isSupportActive ? 'فعال' : 'منقضی شده' }}
+                                    </span>
+                                </td>
+                                <td class="py-3.5 text-sm font-mono text-gray-400">
+                                    {{ $support->expires_at ? jdate($support->expires_at)->format('Y/m/d') : 'نامشخص' }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-sm text-gray-500">
+                                    هیچ پشتیبانی ثبت نشده است.
                                 </td>
                             </tr>
                         @endforelse
