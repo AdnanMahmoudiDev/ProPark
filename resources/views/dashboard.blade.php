@@ -16,9 +16,6 @@
     );
 
     // ---- اشتراک: معیار نمایش دکمه جزئیات ----
-    // هدف: دکمه "مشاهده جزئیات" فقط زمانی مخفی شود که کاربر کلاً هیچ اشتراکی نداشته باشد.
-    // اگر در این صفحه $subscription پاس داده شده، همان را معیار قرار می‌دهیم.
-    // (در غیر این صورت بهتر است از کنترلر پاس داده شود.)
     $hasSubscription = isset($subscription) && !is_null($subscription);
 @endphp
 
@@ -126,16 +123,6 @@
                                     </div>
                                 @endif
                             @endif
-
-                            {{-- دکمه جزئیات: فقط وقتی کلاً اشتراک داریم نمایش داده شود --}}
-                            @if($hasSubscription)
-                                <a
-                                    href="{{ route('subscription.details') }}"
-                                    class="group mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                >
-                                    {{ __('مشاهده جزئیات') }}
-                                </a>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -171,6 +158,16 @@
                                 </div>
                             @else
                                 <div class="text-sm text-red-400">{{ __('dashboard_license_none') }}</div>
+                            @endif
+
+                            {{-- دکمه مشاهده دستگاه‌های متصل و پشتیبانی: زیر وضعیت لایسنس فعال --}}
+                            @if($hasSubscription)
+                                <a
+                                    href="{{ route('subscription.details') }}"
+                                    class="group mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                >
+                                    {{ __('مشاهده جزئیات دستگاه های متصل و پشتیبانی') }}
+                                </a>
                             @endif
                         </div>
                     </div>
