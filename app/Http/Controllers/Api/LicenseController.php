@@ -18,31 +18,32 @@ class LicenseController extends Controller
     }
 
     /**
-     * API اعتبارسنجی لایسنس
+     * API اعتبارسنجی و فعال‌سازی لایسنس (بار اول در برنامه پایتونی)
      */
     public function validateLicense(ValidateLicenseRequest $request): JsonResponse
     {
-        $licenseKey = $request->input('license_key');
-        $machineFingerprint = $request->input('machine_fingerprint');
-
-        $result = $this->validator->validate($licenseKey, $machineFingerprint);
+        $result = $this->validator->validate(
+            $request->input('license_key'),
+            $request->input('machine_fingerprint')
+        );
 
         return response()->json($result);
     }
 
     /**
-     * API دریافت زمان باقیمانده لایسنس
+     * API دریافت وضعیت پشتیبانی لایسنس
+     * (آیا پشتیبانی فعال دارد؟ تاریخ انقضای آن؟ در صورت انقضا، پاسخ منقضی برمی‌گردد)
      */
-    public function remainingValidity(Request $request): JsonResponse
+    public function supportStatus(Request $request): JsonResponse
     {
         $request->validate([
-            'license_key' => ['required', 'string'],
+            'license_key'         => ['required', 'string'],
             'machine_fingerprint' => ['required', 'string'],
         ]);
 
-        $result = $this->validator->getRemainingValidity(
-            $request->license_key,
-            $request->machine_fingerprint
+        $result = $this->validator->getSupportStatus(
+            $request->input('license_key'),
+            $request->input('machine_fingerprint')
         );
 
         return response()->json($result);
@@ -55,28 +56,31 @@ class LicenseController extends Controller
     public function deactivateDevice(Request $request): JsonResponse
     {
         $request->validate([
-            'license_key' => ['required', 'string'],
+            'license_key'         => ['required', 'string'],
             'machine_fingerprint' => ['required', 'string'],
         ]);
 
         $result = $this->validator->deactivateDevice(
-            $request->license_key,
-            $request->machine_fingerprint
+            $request->input('license_key'),
+            $request->input('machine_fingerprint')
         );
 
         return response()->json($result);
     }
-    // API دریافت کامل اطلاعات لایسنس
-        public function licenseInfo(Request $request): JsonResponse
+
+    /**
+     * API دریافت کامل اطلاعات لایسنس (شامل بلوک اطلاعات پشتیبانی)
+     */
+    public function licenseInfo(Request $request): JsonResponse
     {
         $request->validate([
-            'license_key' => ['required', 'string'],
+            'license_key'         => ['required', 'string'],
             'machine_fingerprint' => ['required', 'string'],
         ]);
 
         $result = $this->validator->licenseInfo(
-            $request->license_key,
-            $request->machine_fingerprint
+            $request->input('license_key'),
+            $request->input('machine_fingerprint')
         );
 
         return response()->json($result);
