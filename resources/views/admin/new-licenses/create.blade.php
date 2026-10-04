@@ -16,10 +16,10 @@
 
             <div>
                 <h2 class="text-2xl font-bold text-white leading-tight">
-                    صدور اشتراک برای {{ $user->name }}
+                    صدور لایسنس برای {{ $user->name }}
                 </h2>
                 <p class="text-sm text-gray-400 mt-1">
-                    پلن و بازه زمانی موردنظر را انتخاب کنید تا اشتراک جدید برای این کاربر ایجاد شود.
+                    پلن لایسنس مادام‌العمر و مدت پشتیبانی اولیه را مشخص کنید.
                 </p>
             </div>
         </div>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    {{-- ارور ها --}}
+    {{-- خطاها --}}
     @if($errors->any())
         <div class="rounded-2xl border border-rose-700/70 bg-rose-900/20 p-4 text-rose-300">
             <div class="flex items-start gap-3">
@@ -63,13 +63,13 @@
                 <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl border border-emerald-800/50 bg-emerald-900/20 text-emerald-300">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                              d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-white">اطلاعات اشتراک جدید</h3>
+                    <h3 class="text-sm font-semibold text-white">اطلاعات لایسنس جدید</h3>
                     <p class="mt-1 text-xs text-gray-500">
-                        یکی از پلن‌های موجود را انتخاب کرده و مدت اشتراک را مشخص کنید.
+                        لایسنس به‌صورت مادام‌العمر صادر شده و بازه پشتیبانی برای آن فعال می‌شود.
                     </p>
                 </div>
             </div>
@@ -79,7 +79,7 @@
             <form action="{{ route('admin.new-licenses.store', $user->id) }}" method="POST" class="space-y-6">
                 @csrf
 
-                {{-- یک خلاصه از کاربر --}}
+                {{-- خلاصه کاربر --}}
                 <div class="rounded-2xl border border-gray-800 bg-black/20 p-4">
                     <div class="flex items-start gap-3">
                         <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-800 bg-gray-800/70 text-gray-300">
@@ -91,19 +91,19 @@
                         <div class="min-w-0">
                             <div class="text-sm font-medium text-white">{{ $user->name }}</div>
                             <div class="text-xs text-gray-400 mt-1 font-mono break-all">{{ $user->email }}</div>
-                            <div class="text-xs text-amber-400 mt-2">این کاربر در حال حاضر اشتراک فعال ندارد.</div>
+                            <div class="text-xs text-blue-400 mt-2">نوع لایسنس: مادام‌العمر (بدون انقضا)</div>
                         </div>
                     </div>
                 </div>
 
-                {{-- پلن --}}
+                {{-- انتخاب نوع پلن --}}
                 <div class="space-y-2">
                     <label for="plan_id" class="flex items-center gap-2 text-sm font-medium text-gray-300">
                         <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h10.5"/>
                         </svg>
-                        انتخاب پلن
+                        انتخاب پلن لایسنس
                     </label>
 
                     <select
@@ -114,47 +114,45 @@
                     >
                         <option value="" class="bg-gray-900 text-gray-400">انتخاب پلن...</option>
                         @foreach($plans as $plan)
-                            <option value="{{ $plan->id }}" class="bg-gray-900 text-gray-200">
+                            <option value="{{ $plan->id }}" {{ old('plan_id') == $plan->id ? 'selected' : '' }} class="bg-gray-900 text-gray-200">
                                 {{ $plan->title }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                {{-- بازه زمانی --}}
+                {{-- انتخاب مدت پشتیبانی --}}
                 <div class="space-y-2">
-                    <label for="duration_months" class="flex items-center gap-2 text-sm font-medium text-gray-300">
+                    <label for="support_months" class="flex items-center gap-2 text-sm font-medium text-gray-300">
                         <svg class="h-4 w-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                  d="M6.75 3v2.25M17.25 3v2.25M3.75 8.25h16.5M5.25 4.5h13.5A1.5 1.5 0 0 1 20.25 6v12.75a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V6a1.5 1.5 0 0 1 1.5-1.5Z"/>
+                                  d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 0 018 0z"/>
                         </svg>
-                        مدت اشتراک
+                        مدت پشتیبانی اولیه
                     </label>
 
                     <select
-                        name="duration_months"
-                        id="duration_months"
+                        name="support_months"
+                        id="support_months"
                         required
                         class="w-full rounded-2xl border border-gray-800 bg-black/40 px-4 py-3 text-sm text-gray-200 transition focus:border-blue-700 focus:outline-none focus:ring-blue-700"
                     >
-                        <option value="" class="bg-gray-900 text-gray-400">انتخاب مدت...</option>
-                        <option value="1" class="bg-gray-900 text-gray-200">۱ ماه</option>
-                        <option value="3" class="bg-gray-900 text-gray-200">۳ ماه</option>
-                        <option value="6" class="bg-gray-900 text-gray-200">۶ ماه</option>
-                        <option value="12" class="bg-gray-900 text-gray-200">۱۲ ماه</option>
+                        <option value="" class="bg-gray-900 text-gray-400">انتخاب مدت پشتیبانی...</option>
+                        <option value="6" {{ old('support_months', '6') == '6' ? 'selected' : '' }} class="bg-gray-900 text-gray-200">۶ ماه پشتیبانی</option>
+                        <option value="12" {{ old('support_months') == '12' ? 'selected' : '' }} class="bg-gray-900 text-gray-200">۱ سال (۱۲ ماه) پشتیبانی</option>
                     </select>
                 </div>
 
                 <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
                     <button
                         type="submit"
-                        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto rounded-2xl border border-emerald-800 bg-emerald-900/20 px-6 py-3 text-sm font-medium text-emerald-300 transition duration-200 hover:bg-emerald-800/40 hover:text-white"
+                        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto rounded-2xl border border-emerald-800 bg-emerald-900/20 px-6 py-3 text-sm font-medium text-emerald-300 transition duration-200 hover:bg-emerald-800/40 hover:text-white cursor-pointer"
                     >
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                   d="M4.5 12.75 10.5 18l9-12"/>
                         </svg>
-                        ایجاد اشتراک
+                        صدور و فعال‌سازی لایسنس
                     </button>
 
                     <a href="{{ route('admin.licenses.create') }}"
