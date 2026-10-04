@@ -17,8 +17,8 @@ class SubscriptionDetailsController extends Controller
             ->where('user_id', $user->id)
             ->with([
                 'plan',
-                'planPrice',
                 'license.devices',
+                'supports',
             ])
             ->latest('id')
             ->first();
@@ -30,9 +30,6 @@ class SubscriptionDetailsController extends Controller
 
         $planTitle = $subscription->plan->title ?? 'نامشخص';
 
-        // مقداردهی مدت زمان پلن
-        $planPeriodMonths = $subscription->planPrice->duration_months ?? null;
-
         // تعداد دستگاه‌های متصل فعلی
         $connectedDevicesCount = $subscription->license
             ? $subscription->license->devices->count()
@@ -41,31 +38,34 @@ class SubscriptionDetailsController extends Controller
         // حداکثر دستگاه‌های مجاز از جدول plans
         $maxAllowedDevices = $subscription->plan->max_devices ?? null;
 
-        $subscriptionDurationDays = null;
-        if ($subscription->started_at && $subscription->expires_at) {
-            $subscriptionDurationDays = round(Carbon::parse($subscription->started_at)
-                ->diffInDays(Carbon::parse($subscription->expires_at)));
-        }
+        // دریافت فعال‌ترین دوره پشتیبانی
+        $activeSupport = $subscription->supports()
+            ->where('status', 'active')
+            ->latest('expires_at')
+            ->first() ?? $subscription->supports()->latest('id')->first();
 
-        $remainingDays = null;
-        if ($subscription->expires_at) {
-            // استفاده از round برای حذف کامل بخش اعشاری تفاضل روزها
-            $remainingDays = round(now()->diffInDays(Carbon::parse($subscription->expires_at), false));
+        $supportStartsAt = $activeSupport?->starts_at ?? $subscription->created_at;
+        $supportExpiresAt = $activeSupport?->expires_at;
+        $supportCreatedAt = $activeSupport?->created_at ?? $supportStartsAt;
+
+        $supportRemainingDays = null;
+        if ($supportExpiresAt) {
+            $supportRemainingDays = round(now()->diffInDays(Carbon::parse($supportExpiresAt), false));
         }
 
         $licenseKey = $subscription->license->license_key ?? 'صادر نشده';
-        $price = $subscription->planPrice->price ?? 0;
 
         return view('user.subscription-details', compact(
             'subscription',
             'planTitle',
-            'planPeriodMonths',
             'connectedDevicesCount',
             'maxAllowedDevices',
-            'subscriptionDurationDays',
-            'remainingDays',
-            'licenseKey',
-            'price'
+            'activeSupport',
+            'supportStartsAt',
+            'supportExpiresAt',
+            'supportCreatedAt',
+            'supportRemainingDays',
+            'licenseKey'
         ));
     }
 }
