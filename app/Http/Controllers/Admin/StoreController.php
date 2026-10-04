@@ -27,12 +27,22 @@ class StoreController extends Controller
     public function updatePrice(Request $request, Plan $plan)
     {
         $validated = $request->validate([
-            'price'            => 'required|numeric|min:0',
+            'original_price'   => 'required|numeric|min:0',
             'discount_percent' => 'nullable|numeric|between:0,100',
-            'original_price'   => 'nullable|numeric|min:0',
             'max_devices'      => 'nullable|integer|min:1',
             'is_active'        => 'required|boolean',
+            'sort_order'       => 'nullable|integer',
         ]);
+
+        $originalPrice = (float) $validated['original_price'];
+        $discountPercent = (float) ($validated['discount_percent'] ?? 0);
+
+        // محاسبه قیمت نهایی فروش بر اساس قیمت اصلی و درصد تخفیف
+        $finalPrice = $discountPercent > 0
+            ? round($originalPrice * (1 - ($discountPercent / 100)))
+            : $originalPrice;
+
+        $validated['price'] = $finalPrice;
 
         $plan->update($validated);
 
@@ -51,13 +61,22 @@ class StoreController extends Controller
         DB::transaction(function () use ($request) {
             foreach ($request->plans as $id => $data) {
                 $validated = validator($data, [
-                    'price'            => 'required|numeric|min:0',
+                    'original_price'   => 'required|numeric|min:0',
                     'discount_percent' => 'nullable|numeric|between:0,100',
-                    'original_price'   => 'nullable|numeric|min:0',
                     'max_devices'      => 'nullable|integer|min:1',
                     'is_active'        => 'required|boolean',
                     'sort_order'       => 'nullable|integer',
                 ])->validate();
+
+                $originalPrice = (float) $validated['original_price'];
+                $discountPercent = (float) ($validated['discount_percent'] ?? 0);
+
+                // محاسبه خودکار قیمت فروش سیستمی
+                $finalPrice = $discountPercent > 0
+                    ? round($originalPrice * (1 - ($discountPercent / 100)))
+                    : $originalPrice;
+
+                $validated['price'] = $finalPrice;
 
                 Plan::where('id', $id)->update($validated);
             }

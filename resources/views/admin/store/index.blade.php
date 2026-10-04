@@ -11,7 +11,7 @@
             </h2>
             <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                <span>ویرایش قیمت، تخفیف، تعداد دستگاه مجاز و وضعیت فعال‌بودن لایسنس‌های ProPark</span>
+                <span>تعیین قیمت اصلی، درصد تخفیف و محاسبه خودکار قیمت نهایی فروش</span>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
         {{-- کارت‌های نسخه موبایل --}}
         <div class="block md:hidden space-y-4">
             @forelse($plans as $plan)
-                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-5 space-y-4 shadow-lg">
+                <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-5 space-y-4 shadow-lg plan-row" data-plan-id="{{ $plan->id }}">
                     <div class="flex items-start justify-between gap-3 border-b border-gray-800/80 pb-3">
                         <div>
                             <div class="text-base font-bold text-white">
@@ -74,32 +74,16 @@
                     <div class="grid grid-cols-1 gap-3.5">
                         {{-- قیمت اصلی --}}
                         <div>
-                            <label class="block text-[11px] text-gray-400 mb-1.5">قیمت اصلی (خط خورده)</label>
+                            <label class="block text-[11px] text-gray-400 mb-1.5">قیمت اصلی پلن <span class="text-rose-500">*</span></label>
                             <div class="flex items-center gap-2">
                                 <input
                                     type="text"
                                     inputmode="numeric"
                                     name="plans[{{ $plan->id }}][original_price]"
-                                    value="{{ number_format((int) ($plan->original_price ?? 0)) }}"
-                                    data-price-input
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
-                                >
-                                <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
-                            </div>
-                        </div>
-
-                        {{-- قیمت فروش --}}
-                        <div>
-                            <label class="block text-[11px] text-gray-400 mb-1.5">قیمت نهایی فروش <span class="text-rose-500">*</span></label>
-                            <div class="flex items-center gap-2">
-                                <input
-                                    type="text"
-                                    inputmode="numeric"
-                                    name="plans[{{ $plan->id }}][price]"
-                                    value="{{ number_format((int) $plan->price) }}"
+                                    value="{{ number_format((int) ($plan->original_price ?? $plan->price ?? 0)) }}"
                                     required
                                     data-price-input
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                    class="plan-original-price w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                 >
                                 <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
                             </div>
@@ -115,7 +99,7 @@
                                     value="{{ $plan->discount_percent ?? 0 }}"
                                     min="0"
                                     max="100"
-                                    class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="plan-discount w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 >
                             </div>
 
@@ -129,6 +113,15 @@
                                     min="1"
                                     class="w-full rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 >
+                            </div>
+                        </div>
+
+                        {{-- قیمت نهایی محاسبه شده (سیستمی) --}}
+                        <div class="p-3 rounded-2xl bg-blue-950/20 border border-blue-900/40 flex items-center justify-between">
+                            <span class="text-xs text-blue-400">قیمت نهایی فروش:</span>
+                            <div class="text-sm font-bold text-emerald-400 font-mono flex items-center gap-1.5">
+                                <span class="plan-calculated-price">{{ number_format((int) $plan->price) }}</span>
+                                <span class="text-xs text-gray-400 font-normal">تومان</span>
                             </div>
                         </div>
 
@@ -172,52 +165,36 @@
                     <thead>
                         <tr class="border-b border-gray-800 bg-gradient-to-r from-[#111827] via-[#0f172a] to-[#111827]">
                             <th class="py-4 px-4 text-xs font-semibold text-gray-400 whitespace-nowrap">پلن</th>
-                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت اصلی</th>
-                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت فروش</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت اصلی (تومان)</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">تخفیف (٪)</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">قیمت نهایی فروش (خودکار)</th>
                             <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">دستگاه مجاز</th>
-                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">ترتیب نمایش</th>
+                            <th class="py-4 px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">ترتیب</th>
                             <th class="py-4 px-4 text-xs font-semibold text-gray-400 whitespace-nowrap">وضعیت</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-gray-800/40">
                         @forelse($plans as $plan)
-                            <tr class="hover:bg-gray-800/20 transition duration-150">
+                            <tr class="hover:bg-gray-800/20 transition duration-150 plan-row" data-plan-id="{{ $plan->id }}">
                                 {{-- مشخصات پلن --}}
                                 <td class="py-4 px-4">
                                     <div class="font-bold text-white text-sm">{{ $plan->title }}</div>
                                     <div class="text-[11px] font-mono text-cyan-400/80 mt-0.5">#{{ $plan->slug }}</div>
                                 </td>
 
-                                {{-- قیمت اصلی --}}
+                                {{-- قیمت اصلی (ورودی ادمین) --}}
                                 <td class="py-4 px-3">
                                     <div class="flex items-center gap-2">
                                         <input
                                             type="text"
                                             inputmode="numeric"
                                             name="plans[{{ $plan->id }}][original_price]"
-                                            value="{{ number_format((int) ($plan->original_price ?? 0)) }}"
-                                            data-price-input
-                                            class="w-32 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
-                                        >
-                                        <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
-                                    </div>
-                                </td>
-
-                                {{-- قیمت فروش --}}
-                                <td class="py-4 px-3">
-                                    <div class="flex items-center gap-2">
-                                        <input
-                                            type="text"
-                                            inputmode="numeric"
-                                            name="plans[{{ $plan->id }}][price]"
-                                            value="{{ number_format((int) $plan->price) }}"
+                                            value="{{ number_format((int) ($plan->original_price ?? $plan->price ?? 0)) }}"
                                             required
                                             data-price-input
-                                            class="w-32 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
+                                            class="plan-original-price w-36 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-3 ltr text-left focus:border-blue-700 focus:ring-0 focus:outline-none transition"
                                         >
-                                        <span class="text-xs text-gray-500 whitespace-nowrap">تومان</span>
                                     </div>
                                 </td>
 
@@ -230,9 +207,17 @@
                                             value="{{ $plan->discount_percent ?? 0 }}"
                                             min="0"
                                             max="100"
-                                            class="w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-2 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            class="plan-discount w-20 rounded-xl border border-gray-800 bg-black/40 text-gray-200 text-sm py-2 px-2 text-center focus:border-blue-700 focus:ring-0 focus:outline-none transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         >
                                         <span class="text-xs text-gray-500 whitespace-nowrap">٪</span>
+                                    </div>
+                                </td>
+
+                                {{-- قیمت نهایی فروش (محاسبه خودکار و نمایشی) --}}
+                                <td class="py-4 px-3">
+                                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/30 border border-emerald-800/40 text-emerald-400 font-mono text-sm font-semibold">
+                                        <span class="plan-calculated-price">{{ number_format((int) $plan->price) }}</span>
+                                        <span class="text-[11px] font-normal text-gray-400">تومان</span>
                                     </div>
                                 </td>
 
@@ -302,52 +287,77 @@
         const priceInputs = document.querySelectorAll('[data-price-input]');
 
         function onlyDigits(value) {
-            return (value || '').replace(/\D/g, '');
+            return (value || '').toString().replace(/\D/g, '');
         }
 
         function formatNumber(value) {
             const digits = onlyDigits(value);
-            if (!digits) return '';
+            if (!digits) return '0';
             return Number(digits).toLocaleString('en-US');
         }
 
-        priceInputs.forEach((input) => {
-            input.addEventListener('input', function () {
-                const oldValue = this.value;
-                const oldSelectionStart = this.selectionStart || 0;
-                const digitsBeforeCursor = onlyDigits(oldValue.slice(0, oldSelectionStart)).length;
+        // تابع محاسبه قیمت فروش بر اساس قیمت اصلی و درصد تخفیف
+        function updateCalculatedPrice(row) {
+            const originalInput = row.querySelector('.plan-original-price');
+            const discountInput = row.querySelector('.plan-discount');
+            const calculatedEl = row.querySelector('.plan-calculated-price');
 
-                const formatted = formatNumber(oldValue);
-                this.value = formatted;
+            if (!originalInput || !calculatedEl) return;
 
-                let newCursor = formatted.length;
-                let digitCount = 0;
+            const originalPrice = parseInt(onlyDigits(originalInput.value)) || 0;
+            const discountPercent = Math.min(100, Math.max(0, parseInt(discountInput ? discountInput.value : 0) || 0));
 
-                for (let i = 0; i < formatted.length; i++) {
-                    if (/\d/.test(formatted[i])) {
-                        digitCount++;
+            let finalPrice = originalPrice;
+            if (discountPercent > 0) {
+                finalPrice = Math.round(originalPrice * (1 - (discountPercent / 100)));
+            }
+
+            calculatedEl.textContent = Number(finalPrice).toLocaleString('en-US');
+        }
+
+        // افزودن رویداد به ردیف‌ها
+        document.querySelectorAll('.plan-row').forEach(row => {
+            const originalInput = row.querySelector('.plan-original-price');
+            const discountInput = row.querySelector('.plan-discount');
+
+            if (originalInput) {
+                originalInput.addEventListener('input', function () {
+                    const oldValue = this.value;
+                    const oldSelectionStart = this.selectionStart || 0;
+                    const digitsBeforeCursor = onlyDigits(oldValue.slice(0, oldSelectionStart)).length;
+
+                    const formatted = formatNumber(oldValue);
+                    this.value = formatted;
+
+                    let newCursor = formatted.length;
+                    let digitCount = 0;
+
+                    for (let i = 0; i < formatted.length; i++) {
+                        if (/\d/.test(formatted[i])) {
+                            digitCount++;
+                        }
+                        if (digitCount >= digitsBeforeCursor) {
+                            newCursor = i + 1;
+                            break;
+                        }
                     }
-                    if (digitCount >= digitsBeforeCursor) {
-                        newCursor = i + 1;
-                        break;
-                    }
-                }
 
-                this.setSelectionRange(newCursor, newCursor);
-            });
+                    this.setSelectionRange(newCursor, newCursor);
+                    updateCalculatedPrice(row);
+                });
+            }
 
-            input.addEventListener('blur', function () {
-                this.value = formatNumber(this.value);
-            });
-
-            input.addEventListener('focus', function () {
-                if (this.value) {
-                    const len = this.value.length;
-                    this.setSelectionRange(len, len);
-                }
-            });
+            if (discountInput) {
+                discountInput.addEventListener('input', function () {
+                    let val = parseInt(this.value);
+                    if (val > 100) this.value = 100;
+                    if (val < 0) this.value = 0;
+                    updateCalculatedPrice(row);
+                });
+            }
         });
 
+        // تمیز کردن کاماها قبل از سابمیت فرم
         if (form) {
             form.addEventListener('submit', function () {
                 form.querySelectorAll('[data-price-input]').forEach((input) => {

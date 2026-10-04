@@ -170,7 +170,6 @@
                             </p>
                         </div>
 
-                        {{-- اگر هیچ بسته‌ای فعال نبود --}}
                         <template x-if="supportPackages.length === 0">
                             <div class="mx-auto max-w-2xl rounded-3xl border border-amber-500/30 bg-amber-500/10 p-8 text-center backdrop-blur-xl shadow-2xl">
                                 <h3 class="text-lg sm:text-xl font-black text-white">در حال حاضر بسته پشتیبانی فعالی وجود ندارد</h3>
@@ -202,7 +201,7 @@
                                                     <h4 class="text-lg font-black text-white" x-text="pkg.title"></h4>
                                                     <p class="text-xs text-gray-400">
                                                         <span x-text="toEn(pkg.duration_months)"></span>
-                                                        <span> ماه پشتیبانی</span>
+                                                        <span> ماه پشتیبانی تخصصی</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -232,9 +231,9 @@
                                         </ul>
                                     </div>
 
-                                    <div class="mt-8 pt-6 border-t border-gray-800/60 flex items-end justify-between gap-4">
-                                        <div>
-                                            <span class="block text-[11px] font-medium text-blue-400 mb-1">
+                                    <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
+                                        <div class="flex items-baseline justify-between">
+                                            <span class="text-[11px] font-medium text-blue-400">
                                                 دوره <span x-text="toEn(pkg.duration_months)"></span> ماهه
                                             </span>
                                             <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(pkg.price)"></div>
@@ -244,9 +243,9 @@
                                             type="button"
                                             @click="buySupport(pkg)"
                                             :disabled="isSubmitting"
-                                            class="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50 whitespace-nowrap"
+                                            class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
                                         >
-                                            <span>افزودن به سبد خرید</span>
+                                            <span x-text="isSubmitting && selectedSupportPackageId === pkg.id ? 'در حال افزودن...' : 'افزودن به سبد خرید'"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -256,7 +255,6 @@
 
                     {{-- تب ۲: ارتقای پلن --}}
                     <div x-show="activeTab === 'upgrade'" x-transition class="space-y-6">
-                        {{-- پیام در صورت داشتن بالاترین سطح --}}
                         <template x-if="isTopPlan">
                             <div class="mx-auto max-w-2xl rounded-3xl border border-blue-500/30 bg-blue-500/10 p-8 text-center backdrop-blur-xl shadow-2xl">
                                 <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 mb-4">
@@ -271,7 +269,6 @@
                             </div>
                         </template>
 
-                        {{-- نمایش پلن‌های قابل ارتقا --}}
                         <template x-if="!isTopPlan">
                             <div>
                                 <div class="text-center mb-8">
@@ -300,6 +297,16 @@
                                                     <div>
                                                         <h3 class="text-xl font-black text-white" x-text="plan.title"></h3>
                                                         <p class="mt-1.5 text-xs sm:text-sm leading-6 text-gray-400 min-h-[48px]" x-text="plan.description"></p>
+                                                        
+                                                        {{-- بج لایسنس مادام‌العمر دقیقاً پس از توضیحات --}}
+                                                        <div class="mt-3">
+                                                            <span class="inline-flex items-center gap-1.5 rounded-xl border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold text-blue-300">
+                                                                <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                                </svg>
+                                                                <span>{{ __('shop_lifetime_license_badge') ?? 'لایسنس مادام‌العمر' }}</span>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -319,32 +326,32 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="mt-8 pt-6 border-t border-gray-800/60">
-                                                <div class="flex items-end justify-between gap-4">
-                                                    <div>
-                                                        <span class="block text-[11px] font-medium text-blue-400 mb-1">لایسنس مادام‌العمر</span>
+                                            <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
+                                                <div class="flex items-baseline justify-between">
+                                                    <span class="text-xs text-gray-400">قیمت نهایی:</span>
+                                                    
+                                                    {{-- حالت دارای تخفیف --}}
+                                                    <template x-if="Number(plan.discount_percent) > 0">
+                                                        <div class="flex items-baseline gap-2">
+                                                            <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                                            <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price)"></div>
+                                                        </div>
+                                                    </template>
 
-                                                        <template x-if="Number(plan.discount_percent) > 0">
-                                                            <div class="flex items-baseline gap-2">
-                                                                <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(getFinalPrice(plan.price, plan.discount_percent))"></div>
-                                                                <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price > 0 ? plan.original_price : plan.price)"></div>
-                                                            </div>
-                                                        </template>
-
-                                                        <template x-if="Number(plan.discount_percent) == 0">
-                                                            <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
-                                                        </template>
-                                                    </div>
-
-                                                    <button
-                                                        type="button"
-                                                        @click="buyPlan(plan)"
-                                                        :disabled="isSubmitting"
-                                                        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50"
-                                                    >
-                                                        <span>ارتقا به این پلن</span>
-                                                    </button>
+                                                    {{-- حالت بدون تخفیف --}}
+                                                    <template x-if="Number(plan.discount_percent) == 0">
+                                                        <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                                    </template>
                                                 </div>
+
+                                                <button
+                                                    type="button"
+                                                    @click="buyPlan(plan)"
+                                                    :disabled="isSubmitting"
+                                                    class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
+                                                >
+                                                    <span x-text="isSubmitting && selectedPlanId === plan.id ? 'در حال افزودن...' : 'ارتقا به این پلن'"></span>
+                                                </button>
                                             </div>
                                         </div>
                                     </template>
@@ -384,6 +391,16 @@
                                         <div>
                                             <h3 class="text-xl font-black text-white" x-text="plan.title"></h3>
                                             <p class="mt-1.5 text-xs sm:text-sm leading-6 text-gray-400 min-h-[48px]" x-text="plan.description"></p>
+                                            
+                                            {{-- بج لایسنس مادام‌العمر دقیقاً پس از توضیحات --}}
+                                            <div class="mt-3">
+                                                <span class="inline-flex items-center gap-1.5 rounded-xl border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold text-blue-300">
+                                                    <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                    </svg>
+                                                    <span>{{ __('shop_lifetime_license_badge') ?? 'لایسنس مادام‌العمر' }}</span>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -403,34 +420,32 @@
                                     </ul>
                                 </div>
 
-                                <div class="mt-8 pt-6 border-t border-gray-800/60">
-                                    <div class="flex items-end justify-between gap-4">
-                                        <div>
-                                            <span class="block text-[11px] font-medium text-blue-400 mb-1">
-                                                {{ __('shop_lifetime_license_badge') ?? 'لایسنس مادام‌العمر' }}
-                                            </span>
+                                <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
+                                    <div class="flex items-baseline justify-between">
+                                        <span class="text-xs text-gray-400">قیمت نهایی:</span>
 
-                                            <template x-if="Number(plan.discount_percent) > 0">
-                                                <div class="flex items-baseline gap-2">
-                                                    <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(getFinalPrice(plan.price, plan.discount_percent))"></div>
-                                                    <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price > 0 ? plan.original_price : plan.price)"></div>
-                                                </div>
-                                            </template>
+                                        {{-- حالت دارای تخفیف --}}
+                                        <template x-if="Number(plan.discount_percent) > 0">
+                                            <div class="flex items-baseline gap-2">
+                                                <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                                <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price)"></div>
+                                            </div>
+                                        </template>
 
-                                            <template x-if="Number(plan.discount_percent) == 0">
-                                                <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
-                                            </template>
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            @click="buyPlan(plan)"
-                                            :disabled="isSubmitting"
-                                            class="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer disabled:opacity-50"
-                                        >
-                                            <span x-text="isSubmitting && selectedPlanId === plan.id ? @js(__('shop_adding_to_cart') ?? 'در حال افزودن...') : @js(__('shop_select_plan_btn') ?? 'خرید لایسنس')"></span>
-                                        </button>
+                                        {{-- حالت بدون تخفیف --}}
+                                        <template x-if="Number(plan.discount_percent) == 0">
+                                            <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                        </template>
                                     </div>
+
+                                    <button
+                                        type="button"
+                                        @click="buyPlan(plan)"
+                                        :disabled="isSubmitting"
+                                        class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
+                                    >
+                                        <span x-text="isSubmitting && selectedPlanId === plan.id ? @js(__('shop_adding_to_cart') ?? 'در حال افزودن...') : @js(__('shop_select_plan_btn') ?? 'خرید لایسنس')"></span>
+                                    </button>
                                 </div>
                             </div>
                         </template>
@@ -443,14 +458,8 @@
         <form x-ref="cartForm" method="POST" :action="cartStoreUrl" class="hidden">
             @csrf
             <input type="hidden" name="type" :value="orderType">
-
-            {{-- برای خرید پلن --}}
             <input type="hidden" name="plan_id" :value="selectedPlanId">
-
-            {{-- برای خرید پشتیبانی (آیتم مستقل) --}}
             <input type="hidden" name="support_package_id" :value="selectedSupportPackageId">
-
-            {{-- برای سازگاری/یا اگر هنوز در بک‌اند نیاز داری --}}
             <input type="hidden" name="duration_months" :value="selectedDuration">
         </form>
     </div>
@@ -478,8 +487,8 @@
                 selectedSupportPackageId: null,
                 selectedDuration: 0,
 
-                orderType: 'plan', // 'plan' یا 'support'
-                activeTab: 'support', // پیش‌فرض برای کاربر دارای اشتراک
+                orderType: 'plan',
+                activeTab: 'support',
 
                 errorMessage: '',
                 isSubmitting: false,
@@ -514,14 +523,7 @@
                     return value.toLocaleString('en-US') + ' ' + this.currency;
                 },
 
-                getFinalPrice(price, discount) {
-                    const p = Number(price) || 0;
-                    const d = Number(discount) || 0;
-                    return Math.round(p - ((p * d) / 100));
-                },
-
                 async submitCart() {
-                    // به جای submit سنتی، با fetch می‌زنیم تا اگر 422 یا 419 شد، پیامش را ببینی
                     const form = this.$refs.cartForm;
                     const fd = new FormData(form);
 
@@ -541,8 +543,6 @@
                             return;
                         }
 
-                        // اگر بک‌اند ریدایرکت بده و JSON نده، اینجا ممکنه fail شه
-                        // اما ما تلاش می‌کنیم پیام خطا را استخراج کنیم
                         if (!res.ok) {
                             let data = null;
                             try { data = await res.json(); } catch (e) {}
@@ -560,10 +560,6 @@
                             return;
                         }
 
-                        // اگر موفق باشد، معمولاً بک‌اند باید مسیر سبد خرید را برگرداند.
-                        // دو حالت:
-                        // 1) JSON: { redirect: "..." }
-                        // 2) یا هیچ و شما باید خودت ریدایرکت کنی
                         let data = null;
                         try { data = await res.json(); } catch (e) {}
 
@@ -572,7 +568,6 @@
                             return;
                         }
 
-                        // fallback: بعد از موفقیت، ببریم سبد خرید
                         window.location.href = @js(route('user.cart.index'));
                     } catch (e) {
                         this.errorMessage = this.errUnknown || 'خطای شبکه/سرور';
