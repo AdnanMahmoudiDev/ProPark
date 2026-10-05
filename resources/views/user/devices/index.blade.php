@@ -227,9 +227,9 @@
                                                     <path stroke-linecap="round"
                                                           stroke-linejoin="round"
                                                           stroke-width="2"
-                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0h8m-1-2a1 1 0 00-1-1h-2a1 1 0 00-1 1l-.2 1h4.4L15 5z" />
+                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
-                                                {{ __('dev_delete') }}
+                                                <span>{{ __('dev_delete') }}</span>
                                             </button>
                                         </form>
                                     </div>
@@ -331,7 +331,7 @@
                                                                 <path stroke-linecap="round"
                                                                       stroke-linejoin="round"
                                                                       stroke-width="2"
-                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0h8m-1-2a1 1 0 00-1-1h-2a1 1 0 00-1 1l-.2 1h4.4L15 5z" />
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
                                                             {{ __('dev_delete') }}
                                                         </button>
