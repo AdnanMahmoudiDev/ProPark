@@ -123,7 +123,7 @@
         <div class="flex items-center gap-4 pt-2">
             <x-primary-button class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-bold !text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:from-blue-500 hover:via-sky-500 hover:to-cyan-400 hover:shadow-blue-500/40 focus:ring-2 focus:ring-blue-400/60">
                 {{ __('profile_info_save_button') }}
-            _button') }}
             </x-primary-button>
         </div>
     </form>
+</section>

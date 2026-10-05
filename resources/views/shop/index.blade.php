@@ -17,7 +17,12 @@
             errSelectPlan: @js(__('shop_err_select_plan') ?? 'لطفاً یک پلن را انتخاب کنید'),
             errSupportNotAvailable: @js(__('shop_err_support_not_available') ?? 'بسته پشتیبانی در دسترس نیست'),
             errUnknown: @js(__('shop_err_unknown') ?? 'خطایی رخ داد. لطفاً دوباره تلاش کنید.'),
-            errCsrf: @js(__('shop_err_csrf') ?? 'نشست شما منقضی شده است. صفحه را رفرش کنید.')
+            errCsrf: @js(__('shop_err_csrf') ?? 'نشست شما منقضی شده است. صفحه را رفرش کنید.'),
+            txtAddingToCart: @js(__('shop_adding_to_cart') ?? 'در حال افزودن...'),
+            txtAddToCart: @js(__('shop_add_to_cart') ?? 'افزودن به سبد خرید'),
+            txtSelectPlanBtn: @js(__('shop_select_plan_btn') ?? 'خرید لایسنس'),
+            txtUpgradeBtn: @js(__('shop_upgrade_btn') ?? 'ارتقا به این پلن'),
+            txtDefaultOrgPlan: @js(__('shop_default_org_plan') ?? 'سازمانی')
         })"
         class="relative min-h-screen py-6 sm:py-10 overflow-hidden bg-gray-950 font-sans antialiased text-gray-100"
     >
@@ -42,7 +47,7 @@
                             <svg class="h-4 w-4 rtl:rotate-0 ltr:rotate-180 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                             </svg>
-                            <span>{{ __('shop_back_to_panel') ?? 'بازگشت به پنل' }}</span>
+                            <span>{{ __('shop_back_to_panel') }}</span>
                         </a>
 
                         {{-- نمایش وضعیت در موبایل --}}
@@ -51,7 +56,7 @@
                                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
                             </span>
-                            <span>{{ __('shop_license_store') ?? 'فروشگاه لایسنس' }}</span>
+                            <span>{{ __('shop_license_store') }}</span>
                         </div>
                     </div>
 
@@ -62,16 +67,16 @@
                                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
                             </span>
-                            <span>{{ __('shop_tariff_upgrade') ?? 'تعرفه‌ها و خدمات' }}</span>
+                            <span>{{ __('shop_tariff_upgrade') }}</span>
                         </div>
 
                         <h2 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white">
-                            {{ __('shop_title') ?? 'خدمات و لایسنس‌های' }}
+                            {{ __('shop_title') }}
                             <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-200 bg-clip-text text-transparent">AvaPark</span>
                         </h2>
 
                         <p class="mt-1.5 text-xs sm:text-sm text-gray-400 font-normal leading-relaxed">
-                            {{ __('shop_subtitle') ?? 'پلن لایسنس یا خدمات پشتیبانی نرم‌افزار خود را انتخاب کنید.' }}
+                            {{ __('shop_subtitle') }}
                         </p>
                     </div>
 
@@ -85,8 +90,8 @@
                             </div>
 
                             <div class="text-start leading-tight">
-                                <p class="font-bold text-white text-[11px]">{{ __('shop_instant_activation') ?? 'فعال‌سازی آنی' }}</p>
-                                <p class="text-[10px] text-gray-400">{{ __('shop_cloud_guarantee') ?? 'ضمانت و پشتیبانی رسمی' }}</p>
+                                <p class="font-bold text-white text-[11px]">{{ __('shop_instant_activation') }}</p>
+                                <p class="text-[10px] text-gray-400">{{ __('shop_cloud_guarantee') }}</p>
                             </div>
                         </div>
                     </div>
@@ -114,7 +119,7 @@
 
             @if (session('error'))
                 <div class="flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-xs sm:text-sm font-semibold text-rose-400 backdrop-blur-xl shadow-lg shadow-rose-950/20">
-                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <span>{{ session('error') }}</span>
@@ -135,46 +140,50 @@
                     {{-- دکمه‌های سوئیچ بین حالت‌ها --}}
                     <div class="flex justify-center">
                         <div class="inline-flex p-1.5 rounded-2xl bg-gray-900/90 border border-gray-800/80 shadow-2xl backdrop-blur-xl gap-2">
+                            {{-- دکمه تب پشتیبانی همراه با میکروفون --}}
                             <button
                                 type="button"
                                 @click="activeTab = 'support'"
                                 :class="activeTab === 'support' ? 'bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-lg shadow-blue-500/30' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'"
-                                class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300"
+                                class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer"
                             >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 0 018 0z" />
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 19a3 3 0 01-3 3h-3" />
                                 </svg>
-                                <span>تمدید یا خرید پشتیبانی</span>
+                                <span>{{ __('shop_tab_support') }}</span>
                             </button>
 
+                            {{-- دکمه تب ارتقای پلن --}}
                             <button
                                 type="button"
                                 @click="activeTab = 'upgrade'"
                                 :class="activeTab === 'upgrade' ? 'bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-lg shadow-blue-500/30' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'"
-                                class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300"
+                                class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer"
                             >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
-                                <span>ارتقای پلن</span>
+                                <span>{{ __('shop_tab_upgrade') }}</span>
                             </button>
                         </div>
                     </div>
 
-                    {{-- پشتیبانی (داینامیک از دیتابیس) --}}
+                    {{-- تب ۱: پشتیبانی (داینامیک از دیتابیس) --}}
                     <div x-show="activeTab === 'support'" x-transition class="space-y-6">
                         <div class="text-center">
-                            <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">تمدید و پشتیبانی فنی AvaPark</h3>
+                            <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_support_heading') }}</h3>
                             <p class="mt-2 text-xs sm:text-sm text-gray-400">
-                                با تمدید بسته پشتیبانی، از دریافت آخرین آپدیت‌ها و خدمات پشتیبانی اختصاصی بهره‌مند شوید.
+                                {{ __('shop_support_subheading') }}
                             </p>
                         </div>
 
                         <template x-if="supportPackages.length === 0">
                             <div class="mx-auto max-w-2xl rounded-3xl border border-amber-500/30 bg-amber-500/10 p-8 text-center backdrop-blur-xl shadow-2xl">
-                                <h3 class="text-lg sm:text-xl font-black text-white">در حال حاضر بسته پشتیبانی فعالی وجود ندارد</h3>
+                                <h3 class="text-lg sm:text-xl font-black text-white">{{ __('shop_no_support_packages') }}</h3>
                                 <p class="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
-                                    لطفاً بعداً مراجعه کنید یا با پشتیبانی تماس بگیرید.
+                                    {{ __('shop_no_support_desc') }}
                                 </p>
                             </div>
                         </template>
@@ -192,16 +201,19 @@
                                     <div>
                                         <div class="flex items-center justify-between gap-4 mb-4">
                                             <div class="flex items-center gap-3">
+                                                {{-- آیکون هدست پشتیبانی با میکروفون داخل کارت پکیج --}}
                                                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 19a3 3 0 01-3 3h-3" />
                                                     </svg>
                                                 </div>
                                                 <div>
                                                     <h4 class="text-lg font-black text-white" x-text="pkg.title"></h4>
                                                     <p class="text-xs text-gray-400">
                                                         <span x-text="toEn(pkg.duration_months)"></span>
-                                                        <span> ماه پشتیبانی تخصصی</span>
+                                                        <span> {{ __('shop_months_support_suffix') }}</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -225,7 +237,7 @@
 
                                             <template x-if="!Array.isArray(pkg.features) || pkg.features.length === 0">
                                                 <li class="text-xs sm:text-sm text-gray-400">
-                                                    امکانات این بسته هنوز ثبت نشده است.
+                                                    {{ __('shop_no_features') }}
                                                 </li>
                                             </template>
                                         </ul>
@@ -234,7 +246,7 @@
                                     <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
                                         <div class="flex items-baseline justify-between">
                                             <span class="text-[11px] font-medium text-blue-400">
-                                                دوره <span x-text="toEn(pkg.duration_months)"></span> ماهه
+                                                {{ __('shop_period_prefix') }} <span x-text="toEn(pkg.duration_months)"></span> {{ __('shop_period_months_suffix') }}
                                             </span>
                                             <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(pkg.price)"></div>
                                         </div>
@@ -245,7 +257,7 @@
                                             :disabled="isSubmitting"
                                             class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
                                         >
-                                            <span x-text="isSubmitting && selectedSupportPackageId === pkg.id ? 'در حال افزودن...' : 'افزودن به سبد خرید'"></span>
+                                            <span x-text="isSubmitting && selectedSupportPackageId === pkg.id ? txtAddingToCart : txtAddToCart"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -262,9 +274,10 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-xl sm:text-2xl font-black text-white">پلن شما بالاترین سطح پلن‌های آواپارک است</h3>
+                                <h3 class="text-xl sm:text-2xl font-black text-white">{{ __('shop_top_plan_title') }}</h3>
                                 <p class="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
-                                    شما در حال حاضر دارای اشتراک سطح <span class="font-bold text-blue-300" x-text="currentPlan ? currentPlan.title : 'سازمانی'"></span> هستید و تمامی امکانات ویژه و اختصاصی سیستم برای شما فعال است.
+                                    {{ __('shop_top_plan_desc', ['plan' => '']) }}
+                                    <span class="font-bold text-blue-300" x-text="currentPlan ? currentPlan.title : txtDefaultOrgPlan"></span>
                                 </p>
                             </div>
                         </template>
@@ -272,9 +285,10 @@
                         <template x-if="!isTopPlan">
                             <div>
                                 <div class="text-center mb-8">
-                                    <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">ارتقای سطح کاربری</h3>
+                                    <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_upgrade_title') }}</h3>
                                     <p class="mt-2 text-xs sm:text-sm text-gray-400">
-                                        پلن‌های دارای سطح بالاتر نسبت به پلن فعلی شما (<span class="text-blue-400 font-bold" x-text="currentPlan ? currentPlan.title : ''"></span>)
+                                        {{ __('shop_upgrade_subtitle', ['plan' => '']) }}
+                                        <span class="text-blue-400 font-bold" x-text="currentPlan ? currentPlan.title : ''"></span>
                                     </p>
                                 </div>
 
@@ -288,7 +302,7 @@
                                             <template x-if="Number(plan.discount_percent) > 0">
                                                 <div class="absolute end-6 top-6 z-10 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1 text-xs font-black text-rose-300 shadow-lg backdrop-blur-md">
                                                     <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
-                                                    <span x-text="toEn(plan.discount_percent) + '٪ تخفیف'"></span>
+                                                    <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off'))"></span>
                                                 </div>
                                             </template>
 
@@ -298,13 +312,13 @@
                                                         <h3 class="text-xl font-black text-white" x-text="plan.title"></h3>
                                                         <p class="mt-1.5 text-xs sm:text-sm leading-6 text-gray-400 min-h-[48px]" x-text="plan.description"></p>
                                                         
-                                                        {{-- بج لایسنس مادام‌العمر دقیقاً پس از توضیحات --}}
+                                                        {{-- بج لایسنس مادام‌العمر --}}
                                                         <div class="mt-3">
                                                             <span class="inline-flex items-center gap-1.5 rounded-xl border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold text-blue-300">
                                                                 <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                                                 </svg>
-                                                                <span>{{ __('shop_lifetime_license_badge') ?? 'لایسنس مادام‌العمر' }}</span>
+                                                                <span>{{ __('shop_lifetime_license_badge') }}</span>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -328,7 +342,7 @@
 
                                             <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
                                                 <div class="flex items-baseline justify-between">
-                                                    <span class="text-xs text-gray-400">قیمت نهایی:</span>
+                                                    <span class="text-xs text-gray-400">{{ __('shop_final_price') }}</span>
                                                     
                                                     {{-- حالت دارای تخفیف --}}
                                                     <template x-if="Number(plan.discount_percent) > 0">
@@ -350,7 +364,7 @@
                                                     :disabled="isSubmitting"
                                                     class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
                                                 >
-                                                    <span x-text="isSubmitting && selectedPlanId === plan.id ? 'در حال افزودن...' : 'ارتقا به این پلن'"></span>
+                                                    <span x-text="isSubmitting && selectedPlanId === plan.id ? txtAddingToCart : txtUpgradeBtn"></span>
                                                 </button>
                                             </div>
                                         </div>
@@ -366,9 +380,9 @@
             <template x-if="!hasSubscription">
                 <div>
                     <div class="mb-8 text-center">
-                        <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_choose_plan_heading') ?? 'پلن مناسب خود را انتخاب کنید' }}</h3>
+                        <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_choose_plan_heading') }}</h3>
                         <p class="mt-2 text-xs sm:text-sm text-gray-400">
-                            {{ __('shop_choose_plan_subheading') ?? 'لایسنس‌های نرم‌افزار آواپارک به صورت مادام‌العمر همراه با ۶ ماه پشتیبانی رایگان عرضه می‌شوند.' }}
+                            {{ __('shop_choose_plan_subheading') }}
                         </p>
                     </div>
 
@@ -382,7 +396,7 @@
                                 <template x-if="Number(plan.discount_percent) > 0">
                                     <div class="absolute end-6 top-6 z-10 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1 text-xs font-black text-rose-300 shadow-lg backdrop-blur-md">
                                         <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
-                                        <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off') ?? 'تخفیف')"></span>
+                                        <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off'))"></span>
                                     </div>
                                 </template>
 
@@ -392,13 +406,13 @@
                                             <h3 class="text-xl font-black text-white" x-text="plan.title"></h3>
                                             <p class="mt-1.5 text-xs sm:text-sm leading-6 text-gray-400 min-h-[48px]" x-text="plan.description"></p>
                                             
-                                            {{-- بج لایسنس مادام‌العمر دقیقاً پس از توضیحات --}}
+                                            {{-- بج لایسنس مادام‌العمر --}}
                                             <div class="mt-3">
                                                 <span class="inline-flex items-center gap-1.5 rounded-xl border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold text-blue-300">
                                                     <svg class="h-3.5 w-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                                     </svg>
-                                                    <span>{{ __('shop_lifetime_license_badge') ?? 'لایسنس مادام‌العمر' }}</span>
+                                                    <span>{{ __('shop_lifetime_license_badge') }}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -422,7 +436,7 @@
 
                                 <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
                                     <div class="flex items-baseline justify-between">
-                                        <span class="text-xs text-gray-400">قیمت نهایی:</span>
+                                        <span class="text-xs text-gray-400">{{ __('shop_final_price') }}</span>
 
                                         {{-- حالت دارای تخفیف --}}
                                         <template x-if="Number(plan.discount_percent) > 0">
@@ -444,7 +458,7 @@
                                         :disabled="isSubmitting"
                                         class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer disabled:opacity-50 text-center whitespace-nowrap"
                                     >
-                                        <span x-text="isSubmitting && selectedPlanId === plan.id ? @js(__('shop_adding_to_cart') ?? 'در حال افزودن...') : @js(__('shop_select_plan_btn') ?? 'خرید لایسنس')"></span>
+                                        <span x-text="isSubmitting && selectedPlanId === plan.id ? txtAddingToCart : txtSelectPlanBtn"></span>
                                     </button>
                                 </div>
                             </div>
@@ -480,7 +494,12 @@
             errSelectPlan = '',
             errSupportNotAvailable = '',
             errUnknown = '',
-            errCsrf = ''
+            errCsrf = '',
+            txtAddingToCart = '',
+            txtAddToCart = '',
+            txtSelectPlanBtn = '',
+            txtUpgradeBtn = '',
+            txtDefaultOrgPlan = ''
         }) {
             return {
                 selectedPlanId: null,
@@ -510,6 +529,11 @@
                 errSupportNotAvailable,
                 errUnknown,
                 errCsrf,
+                txtAddingToCart,
+                txtAddToCart,
+                txtSelectPlanBtn,
+                txtUpgradeBtn,
+                txtDefaultOrgPlan,
 
                 toEn(str) {
                     return String(str ?? '')
@@ -538,7 +562,7 @@
                         });
 
                         if (res.status === 419) {
-                            this.errorMessage = this.errCsrf || 'نشست منقضی شد. صفحه را رفرش کنید.';
+                            this.errorMessage = this.errCsrf;
                             this.isSubmitting = false;
                             return;
                         }
@@ -570,7 +594,7 @@
 
                         window.location.href = @js(route('user.cart.index'));
                     } catch (e) {
-                        this.errorMessage = this.errUnknown || 'خطای شبکه/سرور';
+                        this.errorMessage = this.errUnknown;
                         this.isSubmitting = false;
                     }
                 },

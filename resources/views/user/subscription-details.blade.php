@@ -99,40 +99,40 @@
                             {{-- اطلاعات پشتیبانی --}}
                             <div class="rounded-2xl bg-[#111827] p-5 ring-1 ring-white/5 sm:p-6">
                                 <h4 class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                                    {{ __('اطلاعات پشتیبانی') }}
+                                    {{ __('sub_support_info_title') }}
                                 </h4>
 
                                 <div class="space-y-4">
                                     <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4 first:border-none first:pt-0">
-                                        <span class="text-sm text-gray-400">{{ __('روزهای باقی‌مانده پشتیبانی') }}</span>
+                                        <span class="text-sm text-gray-400">{{ __('sub_support_remaining_days') }}</span>
                                         <span class="inline-flex items-center rounded-lg px-2.5 py-1 text-sm font-bold
                                             {{ $supportRemainingDays !== null && $supportRemainingDays >= 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }}">
                                             @if($supportRemainingDays === null)
                                                 —
                                             @elseif($supportRemainingDays < 0)
-                                                {{ __('منقضی شده') }}
+                                                {{ __('sub_support_expired') }}
                                             @else
-                                                {{ number_format($supportRemainingDays) }} {{ __('روز') }}
+                                                {{ number_format($supportRemainingDays) }} {{ __('sub_support_days_suffix') }}
                                             @endif
                                         </span>
                                     </div>
 
                                     <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('تاریخ ثبت پشتیبانی') }}</span>
+                                        <span class="text-sm text-gray-400">{{ __('sub_support_created_at') }}</span>
                                         <span class="font-mono text-xs font-semibold text-gray-200">
                                             {{ $supportCreatedAt ? ($isRtl ? jdate($supportCreatedAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportCreatedAt)->format('Y-m-d H:i')) : '—' }}
                                         </span>
                                     </div>
 
                                     <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('تاریخ شروع پشتیبانی') }}</span>
+                                        <span class="text-sm text-gray-400">{{ __('sub_support_starts_at') }}</span>
                                         <span class="font-mono text-xs font-semibold text-gray-200">
                                             {{ $supportStartsAt ? ($isRtl ? jdate($supportStartsAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportStartsAt)->format('Y-m-d H:i')) : '—' }}
                                         </span>
                                     </div>
 
                                     <div class="flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-                                        <span class="text-sm text-gray-400">{{ __('تاریخ انقضای پشتیبانی') }}</span>
+                                        <span class="text-sm text-gray-400">{{ __('sub_support_expires_at') }}</span>
                                         <span class="font-mono text-xs font-semibold text-gray-200">
                                             {{ $supportExpiresAt ? ($isRtl ? jdate($supportExpiresAt)->format('Y/m/d H:i') : \Carbon\Carbon::parse($supportExpiresAt)->format('Y-m-d H:i')) : '—' }}
                                         </span>
@@ -241,9 +241,9 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-amber-300">{{ __('نکته مهم') }}</p>
+                                <p class="text-xs font-bold text-amber-300">{{ __('sub_important_note_title') }}</p>
                                 <p class="mt-1 text-xs leading-6 text-gray-400">
-                                    {{ __('در صورت مشکل در فعال‌سازی لایسنس، تعداد دستگاه‌ها را بررسی کنید.') }}
+                                    {{ __('sub_important_note_desc') }}
                                 </p>
                             </div>
                         </div>

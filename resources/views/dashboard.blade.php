@@ -79,9 +79,9 @@
                     <div class="relative z-10">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-400">{{ __('وضعیت پشتیبانی') }}</p>
+                                <p class="text-sm text-gray-400">{{ __('dashboard_support_status_label') }}</p>
                                 <h3 class="mt-2 text-2xl font-bold text-white">
-                                    {{ $supportIsActive ? __('پشتیبانی فعال') : __('پشتیبانی فعال نیست') }}
+                                    {{ $supportIsActive ? __('dashboard_support_status_active') : __('dashboard_support_status_inactive') }}
                                 </h3>
                             </div>
 
@@ -99,24 +99,23 @@
                             @if($supportIsActive)
                                 <div class="flex items-center gap-2 text-sm text-green-400">
                                     <span class="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-                                    {{ __('پشتیبانی شما فعال است') }}
+                                    {{ __('dashboard_support_active_notice') }}
                                 </div>
 
                                 <div class="mt-3 text-sm text-gray-400">
-                                    {{ __('تاریخ پایان پشتیبانی:') }}
+                                    {{ __('dashboard_support_expiry_date') }}
                                     <span class="font-medium text-white">
                                         {{ $isRtl ? jdate($supportExpiresAt)->format('Y/m/d') : $supportExpiresAt->format('Y/m/d') }}
                                     </span>
                                 </div>
                             @else
                                 <div class="text-sm text-red-400">
-                                    {{ __('پشتیبانی شما فعال نیست یا منقضی شده است') }}
+                                    {{ __('dashboard_support_inactive_notice') }}
                                 </div>
 
-                                {{-- اگر تاریخ انقضا داریم (ولی منقضی شده)، نمایش بده برای شفافیت --}}
                                 @if($supportExpiresAt)
                                     <div class="mt-3 text-sm text-gray-400">
-                                        {{ __('تاریخ پایان پشتیبانی:') }}
+                                        {{ __('dashboard_support_expiry_date') }}
                                         <span class="font-medium text-white">
                                             {{ $isRtl ? jdate($supportExpiresAt)->format('Y/m/d') : $supportExpiresAt->format('Y/m/d') }}
                                         </span>
@@ -160,13 +159,13 @@
                                 <div class="text-sm text-red-400">{{ __('dashboard_license_none') }}</div>
                             @endif
 
-                            {{-- دکمه مشاهده دستگاه‌های متصل و پشتیبانی: زیر وضعیت لایسنس فعال --}}
+                            {{-- دکمه مشاهده دستگاه‌های متصل و پشتیبانی --}}
                             @if($hasSubscription)
                                 <a
                                     href="{{ route('subscription.details') }}"
                                     class="group mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                                 >
-                                    {{ __('مشاهده جزئیات دستگاه های متصل و پشتیبانی') }}
+                                    {{ __('dashboard_view_subscription_details') }}
                                 </a>
                             @endif
                         </div>
