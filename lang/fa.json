@@ -556,6 +556,30 @@
     "cart_notice_rights": "تمامی حقوق این خرید برای شما محفوظ است.",
     "cart_cancel_button": "انصراف از خرید",
     "cart_checkout_button": "تایید و پرداخت",
-    "cart_view_plans_button": "مشاهده پلن‌ها"
+    "cart_view_plans_button": "مشاهده پلن‌ها",
+    "shop_upgrade_subtitle_prefix": "پلن‌های دارای سطح بالاتر نسبت به پلن فعلی شما",
+    "shop_current_plan_is_highest_prefix": "پلن فعلی شما",
+    "shop_current_plan_is_highest_suffix": "بالاترین سطح موجود است و امکان ارتقا وجود ندارد.",
+    "shop_plans_title": "پلن‌ها و اشتراک‌ها",
+    "shop_plans_desc": "پلن مناسب کسب‌وکار خود را انتخاب یا ارتقا دهید",
+    "shop_support_packages": "بسته‌های پشتیبانی",
+    "shop_support_desc": "پشتیبانی اختصاصی و اولویت‌دار برای پارکینگ شما",
+    "shop_upgrade_plan": "ارتقای پلن",
+    "shop_buy_plan": "خرید پلن",
+    "shop_current_plan_badge": "پلن فعلی شما",
+    "shop_toman": "تومان",
+    "shop_discount": "تخفیف",
+    "shop_upgrade_to_this": "ارتقا به این پلن",
+    "cart_support_purchase_badge": "خرید یا تمدید پشتیبانی",
+    "cart_license_purchase_title": "خرید لایسنس",
+    "cart_support_purchase_title": "خرید یا تمدید پشتیبانی",
+    "cart_order_type": "نوع سفارش",
+    "cart_support_package_name": "بسته پشتیبانی",
+    "cart_month": "ماه",
+    "cart_months": "ماه",
+    "cart_support_package": "بسته پشتیبانی",
+    "cart_license_notice_activation": "با تایید نهایی، لایسنس به پروفایل شما اضافه خواهد شد.",
+    "cart_support_notice_activation": "با تایید نهایی، پشتیبانی به حساب کاربری شما اضافه خواهد شد."
+
 
 }

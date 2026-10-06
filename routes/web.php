@@ -12,8 +12,6 @@ use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
 use App\Http\Controllers\User\CartController; 
 
-
-
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
@@ -24,6 +22,7 @@ use App\Http\Controllers\Admin\DatabaseBackupController;
 use App\Http\Controllers\Admin\CategoryController; 
 use App\Http\Controllers\Admin\PostController; 
 use App\Http\Controllers\Admin\MonitoringController;
+use App\Http\Controllers\Admin\SupportPackagePriceController; // کنترلر مدیریت قیمت پشتیبانی
 
 // صفحه اصلی
 Route::get('/', function () {
@@ -126,6 +125,12 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::put('/store/prices', [StoreController::class, 'bulkUpdate'])
             ->name('store.prices.bulk-update');
 
+        // مدیریت قیمت بسته‌های پشتیبانی
+        Route::prefix('store/support-prices')->name('store.support-prices.')->controller(SupportPackagePriceController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/bulk-update', 'bulkUpdate')->name('bulk-update');
+        });
+
         // ساخت مجوز 
         Route::get('/new-license', [LicenseCreationController::class, 'index'])
             ->name('licenses.create');
@@ -143,7 +148,7 @@ Route::middleware(['auth', 'verified', 'admin'])
             Route::post('/import', [DatabaseBackupController::class, 'import'])->name('import');
         });
         
-        //مانیتورینگ سایت و سرور 
+        // مانیتورینگ سایت و سرور 
         Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
 
         // مدیریت دسته‌بندی‌های وبلاگ (لیست، ایجاد، ویرایش، بروزرسانی و حذف)
@@ -152,6 +157,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         // مدیریت مقالات وبلاگ
         Route::resource('posts', PostController::class);
         Route::post('posts/upload-image', [PostController::class, 'uploadContentImage'])->name('posts.upload-image');
+        
     });
 
 require __DIR__ . '/auth.php';
