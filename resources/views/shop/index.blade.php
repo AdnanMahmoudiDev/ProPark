@@ -140,7 +140,7 @@
                     {{-- دکمه‌های سوئیچ بین حالت‌ها --}}
                     <div class="flex justify-center">
                         <div class="inline-flex p-1.5 rounded-2xl bg-gray-900/90 border border-gray-800/80 shadow-2xl backdrop-blur-xl gap-2">
-                            {{-- دکمه تب پشتیبانی همراه با میکروفون --}}
+                            {{-- دکمه تب پشتیبانی --}}
                             <button
                                 type="button"
                                 @click="activeTab = 'support'"
@@ -170,7 +170,7 @@
                         </div>
                     </div>
 
-                    {{-- تب ۱: پشتیبانی (داینامیک از دیتابیس) --}}
+                    {{-- تب ۱: پشتیبانی --}}
                     <div x-show="activeTab === 'support'" x-transition class="space-y-6">
                         <div class="text-center">
                             <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_support_heading') }}</h3>
@@ -196,12 +196,21 @@
                                 <div
                                     class="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-gray-800/80 bg-gray-900/50 p-7 shadow-xl shadow-black/30 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-blue-500/40 hover:bg-gray-900/80 hover:shadow-blue-950/20"
                                 >
+                                    {{-- افکت نوری پس‌زمینه کارت --}}
                                     <div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                                    {{-- بج درصد تخفیف پکیج پشتیبانی --}}
+                                    <template x-if="Number(pkg.discount_percent) > 0">
+                                        <div class="absolute end-6 top-6 z-10 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1 text-xs font-black text-rose-300 shadow-lg backdrop-blur-md">
+                                            <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
+                                            <span x-text="toEn(pkg.discount_percent) + '٪ ' + @js(__('shop_discount_off') ?? 'تخفیف')"></span>
+                                        </div>
+                                    </template>
 
                                     <div>
                                         <div class="flex items-center justify-between gap-4 mb-4">
                                             <div class="flex items-center gap-3">
-                                                {{-- آیکون هدست پشتیبانی با میکروفون داخل کارت پکیج --}}
+                                                {{-- آیکون پشتیبانی --}}
                                                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
                                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6" />
@@ -213,7 +222,7 @@
                                                     <h4 class="text-lg font-black text-white" x-text="pkg.title"></h4>
                                                     <p class="text-xs text-gray-400">
                                                         <span x-text="toEn(pkg.duration_months)"></span>
-                                                        <span> {{ __('shop_months_support_suffix') }}</span>
+                                                        <span> {{ __('shop_months_support_suffix') ?? 'ماه پشتیبانی' }}</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -237,18 +246,43 @@
 
                                             <template x-if="!Array.isArray(pkg.features) || pkg.features.length === 0">
                                                 <li class="text-xs sm:text-sm text-gray-400">
-                                                    {{ __('shop_no_features') }}
+                                                    {{ __('shop_no_features') ?? 'بدون ویژگی مشخص' }}
                                                 </li>
                                             </template>
                                         </ul>
                                     </div>
 
                                     <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
-                                        <div class="flex items-baseline justify-between">
+                                        {{-- مدت زمان دوره --}}
+                                        <div class="flex items-center justify-between">
                                             <span class="text-[11px] font-medium text-blue-400">
-                                                {{ __('shop_period_prefix') }} <span x-text="toEn(pkg.duration_months)"></span> {{ __('shop_period_months_suffix') }}
+                                                {{ __('shop_period_prefix') ?? 'دوره' }} <span x-text="toEn(pkg.duration_months)"></span> {{ __('shop_period_months_suffix') ?? 'ماهه' }}
                                             </span>
-                                            <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(pkg.price)"></div>
+                                        </div>
+
+                                        {{-- بخش قیمت‌گذاری پشتیبانی --}}
+                                        <div class="space-y-2">
+                                            {{-- حالت دارای تخفیف --}}
+                                            <template x-if="Number(pkg.discount_percent) > 0">
+                                                <div class="space-y-1.5">
+                                                    <div class="flex items-center justify-between text-xs text-gray-400">
+                                                        <span>{{ __('قیمت اصلی:') }}</span>
+                                                        <span class="line-through text-gray-500 font-medium" x-text="formatPrice(pkg.original_price)"></span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="text-xs font-semibold text-emerald-400">{{ __('قیمت با تخفیف:') }}</span>
+                                                        <span class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(pkg.price)"></span>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            {{-- حالت بدون تخفیف --}}
+                                            <template x-if="!Number(pkg.discount_percent) || Number(pkg.discount_percent) == 0">
+                                                <div class="flex items-baseline justify-between">
+                                                    <span class="text-xs text-gray-400">{{ __('قیمت:') }}</span>
+                                                    <span class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(pkg.price)"></span>
+                                                </div>
+                                            </template>
                                         </div>
 
                                         <button
@@ -275,9 +309,11 @@
                                     </svg>
                                 </div>
                                 <h3 class="text-xl sm:text-2xl font-black text-white">{{ __('shop_top_plan_title') }}</h3>
-                                <p class="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
-                                    {{ __('shop_top_plan_desc', ['plan' => '']) }}
-                                    <span class="font-bold text-blue-300" x-text="currentPlan ? currentPlan.title : txtDefaultOrgPlan"></span>
+                                <p class="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed" dir="rtl">
+                                    <span>{{ __('shop_top_plan_desc_prefix') ?? 'شما هم‌اکنون از بالاترین سطح پلن استفاده می‌کنید' }}</span>
+                                    <span class="inline-flex items-center font-bold text-blue-300" dir="ltr">
+                                        (&rlm;<span x-text="currentPlan ? currentPlan.title : txtDefaultOrgPlan"></span>&rlm;)
+                                    </span>
                                 </p>
                             </div>
                         </template>
@@ -286,9 +322,15 @@
                             <div>
                                 <div class="text-center mb-8">
                                     <h3 class="text-2xl font-black text-white sm:text-3xl tracking-tight">{{ __('shop_upgrade_title') }}</h3>
-                                    <p class="mt-2 text-xs sm:text-sm text-gray-400">
-                                        {{ __('shop_upgrade_subtitle', ['plan' => '']) }}
-                                        <span class="text-blue-400 font-bold" x-text="currentPlan ? currentPlan.title : ''"></span>
+                                    
+                                    {{-- رفع مشکل BiDi و ترتیب پرانتزهای نام پلن فعلی --}}
+                                    <p class="mt-2 text-xs sm:text-sm text-gray-400 inline-flex items-center justify-center gap-1.5 flex-wrap" dir="rtl">
+                                        <span>{{ __('shop_upgrade_subtitle_prefix') ?? 'پلن‌های دارای سطح بالاتر نسبت به پلن فعلی شما' }}</span>
+                                        <template x-if="currentPlan && currentPlan.title">
+                                            <span class="inline-flex items-center font-bold text-blue-400" dir="ltr">
+                                                (&rlm;<span x-text="currentPlan.title"></span>&rlm;)
+                                            </span>
+                                        </template>
                                     </p>
                                 </div>
 
@@ -302,7 +344,7 @@
                                             <template x-if="Number(plan.discount_percent) > 0">
                                                 <div class="absolute end-6 top-6 z-10 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1 text-xs font-black text-rose-300 shadow-lg backdrop-blur-md">
                                                     <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
-                                                    <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off'))"></span>
+                                                    <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off') ?? 'تخفیف')"></span>
                                                 </div>
                                             </template>
 
@@ -341,20 +383,28 @@
                                             </div>
 
                                             <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
-                                                <div class="flex items-baseline justify-between">
-                                                    <span class="text-xs text-gray-400">{{ __('shop_final_price') }}</span>
-                                                    
+                                                {{-- بخش قیمت‌گذاری ارتقای پلن --}}
+                                                <div class="space-y-2">
                                                     {{-- حالت دارای تخفیف --}}
                                                     <template x-if="Number(plan.discount_percent) > 0">
-                                                        <div class="flex items-baseline gap-2">
-                                                            <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></div>
-                                                            <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price)"></div>
+                                                        <div class="space-y-1.5">
+                                                            <div class="flex items-center justify-between text-xs text-gray-400">
+                                                                <span>{{ __('قیمت اصلی:') }}</span>
+                                                                <span class="line-through text-gray-500 font-medium" x-text="formatPrice(plan.original_price)"></span>
+                                                            </div>
+                                                            <div class="flex items-center justify-between">
+                                                                <span class="text-xs font-semibold text-emerald-400">{{ __('قیمت با تخفیف:') }}</span>
+                                                                <span class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></span>
+                                                            </div>
                                                         </div>
                                                     </template>
 
                                                     {{-- حالت بدون تخفیف --}}
                                                     <template x-if="Number(plan.discount_percent) == 0">
-                                                        <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                                        <div class="flex items-baseline justify-between">
+                                                            <span class="text-xs text-gray-400">{{ __('قیمت:') }}</span>
+                                                            <span class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></span>
+                                                        </div>
                                                     </template>
                                                 </div>
 
@@ -396,7 +446,7 @@
                                 <template x-if="Number(plan.discount_percent) > 0">
                                     <div class="absolute end-6 top-6 z-10 flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-500/20 via-rose-600/25 to-orange-500/20 px-3 py-1 text-xs font-black text-rose-300 shadow-lg backdrop-blur-md">
                                         <span class="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
-                                        <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off'))"></span>
+                                        <span x-text="toEn(plan.discount_percent) + '٪ ' + @js(__('shop_discount_off') ?? 'تخفیف')"></span>
                                     </div>
                                 </template>
 
@@ -435,20 +485,28 @@
                                 </div>
 
                                 <div class="mt-8 pt-6 border-t border-gray-800/60 flex flex-col gap-4">
-                                    <div class="flex items-baseline justify-between">
-                                        <span class="text-xs text-gray-400">{{ __('shop_final_price') }}</span>
-
+                                    {{-- بخش قیمت‌گذاری پلن‌های اولیه --}}
+                                    <div class="space-y-2">
                                         {{-- حالت دارای تخفیف --}}
                                         <template x-if="Number(plan.discount_percent) > 0">
-                                            <div class="flex items-baseline gap-2">
-                                                <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></div>
-                                                <div class="text-xs text-gray-500 line-through" x-text="formatPrice(plan.original_price)"></div>
+                                            <div class="space-y-1.5">
+                                                <div class="flex items-center justify-between text-xs text-gray-400">
+                                                    <span>{{ __('قیمت اصلی:') }}</span>
+                                                    <span class="line-through text-gray-500 font-medium" x-text="formatPrice(plan.original_price)"></span>
+                                                </div>
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs font-semibold text-emerald-400">{{ __('قیمت با تخفیف:') }}</span>
+                                                    <span class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight" x-text="formatPrice(plan.price)"></span>
+                                                </div>
                                             </div>
                                         </template>
 
                                         {{-- حالت بدون تخفیف --}}
                                         <template x-if="Number(plan.discount_percent) == 0">
-                                            <div class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></div>
+                                            <div class="flex items-baseline justify-between">
+                                                <span class="text-xs text-gray-400">{{ __('قیمت:') }}</span>
+                                                <span class="text-xl sm:text-2xl font-black text-white tracking-tight" x-text="formatPrice(plan.price)"></span>
+                                            </div>
                                         </template>
                                     </div>
 
