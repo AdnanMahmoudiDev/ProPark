@@ -4,27 +4,57 @@
 <div class="space-y-8">
 
     {{-- هدر صفحه --}}
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-            <h2 class="text-2xl font-bold text-white leading-tight">
-                مدیریت پلن‌های فروشگاه
-            </h2>
-            <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                <span>تعیین قیمت اصلی، درصد تخفیف و محاسبه خودکار قیمت نهایی فروش</span>
+    <div class="relative overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-5 sm:p-6 backdrop-blur-2xl shadow-2xl shadow-black/50">
+        <div class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 h-28 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+        
+        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-3">
+                    <span>مدیریت پلن‌های فروشگاه</span>
+                </h2>
+                <div class="flex items-center gap-2 mt-2 text-xs text-gray-400 font-normal">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-sm shadow-blue-500"></span>
+                    <span>تعیین قیمت اصلی، درصد تخفیف و محاسبه خودکار قیمت نهایی فروش</span>
+                </div>
             </div>
-        </div>
 
-        <div class="px-4 py-2 rounded-xl border border-blue-800 bg-blue-900/20 text-blue-300 text-xs">
-            تعداد پلن‌ها: {{ $plans->count() }}
+            <div class="flex items-center flex-wrap gap-3">
+                {{-- دکمه شیک، مدرن و برجسته هدایت به مدیریت تعرفه‌های پشتیبانی --}}
+                <a
+                    href="{{ url('admin/store/support-prices') }}"
+                    class="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-blue-600/30 ring-1 ring-white/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 hover:ring-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60 active:translate-y-0"
+                >
+                    {{-- آیکون پشتیبانی --}}
+                    <div class="flex h-6 w-6 items-center justify-center rounded-xl bg-white/15 border border-white/20 shadow-inner">
+                        <svg class="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 19a3 3 0 01-3 3h-3" />
+                        </svg>
+                    </div>
+
+                    <span>مدیریت تعرفه پشتیبانی</span>
+
+                    {{-- فلش حرکتی --}}
+                    <svg class="h-4 w-4 rtl:rotate-180 transition duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+
+                {{-- بج تعداد پلن‌ها --}}
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border border-gray-800/80 bg-gray-900/80 text-gray-300 text-xs font-semibold shadow-inner">
+                    <span class="text-gray-400">تعداد پلن‌ها:</span>
+                    <span class="font-bold text-blue-400 font-mono text-sm">{{ $plans->count() }}</span>
+                </div>
+            </div>
         </div>
     </div>
 
     {{-- پیام موفقیت --}}
     @if(session('success'))
-        <div class="flex items-center gap-3 p-4 rounded-2xl border border-green-700 bg-green-900/20 text-green-400 text-sm">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        <div class="flex items-center gap-3 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-semibold backdrop-blur-xl shadow-lg shadow-emerald-950/20">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <div>{{ session('success') }}</div>
         </div>
@@ -32,10 +62,10 @@
 
     {{-- خطاهای اعتبارسنجی --}}
     @if($errors->any())
-        <div class="p-4 rounded-2xl border border-rose-700 bg-rose-900/20 text-rose-400 text-sm space-y-2">
+        <div class="p-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-400 text-sm space-y-2 backdrop-blur-xl shadow-lg shadow-rose-950/20">
             <div class="flex items-center gap-2 font-bold">
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 <span>خطا در داده‌های ارسالی</span>
@@ -66,7 +96,7 @@
                             <span class="text-xs font-mono text-cyan-400/80">#{{ $plan->slug }}</span>
                         </div>
 
-                        <div class="px-2.5 py-1 rounded-lg text-[11px] border {{ $plan->is_active ? 'border-green-700 bg-green-900/20 text-green-400' : 'border-gray-700 bg-gray-800/70 text-gray-400' }}">
+                        <div class="px-2.5 py-1 rounded-lg text-[11px] border {{ $plan->is_active ? 'border-emerald-700 bg-emerald-900/20 text-emerald-400' : 'border-gray-700 bg-gray-800/70 text-gray-400' }}">
                             {{ $plan->is_active ? 'فعال' : 'غیرفعال' }}
                         </div>
                     </div>
@@ -269,10 +299,10 @@
             <div class="sticky bottom-4 z-10 flex justify-end">
                 <button
                     type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl border border-blue-800 bg-blue-900/90 backdrop-blur px-6 py-3 text-sm font-medium text-blue-300 transition duration-200 hover:bg-blue-800 hover:text-white shadow-lg cursor-pointer"
+                    class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50 cursor-pointer"
                 >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
                     <span>ذخیره همه تغییرات</span>
                 </button>
