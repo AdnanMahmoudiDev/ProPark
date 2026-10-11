@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\BlogController; // کنترلر عمومی وبلاگ
-use App\Http\Controllers\LocaleController; // کنترلر تغییر زبان
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
-use App\Http\Controllers\User\CartController; 
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\PaymentController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
@@ -19,10 +20,10 @@ use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\LicenseCreationController;
 use App\Http\Controllers\Admin\DatabaseBackupController;
-use App\Http\Controllers\Admin\CategoryController; 
-use App\Http\Controllers\Admin\PostController; 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\MonitoringController;
-use App\Http\Controllers\Admin\SupportPackagePriceController; // کنترلر مدیریت قیمت پشتیبانی
+use App\Http\Controllers\Admin\SupportPackagePriceController;
 
 // صفحه اصلی
 Route::get('/', function () {
@@ -30,28 +31,40 @@ Route::get('/', function () {
 })->name('home');
 
 // تغییر زبان سیستم
-Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
+Route::get('/locale/{locale}', [LocaleController::class, 'switch'])
+    ->name('locale.switch');
 
 // فروشگاه
-Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/shop', [ShopController::class, 'index'])
+    ->name('shop');
 
 // وبلاگ عمومی
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog', [BlogController::class, 'index'])
+    ->name('blog.index');
+
+Route::get('/blog/{slug}', [BlogController::class, 'show'])
+    ->name('blog.show');
 
 // درباره ما
-Route::get('/about', [PageController::class, 'about'])->name('about');
-// پشتیبانی
-Route::get('/support', [PageController::class, 'support'])->name('support');
-// مسیر صفحه شرایط و قوانین
-Route::get('/terms', [PageController::class, 'terms'])->name('terms');
-// مسیر صفحه حریم خصوصی
-Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/about', [PageController::class, 'about'])
+    ->name('about');
 
-// مسیر های کاربر عادی 
+// پشتیبانی
+Route::get('/support', [PageController::class, 'support'])
+    ->name('support');
+
+// شرایط و قوانین
+Route::get('/terms', [PageController::class, 'terms'])
+    ->name('terms');
+
+// حریم خصوصی
+Route::get('/privacy', [PageController::class, 'privacy'])
+    ->name('privacy');
+
+// مسیرهای کاربر عادی
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // داشبرد کاربری
+    // داشبورد کاربری
     Route::get('/dashboard', [ProfileController::class, 'dashboard'])
         ->name('dashboard');
 
@@ -66,29 +79,56 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/devices/{licenseDevice}', [UserDeviceController::class, 'destroy'])
         ->name('user.devices.destroy');
 
-    // مدیریت سبد خرید 
-    Route::prefix('cart')->name('user.cart.')->controller(CartController::class)->group(function () {
-        Route::get('/', 'index')->name('index');             
-        Route::post('/store', 'store')->name('store');       
-        Route::delete('/cancel', 'destroy')->name('cancel'); 
-        Route::post('/checkout', 'checkout')->name('checkout'); 
-    });
+    // مدیریت سبد خرید
+    Route::prefix('cart')
+        ->name('user.cart.')
+        ->controller(CartController::class)
+        ->group(function () {
+            Route::get('/', 'index')
+                ->name('index');
+
+            Route::post('/store', 'store')
+                ->name('store');
+
+            Route::delete('/cancel', 'destroy')
+                ->name('cancel');
+
+            Route::post('/checkout', 'checkout')
+                ->name('checkout');
+        });
+
+    // پرداخت
+    Route::prefix('payment')
+        ->name('payment.')
+        ->controller(PaymentController::class)
+        ->group(function () {
+            Route::post('/checkout', 'checkout')
+                ->name('checkout');
+
+            Route::get('/callback/{order}', 'callback')
+                ->name('callback');
+        });
 
     // مدیریت پروفایل
     Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'edit')->name('profile.edit');
-        Route::patch('/profile', 'update')->name('profile.update');
-        Route::delete('/profile', 'destroy')->name('profile.destroy');
+        Route::get('/profile', 'edit')
+            ->name('profile.edit');
+
+        Route::patch('/profile', 'update')
+            ->name('profile.update');
+
+        Route::delete('/profile', 'destroy')
+            ->name('profile.destroy');
     });
 });
 
-// مسیر های مربوط به ادمین و داشبرد ادمین
+// مسیرهای ادمین
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        // داشبرد ادمین
+        // داشبورد ادمین
         Route::get('/', [DashboardController::class, 'index'])
             ->name('dashboard');
 
@@ -99,7 +139,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
             ->name('users.update-role');
 
-        // مدیریت اشتراک ها
+        // مدیریت اشتراک‌ها
         Route::get('/subscriptions', [SubscriptionController::class, 'index'])
             ->name('subscriptions.index');
 
@@ -108,7 +148,7 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::patch('/subscriptions/{subscription}/plan', [SubscriptionController::class, 'updatePlan'])
             ->name('subscriptions.update-plan');
-        
+
         Route::post('/subscriptions/{subscription}/renew', [SubscriptionController::class, 'renew'])
             ->name('subscriptions.renew');
 
@@ -126,12 +166,18 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('store.prices.bulk-update');
 
         // مدیریت قیمت بسته‌های پشتیبانی
-        Route::prefix('store/support-prices')->name('store.support-prices.')->controller(SupportPackagePriceController::class)->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::put('/bulk-update', 'bulkUpdate')->name('bulk-update');
-        });
+        Route::prefix('store/support-prices')
+            ->name('store.support-prices.')
+            ->controller(SupportPackagePriceController::class)
+            ->group(function () {
+                Route::get('/', 'index')
+                    ->name('index');
 
-        // ساخت مجوز 
+                Route::put('/bulk-update', 'bulkUpdate')
+                    ->name('bulk-update');
+            });
+
+        // ساخت مجوز
         Route::get('/new-license', [LicenseCreationController::class, 'index'])
             ->name('licenses.create');
 
@@ -141,23 +187,35 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::post('/new-license/{user}', [LicenseCreationController::class, 'store'])
             ->name('new-licenses.store');
 
-        // مدیریت دیتابیس (بک‌آپ و ریستور)
-        Route::prefix('database')->name('database.')->group(function () {
-            Route::get('/', [DatabaseBackupController::class, 'index'])->name('index');
-            Route::get('/export', [DatabaseBackupController::class, 'export'])->name('export');
-            Route::post('/import', [DatabaseBackupController::class, 'import'])->name('import');
-        });
-        
-        // مانیتورینگ سایت و سرور 
-        Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+        // مدیریت دیتابیس
+        Route::prefix('database')
+            ->name('database.')
+            ->group(function () {
+                Route::get('/', [DatabaseBackupController::class, 'index'])
+                    ->name('index');
 
-        // مدیریت دسته‌بندی‌های وبلاگ (لیست، ایجاد، ویرایش، بروزرسانی و حذف)
-        Route::resource('categories', CategoryController::class)->except(['create', 'show']);
+                Route::get('/export', [DatabaseBackupController::class, 'export'])
+                    ->name('export');
+
+                Route::post('/import', [DatabaseBackupController::class, 'import'])
+                    ->name('import');
+            });
+
+        // مانیتورینگ سایت و سرور
+        Route::get('/monitoring', [MonitoringController::class, 'index'])
+            ->name('monitoring.index');
+
+        // مدیریت دسته‌بندی‌های وبلاگ
+        Route::resource('categories', CategoryController::class)
+            ->except(['create', 'show']);
 
         // مدیریت مقالات وبلاگ
         Route::resource('posts', PostController::class);
-        Route::post('posts/upload-image', [PostController::class, 'uploadContentImage'])->name('posts.upload-image');
-        
+
+        Route::post(
+            'posts/upload-image',
+            [PostController::class, 'uploadContentImage']
+        )->name('posts.upload-image');
     });
 
 require __DIR__ . '/auth.php';

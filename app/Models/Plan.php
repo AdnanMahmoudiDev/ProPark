@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\PlanPrice;
 use App\Models\Subscription;
 use App\Models\Cart;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Plan extends Model
 {
@@ -42,4 +43,12 @@ class Plan extends Model
     {
         return $this->hasMany(Cart::class);
     }
+    /**
+     *  ایتم‌های سفارش مرتبط با این پلن
+     */
+    public function orderItems(): MorphMany
+    {
+        return $this->morphMany(OrderItem::class, 'purchasable');
+    }
+
 }

@@ -10,6 +10,8 @@ use App\Models\Subscription;
 use App\Models\Cart;
 use App\Models\License;
 use App\Notifications\CustomVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -75,5 +77,21 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(License::class);
     }
+        /**
+     * سفارش‌های کاربر
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * پرداخت‌های کاربر
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }
 

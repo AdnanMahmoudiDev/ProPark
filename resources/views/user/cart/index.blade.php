@@ -16,12 +16,12 @@
 
     /*
     |--------------------------------------------------------------------------
-    | داده‌های محصول انتخاب‌شده
+    | اطلاعات محصول انتخاب‌شده
     |--------------------------------------------------------------------------
     */
     $itemTitle = $isSupportOrder
         ? ($supportPackage?->title ?? __('cart_support_package'))
-        : ($plan?->title ?? '—');
+        : ($plan?->title ?? __('cart_unknown_plan'));
 
     $basePrice = $isSupportOrder
         ? ($supportPackage?->original_price ?? $supportPackage?->price ?? 0)
@@ -36,7 +36,10 @@
     | محاسبه مبلغ تخفیف
     |--------------------------------------------------------------------------
     */
-    $discountAmount = max((float) $basePrice - (float) $finalPrice, 0);
+    $discountAmount = max(
+        (float) $basePrice - (float) $finalPrice,
+        0
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +56,7 @@
 
     /*
     |--------------------------------------------------------------------------
-    | وضعیت معتبر بودن آیتم سبد
+    | اعتبارسنجی آیتم سبد خرید
     |--------------------------------------------------------------------------
     */
     $hasValidCartItem = $cart && (
@@ -63,7 +66,10 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <div dir="{{ $direction }}" class="{{ $align }}">
+        <div
+            dir="{{ $direction }}"
+            class="{{ $align }}"
+        >
             <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                 {{ __('cart_title') }}
             </h2>
@@ -83,12 +89,15 @@
                         $messageClasses = [
                             'success' => 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
                             'warning' => 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-                            'error'   => 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+                            'error' => 'border-rose-500/30 bg-rose-500/10 text-rose-300',
                         ][$type];
                     @endphp
 
-                    <div class="mb-4 rounded-2xl border px-4 py-3 text-sm shadow-sm {{ $messageClasses }} {{ $align }}">
-                        <span>{{ session($type) }}</span>
+                    <div
+                        class="mb-4 rounded-2xl border px-4 py-3 text-sm shadow-sm {{ $messageClasses }} {{ $align }}"
+                        role="alert"
+                    >
+                        {{ session($type) }}
                     </div>
                 @endif
             @endforeach
@@ -109,13 +118,13 @@
                                 </p>
                             </div>
 
-                            {{-- نوع سفارش (بج بالا) --}}
+                            {{-- نوع سفارش --}}
                             @if ($isSupportOrder)
-                                <span class="inline-flex items-center self-start rounded-full border border-sky-500/25 bg-sky-500/10 px-3.5 py-1.5 text-xs font-semibold text-sky-300 md:self-auto shadow-sm">
+                                <span class="inline-flex items-center self-start rounded-full border border-sky-500/25 bg-sky-500/10 px-3.5 py-1.5 text-xs font-semibold text-sky-300 shadow-sm md:self-auto">
                                     {{ __('cart_support_purchase_badge') }}
                                 </span>
                             @else
-                                <span class="inline-flex items-center self-start rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 md:self-auto shadow-sm">
+                                <span class="inline-flex items-center self-start rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 shadow-sm md:self-auto">
                                     {{ __('cart_license_purchase_badge') }}
                                 </span>
                             @endif
@@ -246,8 +255,11 @@
                         {{-- اقدامات --}}
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-                            {{-- لغو سبد --}}
-                            <form action="{{ route('user.cart.cancel') }}" method="POST">
+                            {{-- لغو سبد خرید --}}
+                            <form
+                                action="{{ route('user.cart.cancel') }}"
+                                method="POST"
+                            >
                                 @csrf
                                 @method('DELETE')
 
@@ -260,7 +272,10 @@
                             </form>
 
                             {{-- پرداخت نهایی --}}
-                            <form action="{{ route('user.cart.checkout') }}" method="POST">
+                            <form
+                                action="{{ route('payment.checkout') }}"
+                                method="POST"
+                            >
                                 @csrf
 
                                 <button
@@ -292,7 +307,7 @@
                                 href="{{ route('shop') }}"
                                 class="group inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40"
                             >
-                                <span>{{ __('cart_view_plans_button') }}</span>
+                                {{ __('cart_view_plans_button') }}
                             </a>
                         </div>
                     </div>
