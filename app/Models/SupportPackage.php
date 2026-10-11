@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class SupportPackage extends Model
 {
@@ -59,4 +60,12 @@ class SupportPackage extends Model
 
         return (int) max(0, $base - $this->price);
     }
+    /**
+     * آیتم‌های سفارش مرتبط با این پکیج پشتیبانی
+     */
+    public function orderItems(): MorphMany
+    {
+        return $this->morphMany(OrderItem::class, 'purchasable');
+    }
+
 }
