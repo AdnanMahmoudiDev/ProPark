@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'license' => [
+        'demo_key' => env('AVAPARK_DEMO_LICENSE_KEY', 'AVAPARK-DEMO-TRIAL'),
+    ],
+
 ];

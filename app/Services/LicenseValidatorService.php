@@ -27,13 +27,13 @@ class LicenseValidatorService
     /**
      * کلید ثابت لایسنس دمو.
      *
-     * مقدار اصلی از فایل .env خوانده می‌شود.
+     * مقدار از فایل config/services.php خوانده می‌شود.
      */
     private function demoLicenseKey(): string
     {
-        return strtoupper(trim((string) env(
-            'PROPARK_DEMO_LICENSE_KEY',
-            'PROPARK-DEMO-TRIAL'
+        return strtoupper(trim((string) config(
+            'services.license.demo_key',
+            'AVAPARK-DEMO-TRIAL'
         )));
     }
 
