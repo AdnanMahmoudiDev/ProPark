@@ -579,7 +579,9 @@
     "cart_months": "ماه",
     "cart_support_package": "بسته پشتیبانی",
     "cart_license_notice_activation": "با تایید نهایی، لایسنس به پروفایل شما اضافه خواهد شد.",
-    "cart_support_notice_activation": "با تایید نهایی، پشتیبانی به حساب کاربری شما اضافه خواهد شد."
-
-
+    "cart_support_notice_activation": "با تایید نهایی، پشتیبانی به حساب کاربری شما اضافه خواهد شد.",
+    "cart_unknown_plan": "پلن نامشخص",
+    "cart_select_gateway": "انتخاب درگاه پرداخت آنلاین",
+    "cart_gateway_sep": "درگاه پرداخت اینترنتی سامان کیش (سپ)",
+    "cart_gateway_sep_desc": "پرداخت امن با کلیه کارت‌های عضو شتاب"
 }

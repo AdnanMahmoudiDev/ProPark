@@ -578,9 +578,9 @@
     "cart_notice_rights": "All rights to this purchase are reserved for you.",
     "cart_cancel_button": "Cancel Order",
     "cart_checkout_button": "Confirm and Pay",
-    "cart_view_plans_button": "View Plans"
-
-
-
-
+    "cart_view_plans_button": "View Plans",
+    "cart_unknown_plan": "Unknown Plan",
+    "cart_select_gateway": "Select Online Payment Gateway",
+    "cart_gateway_sep": "Saman Electronic Payment (SEP)",
+    "cart_gateway_sep_desc": "Secure payment with all Shetab bank cards"
 }

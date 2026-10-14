@@ -21,6 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminMiddleware::class,
         ]);
 
+        // استثنا کردن روت کال‌بک درگاه پرداخت از بررسی توکن CSRF (پشتیبانی از بازگشت POST شاپرک/سپ)
+        $middleware->validateCsrfTokens(except: [
+            'payment/callback/*',
+        ]);
+
         // افزودن میدل‌ویر تغییر زبان به پایپ‌لاین وب
         $middleware->web(append: [
             SetLocale::class,

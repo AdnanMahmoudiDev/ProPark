@@ -61,6 +61,10 @@ Route::get('/terms', [PageController::class, 'terms'])
 Route::get('/privacy', [PageController::class, 'privacy'])
     ->name('privacy');
 
+// کال‌بک بازگشت از درگاه پرداخت (پذیرش GET و POST و خارج از احراز هویت برای جلوگیری از خطای سشن شاپرک)
+Route::match(['get', 'post'], '/payment/callback/{order}', [PaymentController::class, 'callback'])
+    ->name('payment.callback');
+
 // مسیرهای کاربر عادی
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -97,16 +101,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('checkout');
         });
 
-    // پرداخت
+    // شروع فرآیند پرداخت
     Route::prefix('payment')
         ->name('payment.')
         ->controller(PaymentController::class)
         ->group(function () {
             Route::post('/checkout', 'checkout')
                 ->name('checkout');
-
-            Route::get('/callback/{order}', 'callback')
-                ->name('callback');
         });
 
     // مدیریت پروفایل

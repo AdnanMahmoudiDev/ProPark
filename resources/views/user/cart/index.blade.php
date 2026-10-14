@@ -220,6 +220,40 @@
                             </div>
                         </div>
 
+                        {{-- انتخاب درگاه پرداخت --}}
+                        <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-5 {{ $align }}">
+                            <div class="mb-3 text-xs font-medium text-slate-400">
+                                {{ __('cart_select_gateway') }}
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label class="group relative flex cursor-pointer items-center justify-between rounded-xl border border-blue-500/40 bg-blue-500/10 p-3.5 transition hover:border-blue-500">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-700/60 bg-white p-1.5 shadow-sm transition-transform duration-200 group-hover:scale-105">
+                                            <img 
+                                                src="{{ asset('images/gateways/sep.jpg') }}" 
+                                                alt="{{ __('cart_gateway_sep') }}" 
+                                                class="h-full w-full object-contain"
+                                                loading="lazy"
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <div class="text-sm font-semibold text-white">
+                                                {{ __('cart_gateway_sep') }}
+                                            </div>
+                                            <div class="text-xs text-slate-400">
+                                                {{ __('cart_gateway_sep_desc') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="h-4 w-4 rounded-full border-2 border-blue-500 flex items-center justify-center">
+                                        <div class="h-2 w-2 rounded-full bg-blue-500"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
                         {{-- مبلغ قابل پرداخت --}}
                         <div class="rounded-3xl border border-blue-500/20 bg-gradient-to-l from-blue-500/10 to-slate-900 p-5 shadow-lg shadow-blue-900/10">
                             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -277,6 +311,7 @@
                                 method="POST"
                             >
                                 @csrf
+                                <input type="hidden" name="gateway" value="sep">
 
                                 <button
                                     type="submit"
