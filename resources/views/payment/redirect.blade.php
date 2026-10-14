@@ -4,14 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    {{-- تضمین عدم ارسال پیشوند www به شاپرک --}}
-    <script>
-        if (window.location.hostname.startsWith('www.')) {
-            window.location.replace(window.location.href.replace('www.', ''));
-        }
-    </script>
-
-    {{-- ارسال دقیق Origin (https://avapark.ir/) به شاپرک بدون ساب‌مسیرها --}}
+    {{-- ارسال تنها Origin به شاپرک جهت تطابق با دامنه تعریف شده --}}
     <meta name="referrer" content="origin">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ __('در حال انتقال به درگاه بانکی...') }}</title>
@@ -39,7 +32,7 @@
             {{ __('لطفاً چند لحظه شکیبا باشید؛ شما به صورت خودکار به درگاه امن پرداخت منتقل می‌شوید...') }}
         </p>
 
-        {{-- فرم انتقال امن شاپرک --}}
+        {{-- فرم انتقال مستقیم به شاپرک --}}
         <form id="gatewayForm" action="{{ $action }}" method="{{ $method }}">
             @foreach($inputs as $key => $value)
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
@@ -62,10 +55,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // اگر دامنه شامل www بود صبر کن تا ریدایرکت جاوااسکریپتی بالا اجرا شود
-            if (window.location.hostname.startsWith('www.')) {
-                return;
-            }
             const form = document.getElementById('gatewayForm');
             if (form) {
                 form.submit();
