@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -33,14 +32,14 @@ class PaymentService
      */
     public function initiatePayment(Order $order, ?string $driver = null): array
     {
-        $driver = $driver ?: config('payment.default', 'zarinpal');
+        $driver = $driver ?: config('payment.default', 'sep');
 
         // اگر مبلغ سفارش صفر باشد (مثلاً ۱۰۰٪ تخفیف یا پلن رایگان)
         if ($order->payable_amount <= 0) {
             return $this->handleFreeOrder($order);
         }
 
-        // ۱. ساخت Invoice پکیج Multipay با مبلغ سفارش (به تومان)
+        // ۱. ساخت Invoice پکیج Multipay با مبلغ سفارش (به تومان بر اساس تنظیمات درگاه)
         $invoice = (new Invoice)
             ->amount((int) $order->payable_amount)
             ->detail('order_id', $order->id)
@@ -58,7 +57,7 @@ class PaymentService
 
         $callbackUrl = route('payment.callback', ['order' => $order->id]);
 
-        // ۲. ارسال به درگاه، دریافت شناسه تراکنش (Authority/Token) و هدایت
+        // ۲. ارسال به درگاه، دریافت شناسه تراکنش (Token / Authority) و هدایت
         try {
             $paymentDriver = ShetabitPayment::via($driver)->callbackUrl($callbackUrl);
 
@@ -69,7 +68,7 @@ class PaymentService
             $redirection = $paymentDriver->purchase(
                 $invoice,
                 function ($driverInstance, $transactionId) use ($order, $driver, &$paymentReceipt, $callbackUrl) {
-                    // ثبت تراکنش در جدول payments به صورت pending با ستون‌های واقعی دیتابیس
+                    // ثبت تراکنش در جدول payments به صورت pending با ستون‌های استاندارد دیتابیس
                     $paymentReceipt = Payment::create([
                         'user_id'         => $order->user_id,
                         'order_id'        => $order->id,
@@ -115,7 +114,7 @@ class PaymentService
                 'error'    => $e->getMessage(),
             ]);
 
-            throw new Exception('خطا در اتصال به درگاه پرداخت: ' . $e->getMessage());
+            throw new Exception(__('خطا در اتصال به درگاه پرداخت: :message', ['message' => $e->getMessage()]));
         }
     }
 
@@ -124,24 +123,50 @@ class PaymentService
      *
      * @param Order $order
      * @param array $callbackData
-     * @return array [ 'success' => bool, 'message' => string, 'payment' => Payment ]
+     * @return array [ 'success' => bool, 'message' => string, 'payment' => Payment|null, 'reference_id' => string|null ]
      */
     public function verifyPayment(Order $order, array $callbackData): array
     {
-        // دریافت authority از پارامترهای callback (زرین‌پال معمولاً Authority یا authority می‌فرستد)
-        $authority = $callbackData['Authority'] ?? $callbackData['authority'] ?? null;
+        // دریافت authority/token از پارامترهای بازگشتی:
+        // در درگاه سپ: RefNum یا ResNum
+        // در زرین‌پال: Authority یا authority
+        $authority = $callbackData['RefNum']
+            ?? $callbackData['Authority']
+            ?? $callbackData['authority']
+            ?? $callbackData['token']
+            ?? $callbackData['Token']
+            ?? null;
 
-        // جستجوی آخرین پرداخت pending بر اساس authority یا آخرین رکورد سفارش
+        // بررسی اختصاصی وضعیت بازگشتی درگاه سپ (سامان کیش)
+        // اگر State مقدار OK نداشته باشد، کاربر فرآیند را لغو کرده یا خطای بانکی رخ داده است
+        if (isset($callbackData['State']) && strtoupper((string) $callbackData['State']) !== 'OK') {
+            $statusDescription = $callbackData['State'];
+            return [
+                'success' => false,
+                'message' => __('تراکنش توسط درگاه لغو شد یا ناموفق بود (وضعیت: :state)', ['state' => $statusDescription]),
+                'payment' => null,
+            ];
+        }
+
+        // جستجوی آخرین پرداخت معلق بر اساس authority یا آخرین رکورد معلق سفارش
         $paymentQuery = $order->payments()->where('status', 'pending');
         if ($authority) {
-            $paymentQuery->where('authority', $authority);
+            $paymentQuery->where(function ($q) use ($authority) {
+                $q->where('authority', $authority)
+                  ->orWhere('request_payload->transaction_id', $authority);
+            });
         }
         $payment = $paymentQuery->latest('id')->first();
+
+        // اگر با شناسه مستقیم پیدا نشد، آخرین پرداخت pending این سفارش را برمی‌داریم
+        if (!$payment) {
+            $payment = $order->payments()->where('status', 'pending')->latest('id')->first();
+        }
 
         if (!$payment) {
             return [
                 'success' => false,
-                'message' => 'تراکنش معتبری برای این سفارش یافت نشد یا قبلاً پردازش شده است.',
+                'message' => __('تراکنش معتبری برای این سفارش یافت نشد یا قبلاً پردازش شده است.'),
                 'payment' => null,
             ];
         }
@@ -149,7 +174,7 @@ class PaymentService
         try {
             $authorityToVerify = $payment->authority ?: $authority;
 
-            // وریفای توسط درگاه با استفاده از authority ذخیره شده
+            // اعتبارسنجی تراکنش توسط درگاه مربوطه
             $receipt = ShetabitPayment::via($payment->gateway)
                 ->amount((int) $payment->amount)
                 ->transactionId($authorityToVerify)
@@ -158,7 +183,7 @@ class PaymentService
             $referenceId = (string) $receipt->getReferenceId();
 
             return DB::transaction(function () use ($order, $payment, $referenceId, $callbackData) {
-                // ۱. به‌روزرسانی رکورد Payment با ستون‌های استاندارد جدول
+                // ۱. به‌روزرسانی رکورد Payment با اطلاعات دریافتی
                 $payment->update([
                     'reference_id'     => $referenceId,
                     'status'           => 'completed',
@@ -180,7 +205,7 @@ class PaymentService
 
                 return [
                     'success'      => true,
-                    'message'      => 'پرداخت با موفقیت انجام شد.',
+                    'message'      => __('پرداخت با موفقیت انجام شد.'),
                     'reference_id' => $referenceId,
                     'payment'      => $payment,
                 ];
@@ -205,7 +230,7 @@ class PaymentService
 
             return [
                 'success' => false,
-                'message' => $e->getMessage() ?: 'پرداخت توسط درگاه تأیید نشد یا توسط کاربر لغو گردید.',
+                'message' => $e->getMessage() ?: __('پرداخت توسط درگاه تأیید نشد یا توسط کاربر لغو گردید.'),
                 'payment' => $payment,
             ];
         } catch (Exception $e) {
@@ -227,7 +252,7 @@ class PaymentService
 
             return [
                 'success' => false,
-                'message' => 'خطای سیستمی در تأیید پرداخت: ' . $e->getMessage(),
+                'message' => __('خطای سیستمی در تأیید پرداخت: :message', ['message' => $e->getMessage()]),
                 'payment' => $payment,
             ];
         }
