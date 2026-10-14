@@ -74,7 +74,7 @@ class PaymentController extends Controller
                         'inputs' => $redirection->getInputs(),
                     ])
                     ->withHeaders([
-                        'Referrer-Policy' => 'unsafe-url',
+                        'Referrer-Policy' => 'origin',
                     ]);
             }
 

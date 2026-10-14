@@ -3,8 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- الزام مرورگر به ارسال هدر رفرر کامل به درگاه شاپرک --}}
-    <meta name="referrer" content="unsafe-url">
+    
+    {{-- تضمین عدم ارسال پیشوند www به شاپرک --}}
+    <script>
+        if (window.location.hostname.startsWith('www.')) {
+            window.location.replace(window.location.href.replace('www.', ''));
+        }
+    </script>
+
+    {{-- ارسال دقیق Origin (https://avapark.ir/) به شاپرک بدون ساب‌مسیرها --}}
+    <meta name="referrer" content="origin">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ __('در حال انتقال به درگاه بانکی...') }}</title>
     @vite(['resources/css/app.css'])
@@ -54,6 +62,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // اگر دامنه شامل www بود صبر کن تا ریدایرکت جاوااسکریپتی بالا اجرا شود
+            if (window.location.hostname.startsWith('www.')) {
+                return;
+            }
             const form = document.getElementById('gatewayForm');
             if (form) {
                 form.submit();
