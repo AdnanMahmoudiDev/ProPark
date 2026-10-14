@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- الزام مرورگر به ارسال هدر رفرر کامل به درگاه شاپرک --}}
-    <meta name="referrer" content="unsafe-url">
+    
+    {{-- ارسال تنها Origin به شاپرک جهت تطابق با دامنه تعریف شده --}}
+    <meta name="referrer" content="origin">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ __('در حال انتقال به درگاه بانکی...') }}</title>
     @vite(['resources/css/app.css'])
@@ -31,7 +32,7 @@
             {{ __('لطفاً چند لحظه شکیبا باشید؛ شما به صورت خودکار به درگاه امن پرداخت منتقل می‌شوید...') }}
         </p>
 
-        {{-- فرم انتقال امن شاپرک --}}
+        {{-- فرم انتقال مستقیم به شاپرک --}}
         <form id="gatewayForm" action="{{ $action }}" method="{{ $method }}">
             @foreach($inputs as $key => $value)
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
