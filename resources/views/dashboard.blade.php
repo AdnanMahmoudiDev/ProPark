@@ -46,6 +46,37 @@
     <div class="min-h-screen bg-[#0b0f19] py-10">
         <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
 
+            {{-- پیام‌های وضعیت سشن (موفقیت یا خطا) --}}
+            @if (session('success'))
+                <div class="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-emerald-950/40 p-4 text-emerald-300 shadow-xl backdrop-blur-md">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/40 bg-emerald-500/20">
+                            <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-sm font-semibold leading-relaxed">
+                            {{ session('success') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="relative overflow-hidden rounded-2xl border border-rose-500/30 bg-rose-950/40 p-4 text-rose-300 shadow-xl backdrop-blur-md">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-rose-500/40 bg-rose-500/20">
+                            <svg class="h-5 w-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-sm font-semibold leading-relaxed">
+                            {{ session('error') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             {{-- خوشامد گویی --}}
             <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-gray-900 to-gray-950 p-7 shadow-2xl">
                 <div class="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-700/10 blur-3xl"></div>
