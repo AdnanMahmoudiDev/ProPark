@@ -30,7 +30,7 @@ class PaymentController extends Controller
     {
         $user = Auth::user();
 
-        // دریافت سبد خرید کاربر
+        // دریافت سبد خرید معلق کاربر
         $cart = Cart::where('user_id', $user->id)
             ->where('status', Cart::STATUS_PENDING)
             ->first();
@@ -44,12 +44,12 @@ class PaymentController extends Controller
             // ۱. تبدیل سبد خرید به سفارش قطعی
             $order = $this->orderService->createOrderFromCart($cart);
 
-            // ۲. تعیین درگاه پرداخت و شروع تراکنش
-            $driver = $request->input('gateway', config('payment.default', 'zarinpal'));
+            // ۲. تعیین درگاه پرداخت بر اساس درخواست یا پیش‌فرض کانفیگ
+            $driver = $request->input('gateway', config('payment.default', 'sep'));
             $result = $this->paymentService->initiatePayment($order, $driver);
 
             // اگر سفارش رایگان بود، مستقیم به داشبورد هدایت شود
-            if ($result['is_free']) {
+            if (!empty($result['is_free'])) {
                 return redirect()->route('dashboard')
                     ->with('success', __('سفارش شما با موفقیت و بدون هزینه ثبت و فعال گردید.'));
             }
@@ -68,15 +68,24 @@ class PaymentController extends Controller
      */
     public function callback(Request $request, Order $order): RedirectResponse
     {
-        // اطمینان از تعلق سفارش به کاربر جاری وارد شده
-        if (Auth::id() !== $order->user_id) {
+        // در صورتی که سشن به دلیل ارسال POST از دامنه خارجی منقضی/ارسال نشده باشد،
+        // کاربر مالک سفارش به طور امن لاگین می‌شود.
+        if (!Auth::check()) {
+            Auth::loginUsingId($order->user_id);
+        } elseif (Auth::id() !== $order->user_id) {
             abort(403, __('شما دسترسی به این سفارش را ندارید.'));
         }
 
-        // اعتبارسنجی تراکنش توسط سرویس پرداخت
+        // جلوگیری از تکرار فرآیند اعتبارسنجی در صورت رفرش صفحه یا پردازش قبلی
+        if (defined(Order::class . '::STATUS_PAID') && $order->status === Order::STATUS_PAID) {
+            return redirect()->route('dashboard')
+                ->with('success', __('این سفارش قبلاً با موفقیت پرداخت و ثبت گردیده است.'));
+        }
+
+        // اعتبارسنجی تراکنش توسط سرویس پرداخت با ارسال کل داده‌های Request (متدهای GET و POST)
         $result = $this->paymentService->verifyPayment($order, $request->all());
 
-        if ($result['success']) {
+        if (!empty($result['success'])) {
             return redirect()->route('dashboard')
                 ->with('success', __(
                     'پرداخت با موفقیت انجام شد. شماره پیگیری: :ref',
@@ -88,7 +97,7 @@ class PaymentController extends Controller
         return redirect()->route('user.cart.index')
             ->with('error', __(
                 'پرداخت ناموفق بود یا توسط شما لغو شد: :message',
-                ['message' => $result['message']]
+                ['message' => $result['message'] ?? __('خطایی در انجام تراکنش رخ داد.')]
             ));
     }
 }
