@@ -61,18 +61,21 @@ class PaymentController extends Controller
             }
 
             /*
-             * درگاه سپ باید با POST و پارامترهای فرم فراخوانی شود.
-             * بنابراین فرم آماده‌شده توسط پکیج را به مرورگر برمی‌گردانیم،
-             * نه اینکه فقط با GET به آدرس درگاه redirect کنیم.
+             * رندر ویوی واسط همراه با متاتگ و هدر صریح Referrer-Policy
+             * برای اطمینان از ارسال مقدار دامنه (https://avapark.ir) به شاپرک
              */
             $redirection = $result['redirection'] ?? null;
 
             if ($redirection instanceof RedirectionForm) {
-                return response(
-                    $redirection->render(),
-                    Response::HTTP_OK,
-                    ['Content-Type' => 'text/html; charset=UTF-8']
-                );
+                return response()
+                    ->view('payment.redirect', [
+                        'action' => $redirection->getAction(),
+                        'method' => $redirection->getMethod(),
+                        'inputs' => $redirection->getInputs(),
+                    ])
+                    ->withHeaders([
+                        'Referrer-Policy' => 'unsafe-url',
+                    ]);
             }
 
             /*
