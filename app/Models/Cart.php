@@ -27,7 +27,6 @@ class Cart extends Model
 
         // plan purchase
         'plan_id',
-        'plan_price_id',
 
         // support package purchase
         'support_package_id',
@@ -41,7 +40,6 @@ class Cart extends Model
         'user_id'            => 'integer',
 
         'plan_id'            => 'integer',
-        'plan_price_id'      => 'integer',
 
         'support_package_id' => 'integer',
 
@@ -63,11 +61,6 @@ class Cart extends Model
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
-    }
-
-    public function planPrice(): BelongsTo
-    {
-        return $this->belongsTo(PlanPrice::class);
     }
 
     /**

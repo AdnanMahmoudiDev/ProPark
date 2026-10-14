@@ -6,7 +6,6 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Plan;
-use App\Models\PlanPrice;
 use App\Models\SupportPackage;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -67,36 +66,26 @@ class OrderService
     {
         if ($cart->plan_id) {
             $plan = $cart->plan ?? Plan::findOrFail($cart->plan_id);
-            $planPrice = $cart->planPrice;
 
-            // اگر plan_price_id ست نشده بود، اولین قیمت فعال پلن را بردار
-            if (!$planPrice && $cart->plan_price_id) {
-                $planPrice = PlanPrice::find($cart->plan_price_id);
-            }
-            if (!$planPrice) {
-                $planPrice = $plan->prices()->where('is_active', true)->orderBy('sort_order')->first();
-            }
+            // قیمت مستقیماً از خود پلن خوانده می‌شود (بعد از ریفکتور حذف plan_prices)
+            $unitPrice = (int) ($plan->original_price ?: $plan->price);
+            $finalAmount = (int) $plan->price;
+            $discountAmount = max(0, $unitPrice - $finalAmount);
 
-            if (!$planPrice) {
+            if ($finalAmount <= 0) {
                 throw new InvalidArgumentException('قیمت معتبری برای این پلن یافت نشد.');
             }
-
-            $unitPrice = (int) ($planPrice->original_price ?: $planPrice->price);
-            $finalAmount = (int) $planPrice->price;
-            $discountAmount = max(0, $unitPrice - $finalAmount);
 
             return [
                 'purchasable_type' => Plan::class,
                 'purchasable_id'   => $plan->id,
-                'title'            => $plan->title . ' (' . ($planPrice->duration_label ?? ($planPrice->duration_months . ' ماهه')) . ')',
+                'title'            => $plan->title,
                 'unit_price'       => $unitPrice,
                 'discount_amount'  => $discountAmount,
                 'final_amount'     => $finalAmount,
                 'metadata'         => [
-                    'plan_id'         => $plan->id,
-                    'plan_price_id'   => $planPrice->id,
-                    'duration_months' => $planPrice->duration_months,
-                    'action_type'     => $cart->type,
+                    'plan_id'     => $plan->id,
+                    'action_type' => $cart->type,
                 ],
             ];
         }
