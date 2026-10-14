@@ -104,8 +104,14 @@ class PaymentController extends Controller
      */
     public function callback(Request $request, Order $order): RedirectResponse
     {
-        // اگر کاربر وارد شده باشد، فقط اجازهٔ دسترسی به سفارش خودش را دارد.
-        if (Auth::check() && Auth::id() !== $order->user_id) {
+        // بازیابی احراز هویت کاربر صاحب سفارش در صورت گم‌شدن سشن در بازگشت POST شاپرک
+        if (!Auth::check() && $order->user) {
+            Auth::login($order->user);
+            $request->session()->regenerate();
+        }
+
+        // اگر کاربر لاگین شده کاربری به جز صاحب سفارش باشد، دسترسی مسدود می‌شود
+        if (Auth::check() && (int) Auth::id() !== (int) $order->user_id) {
             abort(403, __('شما دسترسی به این سفارش را ندارید.'));
         }
 
