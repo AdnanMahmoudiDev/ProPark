@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'default' => env('PAYMENT_DEFAULT', 'zarinpal'),
+    'default' => env('PAYMENT_DEFAULT', 'sep'),
 
     /*
     |--------------------------------------------------------------------------
@@ -307,10 +307,10 @@ return [
             'apiGetToken' => 'https://sep.shaparak.ir/onlinepg/onlinepg',
             'apiPaymentUrl' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
             'apiVerificationUrl' => 'https://sep.shaparak.ir/verifyTxnRandomSessionkey/ipg/VerifyTransaction',
-            'terminalId' => '',
-            'callbackUrl' => '',
-            'description' => 'Saman Electronic Payment for Saderat & Keshavarzi',
-            'currency' => 'T',
+            'terminalId' => env('SEP_TERMINAL_ID', '15857460'),
+            'callbackUrl' => env('SEP_CALLBACK_URL', ''),
+            'description' => env('SEP_DESCRIPTION', 'پرداخت سفارش سامانه ProPark از طریق درگاه سپ'),
+            'currency' => env('SEP_CURRENCY', 'T'),
         ],
 
         'sepehr' => [
