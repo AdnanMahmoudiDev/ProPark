@@ -15,18 +15,19 @@ class InvoiceController extends Controller
      */
     public function index(Request $request): View
     {
-        // status از QueryString: /user/invoices?status=cancelled
+        // status از QueryString: /user/invoices?status=expired
         $status = $request->query('status');
 
-        // فقط وضعیت‌های مجاز را قبول می‌کنیم
+        // وضعیت‌های مجاز بر اساس ثابت‌های مدل Order
         $allowedStatuses = [
             Order::STATUS_PENDING,
             Order::STATUS_PAID,
             Order::STATUS_CANCELLED,
             Order::STATUS_FAILED,
+            Order::STATUS_EXPIRED,
         ];
 
-        // اگر status نامعتبر بود، فیلتر را حذف می‌کنیم
+        // اگر status نامعتبر بود، فیلتر را نادیده می‌گیریم
         if (!is_null($status) && !in_array($status, $allowedStatuses, true)) {
             $status = null;
         }
