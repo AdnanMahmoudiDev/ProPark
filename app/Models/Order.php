@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends Model
 {
     use HasFactory;
+    
+    // وضعیت‌های استاندارد سفارش
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_PAID      = 'paid';
+    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_FAILED    = 'failed';
 
     protected $fillable = [
         'user_id',
