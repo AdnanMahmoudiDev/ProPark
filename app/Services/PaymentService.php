@@ -137,23 +137,12 @@ class PaymentService
             ?? $callbackData['Token']
             ?? null;
 
-        // بررسی اختصاصی وضعیت بازگشتی درگاه سپ (سامان کیش)
-        // اگر State مقدار OK نداشته باشد، کاربر فرآیند را لغو کرده یا خطای بانکی رخ داده است
-        if (isset($callbackData['State']) && strtoupper((string) $callbackData['State']) !== 'OK') {
-            $statusDescription = $callbackData['State'];
-            return [
-                'success' => false,
-                'message' => __('تراکنش توسط درگاه لغو شد یا ناموفق بود (وضعیت: :state)', ['state' => $statusDescription]),
-                'payment' => null,
-            ];
-        }
-
         // جستجوی آخرین پرداخت معلق بر اساس authority یا آخرین رکورد معلق سفارش
         $paymentQuery = $order->payments()->where('status', 'pending');
         if ($authority) {
             $paymentQuery->where(function ($q) use ($authority) {
                 $q->where('authority', $authority)
-                  ->orWhere('request_payload->transaction_id', $authority);
+                    ->orWhere('request_payload->transaction_id', $authority);
             });
         }
         $payment = $paymentQuery->latest('id')->first();
@@ -161,6 +150,46 @@ class PaymentService
         // اگر با شناسه مستقیم پیدا نشد، آخرین پرداخت pending این سفارش را برمی‌داریم
         if (!$payment) {
             $payment = $order->payments()->where('status', 'pending')->latest('id')->first();
+        }
+
+        /**
+         * بررسی اختصاصی وضعیت بازگشتی درگاه سپ (سامان کیش)
+         * اگر State مقدار OK نداشته باشد، کاربر فرآیند را لغو کرده یا خطای بانکی رخ داده است.
+         *
+         * نکته: باگ قبلی اینجا بود؛ قبل از آپدیت Order/Payment return می‌شد.
+         */
+        if (isset($callbackData['State']) && strtoupper((string) $callbackData['State']) !== 'OK') {
+            $statusDescription = (string) $callbackData['State'];
+
+            // اگر پیام حالت انصراف کاربر را داشته باشد => cancelled، در غیر اینصورت failed
+            $isCanceledByUser =
+                stripos($statusDescription, 'Canceled') !== false
+                || stripos($statusDescription, 'Cancel') !== false;
+
+            $orderStatus = $isCanceledByUser ? 'cancelled' : 'failed';
+
+            DB::transaction(function () use ($order, $payment, $callbackData, $statusDescription, $orderStatus) {
+                if ($payment) {
+                    $payment->update([
+                        'status'           => 'failed',
+                        'failure_message'  => "SEP State: {$statusDescription}",
+                        'response_payload' => array_merge($payment->response_payload ?? [], [
+                            'callback_data' => $callbackData,
+                            'failed_at'     => now()->toDateTimeString(),
+                        ]),
+                    ]);
+                }
+
+                $order->update([
+                    'status' => $orderStatus,
+                ]);
+            });
+
+            return [
+                'success' => false,
+                'message' => __('تراکنش توسط درگاه لغو شد یا ناموفق بود (وضعیت: :state)', ['state' => $statusDescription]),
+                'payment' => $payment,
+            ];
         }
 
         if (!$payment) {
@@ -210,17 +239,23 @@ class PaymentService
                     'payment'      => $payment,
                 ];
             });
-
         } catch (InvalidPaymentException $e) {
-            $payment->update([
-                'status'           => 'failed',
-                'failure_message'  => $e->getMessage(),
-                'response_payload' => array_merge($payment->response_payload ?? [], [
-                    'callback_data' => $callbackData,
-                    'error_message' => $e->getMessage(),
-                    'failed_at'     => now()->toDateTimeString(),
-                ]),
-            ]);
+            DB::transaction(function () use ($order, $payment, $callbackData, $e) {
+                $payment->update([
+                    'status'           => 'failed',
+                    'failure_message'  => $e->getMessage(),
+                    'response_payload' => array_merge($payment->response_payload ?? [], [
+                        'callback_data' => $callbackData,
+                        'error_message' => $e->getMessage(),
+                        'failed_at'     => now()->toDateTimeString(),
+                    ]),
+                ]);
+
+                // باگ قبلی: Order آپدیت نمی‌شد و pending می‌ماند
+                $order->update([
+                    'status' => 'failed',
+                ]);
+            });
 
             Log::warning('Payment verification failed (InvalidPayment)', [
                 'order_id'   => $order->id,
@@ -234,15 +269,22 @@ class PaymentService
                 'payment' => $payment,
             ];
         } catch (Exception $e) {
-            $payment->update([
-                'status'           => 'failed',
-                'failure_message'  => $e->getMessage(),
-                'response_payload' => array_merge($payment->response_payload ?? [], [
-                    'callback_data' => $callbackData,
-                    'error_message' => $e->getMessage(),
-                    'failed_at'     => now()->toDateTimeString(),
-                ]),
-            ]);
+            DB::transaction(function () use ($order, $payment, $callbackData, $e) {
+                $payment->update([
+                    'status'           => 'failed',
+                    'failure_message'  => $e->getMessage(),
+                    'response_payload' => array_merge($payment->response_payload ?? [], [
+                        'callback_data' => $callbackData,
+                        'error_message' => $e->getMessage(),
+                        'failed_at'     => now()->toDateTimeString(),
+                    ]),
+                ]);
+
+                // باگ قبلی: Order آپدیت نمی‌شد و pending می‌ماند
+                $order->update([
+                    'status' => 'failed',
+                ]);
+            });
 
             Log::error('Payment verification server error', [
                 'order_id'   => $order->id,
@@ -300,6 +342,7 @@ class PaymentService
     protected function finalizeOrderServices(Order $order): void
     {
         $user = $order->user;
+
         $cart = Cart::where('user_id', $user->id)
             ->where('status', 'pending')
             ->first();

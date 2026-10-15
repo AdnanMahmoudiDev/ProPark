@@ -15,18 +15,31 @@ class InvoiceController extends Controller
      */
     public function index(Request $request): View
     {
+        // status از QueryString: /user/invoices?status=expired
         $status = $request->query('status');
+
+        // وضعیت‌های مجاز بر اساس ثابت‌های مدل Order
+        $allowedStatuses = [
+            Order::STATUS_PENDING,
+            Order::STATUS_PAID,
+            Order::STATUS_CANCELLED,
+            Order::STATUS_FAILED,
+            Order::STATUS_EXPIRED,
+        ];
+
+        // اگر status نامعتبر بود، فیلتر را نادیده می‌گیریم
+        if (!is_null($status) && !in_array($status, $allowedStatuses, true)) {
+            $status = null;
+        }
 
         $orders = Order::query()
             ->where('user_id', Auth::id())
             ->with([
-                'user',          // برای نمایش نام/ایمیل/شماره تلفن بدون N+1
+                'user',
                 'items',
                 'latestPayment',
             ])
-            ->when($status, function ($query, $status) {
-                return $query->where('status', $status);
-            })
+            ->when($status, fn ($query) => $query->where('status', $status))
             ->latest()
             ->paginate(10)
             ->appends($request->query());
@@ -39,15 +52,12 @@ class InvoiceController extends Controller
      */
     public function show(Order $order): View
     {
-        // جلوگیری از دسترسی کاربر به فاکتورهای دیگران (IDOR protection)
         abort_if($order->user_id !== Auth::id(), 403);
 
         $order->load([
-            'user', // برای phone_number
+            'user',
             'items',
-            'payments' => function ($query) {
-                $query->latest();
-            },
+            'payments' => fn ($query) => $query->latest(),
         ]);
 
         return view('user.invoices.show', compact('order'));
