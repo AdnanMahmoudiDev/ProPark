@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends Model
 {
     use HasFactory;
-    
+
     // وضعیت‌های استاندارد سفارش
     public const STATUS_PENDING   = 'pending';
     public const STATUS_PAID      = 'paid';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_FAILED    = 'failed';
+    public const STATUS_EXPIRED   = 'expired';
 
     protected $fillable = [
         'user_id',
@@ -73,17 +74,22 @@ class Order extends Model
      */
     public function isPaid(): bool
     {
-        return $this->status === 'paid';
+        return $this->status === self::STATUS_PAID;
     }
 
     public function isCanceled(): bool
     {
-        return in_array($this->status, ['canceled', 'cancelled', 'failed']);
+        return in_array($this->status, ['canceled', self::STATUS_CANCELLED, self::STATUS_FAILED], true);
     }
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->status === self::STATUS_EXPIRED;
     }
 
     /**
@@ -100,12 +106,13 @@ class Order extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'paid'       => __('پرداخت شده'),
-            'pending'    => __('در انتظار پرداخت'),
+            self::STATUS_PAID      => __('پرداخت شده'),
+            self::STATUS_PENDING   => __('در انتظار پرداخت'),
             'canceled',
-            'cancelled'  => __('لغو شده'),
-            'failed'     => __('ناموفق'),
-            default      => ucfirst($this->status ?? 'نامشخص'),
+            self::STATUS_CANCELLED => __('لغو شده'),
+            self::STATUS_FAILED    => __('ناموفق'),
+            self::STATUS_EXPIRED   => __('منقضی شده'),
+            default                => ucfirst($this->status ?? 'نامشخص'),
         };
     }
 
@@ -115,11 +122,12 @@ class Order extends Model
     public function getStatusBadgeClassesAttribute(): string
     {
         return match ($this->status) {
-            'paid' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20',
-            'pending' => 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20',
+            self::STATUS_PAID => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20',
+            self::STATUS_PENDING => 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20',
             'canceled',
-            'cancelled' => 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
-            'failed' => 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
+            self::STATUS_CANCELLED => 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
+            self::STATUS_FAILED => 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
+            self::STATUS_EXPIRED => 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20',
             default => 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20',
         };
     }
