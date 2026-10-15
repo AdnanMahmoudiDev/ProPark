@@ -12,6 +12,7 @@ use App\Http\Controllers\User\SubscriptionDetailsController;
 use App\Http\Controllers\User\UserDeviceController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\InvoiceController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
@@ -71,6 +72,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // داشبورد کاربری
     Route::get('/dashboard', [ProfileController::class, 'dashboard'])
         ->name('dashboard');
+
+    // فاکتورها و سوابق خرید
+    Route::get('/invoices', [InvoiceController::class, 'index'])
+        ->name('user.invoices.index');
+
+    Route::get('/invoices/{order}', [InvoiceController::class, 'show'])
+        ->name('user.invoices.show');
 
     // اطلاعات بیشتر اشتراک
     Route::get('/subscription/details', [SubscriptionDetailsController::class, 'index'])
