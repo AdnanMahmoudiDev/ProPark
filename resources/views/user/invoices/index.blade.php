@@ -65,9 +65,9 @@
                     </a>
 
                     {{-- پرداخت‌شده --}}
-                    <a href="{{ route('user.invoices.index', ['status' => 'paid']) }}"
+                    <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_PAID]) }}"
                        class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
-                       {{ $status === 'paid'
+                       {{ $status === \App\Models\Order::STATUS_PAID
                             ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
                             : 'bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300' }}">
 
@@ -76,9 +76,9 @@
                     </a>
 
                     {{-- در انتظار پرداخت --}}
-                    <a href="{{ route('user.invoices.index', ['status' => 'pending']) }}"
+                    <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_PENDING]) }}"
                        class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
-                       {{ $status === 'pending'
+                       {{ $status === \App\Models\Order::STATUS_PENDING
                             ? 'bg-amber-100 text-amber-800 ring-1 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
                             : 'bg-slate-100 text-slate-600 hover:bg-amber-50 hover:text-amber-800 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-amber-500/10 dark:hover:text-amber-300' }}">
 
@@ -87,12 +87,13 @@
                     </a>
 
                     {{-- لغوشده / ناموفق --}}
-                    <a href="{{ route('user.invoices.index', ['status' => 'canceled']) }}"
-                       class="inline-flex min-h-10 items-center justify-center rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
-                       {{ in_array($status, ['canceled', 'cancelled'])
+                    <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_CANCELLED]) }}"
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       {{ in_array($status, [\App\Models\Order::STATUS_CANCELLED, \App\Models\Order::STATUS_FAILED, 'canceled'], true)
                             ? 'bg-rose-100 text-rose-800 ring-1 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'
                             : 'bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-700 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-300' }}">
 
+                        <span class="h-2 w-2 rounded-full bg-rose-500"></span>
                         {{ __('لغو شده / ناموفق') }}
                     </a>
 
@@ -123,15 +124,15 @@
                                     </div>
 
                                     @php
-                                        $invoiceStatusClasses = $order->status === 'paid'
+                                        $invoiceStatusClasses = $order->status === \App\Models\Order::STATUS_PAID
                                             ? 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
-                                            : ($order->status === 'pending'
+                                            : ($order->status === \App\Models\Order::STATUS_PENDING
                                                 ? 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
-                                                : $order->status_badge_classes);
+                                                : ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'));
                                     @endphp
 
                                     <span class="inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-bold ring-1 ring-inset {{ $invoiceStatusClasses }}">
-                                        {{ $order->status_label }}
+                                        {{ $order->status_label ?? $order->status }}
                                     </span>
                                 </div>
 
@@ -236,7 +237,7 @@
                                         {{ __('مبلغ نهایی') }}
                                     </th>
 
-                                    <th scope="col" class="whitespace-nowrap px-5 py-4 font-semibold lg:px-6">
+                                    <th scope="col" class="whitespace-nowrap px-5 py-4 text-center font-semibold lg:px-6">
                                         {{ __('تاریخ ثبت') }}
                                     </th>
 
@@ -292,7 +293,7 @@
                                         </td>
 
                                         {{-- تاریخ --}}
-                                        <td class="whitespace-nowrap px-5 py-4 text-xs text-slate-500 dark:text-slate-400 lg:px-6">
+                                        <td class="whitespace-nowrap px-5 py-4 text-center text-xs text-slate-500 dark:text-slate-400 lg:px-6">
                                             @if(function_exists('jdate'))
                                                 {{ jdate($order->created_at)->format('Y/m/d - H:i') }}
                                             @elseif(function_exists('verta'))
@@ -304,27 +305,35 @@
 
                                         {{-- وضعیت پرداخت --}}
                                         <td class="whitespace-nowrap px-5 py-4 text-center lg:px-6">
-                                            <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold ring-1 ring-inset
-                                                {{ $order->status === 'paid'
+                                            @php
+                                                $badgeClasses = $order->status === \App\Models\Order::STATUS_PAID
                                                     ? 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
-                                                    : ($order->status === 'pending'
+                                                    : ($order->status === \App\Models\Order::STATUS_PENDING
                                                         ? 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
-                                                        : $order->status_badge_classes) }}">
+                                                        : ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'));
+                                            @endphp
 
-                                                @if($order->status === 'paid')
+                                            <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold ring-1 ring-inset {{ $badgeClasses }}">
+                                                @if($order->status === \App\Models\Order::STATUS_PAID)
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                                               d="M5 13l4 4L19 7">
                                                         </path>
                                                     </svg>
-                                                @elseif($order->status === 'pending')
+                                                @elseif($order->status === \App\Models\Order::STATUS_PENDING)
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
                                                         <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 2"></path>
                                                     </svg>
+                                                @else
+                                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                              d="M6 18L18 6M6 6l12 12">
+                                                        </path>
+                                                    </svg>
                                                 @endif
 
-                                                {{ $order->status_label }}
+                                                {{ $order->status_label ?? $order->status }}
                                             </span>
                                         </td>
 
