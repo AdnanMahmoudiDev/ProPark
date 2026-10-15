@@ -102,7 +102,7 @@
                                     name="name" 
                                     x-model="name"
                                     dir="ltr"
-                                    placeholder="e.g. Adnan Mahmoudi"
+                                    placeholder="e.g. نام را به انگلیسی وارد کنید"
                                     pattern="^[A-Za-z\s]+$"
                                     title="{{ __('Please enter the name in English') }}"
                                     required 
