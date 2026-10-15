@@ -97,6 +97,17 @@
                         {{ __('لغو شده / ناموفق') }}
                     </a>
 
+                    {{-- منقضی شده --}}
+                    <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_EXPIRED]) }}"
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       {{ $status === \App\Models\Order::STATUS_EXPIRED
+                            ? 'bg-slate-200 text-slate-800 ring-1 ring-slate-400 dark:bg-slate-600 dark:text-slate-100 dark:ring-slate-500'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 dark:hover:text-slate-200' }}">
+
+                        <span class="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-300"></span>
+                        {{ __('منقضی شده') }}
+                    </a>
+
                 </div>
             </div>
 
@@ -124,11 +135,12 @@
                                     </div>
 
                                     @php
-                                        $invoiceStatusClasses = $order->status === \App\Models\Order::STATUS_PAID
-                                            ? 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
-                                            : ($order->status === \App\Models\Order::STATUS_PENDING
-                                                ? 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
-                                                : ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'));
+                                        $invoiceStatusClasses = match($order->status) {
+                                            \App\Models\Order::STATUS_PAID => 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30',
+                                            \App\Models\Order::STATUS_PENDING => 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30',
+                                            \App\Models\Order::STATUS_EXPIRED => 'bg-slate-100 text-slate-700 ring-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600',
+                                            default => ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30')
+                                        };
                                     @endphp
 
                                     <span class="inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-bold ring-1 ring-inset {{ $invoiceStatusClasses }}">
@@ -306,11 +318,12 @@
                                         {{-- وضعیت پرداخت --}}
                                         <td class="whitespace-nowrap px-5 py-4 text-center lg:px-6">
                                             @php
-                                                $badgeClasses = $order->status === \App\Models\Order::STATUS_PAID
-                                                    ? 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
-                                                    : ($order->status === \App\Models\Order::STATUS_PENDING
-                                                        ? 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
-                                                        : ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'));
+                                                $badgeClasses = match($order->status) {
+                                                    \App\Models\Order::STATUS_PAID => 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30',
+                                                    \App\Models\Order::STATUS_PENDING => 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30',
+                                                    \App\Models\Order::STATUS_EXPIRED => 'bg-slate-100 text-slate-700 ring-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600',
+                                                    default => ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30')
+                                                };
                                             @endphp
 
                                             <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold ring-1 ring-inset {{ $badgeClasses }}">
@@ -324,6 +337,12 @@
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
                                                         <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 2"></path>
+                                                    </svg>
+                                                @elseif($order->status === \App\Models\Order::STATUS_EXPIRED)
+                                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                        </path>
                                                     </svg>
                                                 @else
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
