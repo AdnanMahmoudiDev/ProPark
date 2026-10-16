@@ -582,5 +582,8 @@
     "cart_unknown_plan": "Unknown Plan",
     "cart_select_gateway": "Select Online Payment Gateway",
     "cart_gateway_sep": "Saman Electronic Payment (SEP)",
-    "cart_gateway_sep_desc": "Secure payment with all Shetab bank cards"
+    "cart_gateway_sep_desc": "Secure payment with all Shetab bank cards",
+    "dashboard_order_history": "Order History",
+    "dashboard_order_history_desc": "View invoices and order statuses"
+
 }
