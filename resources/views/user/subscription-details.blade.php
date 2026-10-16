@@ -250,44 +250,13 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 bg-[#0c111b] px-5 py-5 sm:px-8">
-                    @if(!$isActive)
-                        <a
-                            href="{{ route('shop') }}"
-                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-blue-600/25 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                        >
-                            {{ __('sub_renew') }}
-                        </a>
-                    @endif
-
-                    <button
-                        type="button"
-                        onclick="window.print()"
-                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-800/70 bg-blue-900/20 px-6 py-3 text-sm font-bold text-blue-300 shadow-lg shadow-blue-950/10 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-800/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400/40"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M6 9V4h12v5M6 18h12v2H6zm-2-8h16a2 2 0 012 2v4H2v-4a2 2 0 012-2z"
-                            />
-                        </svg>
-                        <span>{{ __('sub_print_receipt') }}</span>
-                    </button>
-                </div>
+                
             </div>
 
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-500">
                     {!! __('sub_support_help') !!}
-                    <a href="#" class="text-blue-400 transition-colors hover:text-blue-300 hover:underline">{{ __('sub_support_link') }}</a>
+                    <a href="/support" class="text-blue-400 transition-colors hover:text-blue-300 hover:underline">{{ __('sub_support_link') }}</a>
                 </p>
             </div>
         </div>
