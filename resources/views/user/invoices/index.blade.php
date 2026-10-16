@@ -2,26 +2,30 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
-                <h2 class="flex items-center gap-3 text-xl font-bold leading-tight text-slate-800 dark:text-white sm:text-2xl">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-blue-700 bg-blue-600/20">
+                        <svg class="h-6 w-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
                         </svg>
-                    </span>
+                    </div>
 
-                    {{ __('فاکتورها و سوابق خرید') }}
-                </h2>
+                    <div>
+                        <h2 class="text-2xl font-bold leading-tight text-white">
+                            {{ __('فاکتورها و سوابق خرید') }}
+                        </h2>
 
-                <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                    {{ __('لیست تمامی سفارش‌ها، فاکتورها و وضعیت پرداخت‌های شما') }}
-                </p>
+                        <p class="mt-2 text-sm leading-6 text-gray-400">
+                            {{ __('لیست تمامی سفارش‌ها، فاکتورها و وضعیت پرداخت‌های شما') }}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div class="flex">
                 <a href="{{ route('dashboard') }}"
-                   class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 sm:w-auto">
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-gray-700 bg-gray-900/70 px-4 py-2.5 text-sm font-semibold text-gray-200 transition duration-300 hover:border-blue-700/50 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400/40 sm:w-auto">
 
                     <svg class="h-4 w-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,111 +39,135 @@
         </div>
     </x-slot>
 
-    <div class="py-6 sm:py-10">
-        <div class="mx-auto max-w-7xl space-y-5 px-3 sm:space-y-6 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-[#0b0f19] py-10">
+        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+
+            {{-- هدر صفحه --}}
+            <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-gray-900 to-gray-950 p-7 shadow-2xl">
+                <div class="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-700/10 blur-3xl"></div>
+
+                <div class="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <span class="h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
+                            <span>{{ __('مدیریت سفارش‌ها و فاکتورهای حساب کاربری') }}</span>
+                        </div>
+
+                        <h1 class="mt-3 text-2xl font-bold text-white sm:text-3xl">
+                            {{ __('فاکتورها و سوابق خرید') }}
+                        </h1>
+
+                        <p class="mt-3 max-w-2xl text-sm leading-7 text-gray-400">
+                            {{ __('در این بخش می‌توانید فاکتورهای پرداخت‌شده، سفارش‌های در انتظار پرداخت، موارد لغوشده و سفارش‌های منقضی‌شده خود را مشاهده و بررسی کنید.') }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-blue-800 bg-blue-900/20 px-4 py-3 text-sm text-blue-300">
+                        {{ __('تعداد فاکتورها') }}:
+                        <span class="font-bold text-white">{{ $orders->total() }}</span>
+                    </div>
+                </div>
+            </div>
 
             {{-- فیلتر وضعیت‌ها --}}
-            <div class="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800 sm:p-4">
-                <div class="mb-3 flex items-center gap-2">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M3 4h18M6 8h12m-9 4h6m-4 4h2">
-                        </path>
-                    </svg>
-
-                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                        {{ __('فیلتر فاکتورها') }}
+            <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-4 shadow-xl sm:p-5">
+                <div class="mb-4 flex items-center gap-2">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-700 bg-blue-600/20">
+                        <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 4h18M6 8h12m-9 4h6m-4 4h2">
+                            </path>
+                        </svg>
                     </span>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-white">{{ __('فیلتر فاکتورها') }}</h3>
+                        <p class="text-xs text-gray-500">{{ __('برای مشاهده سریع‌تر، وضعیت موردنظر را انتخاب کنید') }}</p>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
-
                     {{-- همه فاکتورها --}}
                     <a href="{{ route('user.invoices.index') }}"
-                       class="inline-flex min-h-10 items-center justify-center rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       class="inline-flex min-h-10 items-center justify-center rounded-2xl px-3 py-2 text-center text-xs font-semibold transition duration-300 sm:px-4 sm:text-sm
                        {{ is_null($status)
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600' }}">
-
+                            ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 text-white shadow-lg shadow-blue-600/20'
+                            : 'border border-gray-700 bg-gray-800 text-gray-300 hover:border-blue-700/40 hover:bg-gray-700/70 hover:text-white' }}">
                         {{ __('همه فاکتورها') }}
                     </a>
 
                     {{-- پرداخت‌شده --}}
                     <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_PAID]) }}"
-                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-center text-xs font-semibold transition duration-300 sm:px-4 sm:text-sm
                        {{ $status === \App\Models\Order::STATUS_PAID
-                            ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30'
-                            : 'bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300' }}">
+                            ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30'
+                            : 'border border-gray-700 bg-gray-800 text-gray-300 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:text-emerald-300' }}">
 
-                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
                         {{ __('موفق / پرداخت‌شده') }}
                     </a>
 
                     {{-- در انتظار پرداخت --}}
                     <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_PENDING]) }}"
-                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-center text-xs font-semibold transition duration-300 sm:px-4 sm:text-sm
                        {{ $status === \App\Models\Order::STATUS_PENDING
-                            ? 'bg-amber-100 text-amber-800 ring-1 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30'
-                            : 'bg-slate-100 text-slate-600 hover:bg-amber-50 hover:text-amber-800 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-amber-500/10 dark:hover:text-amber-300' }}">
+                            ? 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30'
+                            : 'border border-gray-700 bg-gray-800 text-gray-300 hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-300' }}">
 
-                        <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                        <span class="h-2 w-2 rounded-full bg-amber-400"></span>
                         {{ __('در انتظار پرداخت') }}
                     </a>
 
                     {{-- لغوشده / ناموفق --}}
                     <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_CANCELLED]) }}"
-                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-center text-xs font-semibold transition duration-300 sm:px-4 sm:text-sm
                        {{ in_array($status, [\App\Models\Order::STATUS_CANCELLED, \App\Models\Order::STATUS_FAILED, 'canceled'], true)
-                            ? 'bg-rose-100 text-rose-800 ring-1 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30'
-                            : 'bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-700 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-300' }}">
+                            ? 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30'
+                            : 'border border-gray-700 bg-gray-800 text-gray-300 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-300' }}">
 
-                        <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+                        <span class="h-2 w-2 rounded-full bg-rose-400"></span>
                         {{ __('لغو شده / ناموفق') }}
                     </a>
 
                     {{-- منقضی شده --}}
                     <a href="{{ route('user.invoices.index', ['status' => \App\Models\Order::STATUS_EXPIRED]) }}"
-                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-center text-xs font-semibold transition-colors sm:px-4 sm:text-sm
+                       class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-center text-xs font-semibold transition duration-300 sm:px-4 sm:text-sm
                        {{ $status === \App\Models\Order::STATUS_EXPIRED
-                            ? 'bg-slate-200 text-slate-800 ring-1 ring-slate-400 dark:bg-slate-600 dark:text-slate-100 dark:ring-slate-500'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 dark:hover:text-slate-200' }}">
+                            ? 'bg-slate-500/15 text-slate-200 ring-1 ring-slate-500/30'
+                            : 'border border-gray-700 bg-gray-800 text-gray-300 hover:border-slate-500/30 hover:bg-slate-500/10 hover:text-slate-200' }}">
 
-                        <span class="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-300"></span>
+                        <span class="h-2 w-2 rounded-full bg-slate-300"></span>
                         {{ __('منقضی شده') }}
                     </a>
-
                 </div>
             </div>
 
             {{-- لیست فاکتورها --}}
-            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 sm:rounded-3xl">
-
+            <div class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 shadow-2xl">
                 @if($orders->count() > 0)
 
-                    {{-- نمایش موبایل: کارت‌های فاکتور --}}
-                    <div class="space-y-3 p-3 sm:hidden">
+                    {{-- نمایش موبایل --}}
+                    <div class="space-y-4 p-3 sm:hidden">
                         @foreach($orders as $order)
-
-                            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-
+                            <div class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-950/80 shadow-lg">
                                 {{-- سربرگ کارت --}}
-                                <div class="flex items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/80 px-3 py-3 dark:border-slate-700 dark:bg-slate-700/30">
+                                <div class="flex items-center justify-between gap-3 border-b border-gray-800 bg-gray-900/80 px-4 py-4">
                                     <div class="min-w-0">
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                        <p class="text-[11px] text-gray-500">
                                             {{ __('شماره فاکتور') }}
                                         </p>
 
-                                        <p class="mt-1 truncate font-mono text-sm font-bold text-slate-800 dark:text-white">
+                                        <p class="mt-1 truncate font-mono text-sm font-bold text-white">
                                             #{{ $order->order_number ?? $order->id }}
                                         </p>
                                     </div>
 
                                     @php
                                         $invoiceStatusClasses = match($order->status) {
-                                            \App\Models\Order::STATUS_PAID => 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30',
-                                            \App\Models\Order::STATUS_PENDING => 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30',
-                                            \App\Models\Order::STATUS_EXPIRED => 'bg-slate-100 text-slate-700 ring-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600',
-                                            default => ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30')
+                                            \App\Models\Order::STATUS_PAID => 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
+                                            \App\Models\Order::STATUS_PENDING => 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
+                                            \App\Models\Order::STATUS_EXPIRED => 'bg-slate-500/15 text-slate-200 ring-slate-500/30',
+                                            default => ($order->status_badge_classes ?? 'bg-rose-500/15 text-rose-300 ring-rose-500/30')
                                         };
                                     @endphp
 
@@ -148,29 +176,29 @@
                                     </span>
                                 </div>
 
-                                {{-- اقلام خریداری‌شده --}}
-                                <div class="space-y-2 px-3 py-3">
-                                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                {{-- اقلام --}}
+                                <div class="space-y-2 px-4 py-4">
+                                    <p class="text-xs font-semibold text-gray-500">
                                         {{ __('اقلام خریداری‌شده') }}
                                     </p>
 
                                     <div class="space-y-2">
                                         @forelse($order->items as $item)
-                                            <div class="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                                            <div class="flex items-start gap-2 text-sm text-gray-300">
                                                 <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500"></span>
 
                                                 <span class="min-w-0 break-words leading-6">
                                                     {{ $item->title }}
 
                                                     @if($item->quantity > 1)
-                                                        <span class="mr-1 text-xs text-slate-400">
+                                                        <span class="mr-1 text-xs text-gray-500">
                                                             ({{ $item->quantity }} {{ __('عدد') }})
                                                         </span>
                                                     @endif
                                                 </span>
                                             </div>
                                         @empty
-                                            <p class="text-xs text-slate-400">
+                                            <p class="text-xs text-gray-500">
                                                 {{ __('بدون آیتم') }}
                                             </p>
                                         @endforelse
@@ -178,27 +206,26 @@
                                 </div>
 
                                 {{-- مبلغ و تاریخ --}}
-                                <div class="grid grid-cols-2 gap-3 border-t border-slate-100 px-3 py-3 dark:border-slate-700">
+                                <div class="grid grid-cols-2 gap-3 border-t border-gray-800 px-4 py-4">
                                     <div class="min-w-0">
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                        <p class="text-[11px] text-gray-500">
                                             {{ __('مبلغ نهایی') }}
                                         </p>
 
-                                        <p class="mt-1 break-words text-sm font-bold text-slate-900 dark:text-white">
+                                        <p class="mt-1 break-words text-sm font-bold text-white">
                                             {{ $order->formatted_payable_amount }}
-
-                                            <span class="text-[10px] font-normal text-slate-500 dark:text-slate-400">
+                                            <span class="text-[10px] font-normal text-gray-500">
                                                 {{ $order->currency === 'IRT' ? __('تومان') : __('ریال') }}
                                             </span>
                                         </p>
                                     </div>
 
                                     <div class="min-w-0 text-left">
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                        <p class="text-[11px] text-gray-500">
                                             {{ __('تاریخ ثبت') }}
                                         </p>
 
-                                        <p class="mt-1 break-words text-xs leading-5 text-slate-600 dark:text-slate-300" dir="ltr">
+                                        <p class="mt-1 break-words text-xs leading-5 text-gray-300" dir="ltr">
                                             @if(function_exists('jdate'))
                                                 {{ jdate($order->created_at)->format('Y/m/d - H:i') }}
                                             @elseif(function_exists('verta'))
@@ -210,10 +237,10 @@
                                     </div>
                                 </div>
 
-                                {{-- مشاهده فاکتور --}}
-                                <div class="border-t border-slate-100 p-3 dark:border-slate-700">
+                                {{-- عملیات --}}
+                                <div class="border-t border-gray-800 p-4">
                                     <a href="{{ route('user.invoices.show', $order) }}"
-                                       class="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800">
+                                       class="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
 
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -227,68 +254,60 @@
                                         {{ __('مشاهده فاکتور') }}
                                     </a>
                                 </div>
-
                             </div>
                         @endforeach
                     </div>
 
-                    {{-- نمایش دسکتاپ: جدول --}}
+                    {{-- نمایش دسکتاپ --}}
                     <div class="hidden overflow-x-auto sm:block">
                         <table class="w-full text-right text-sm">
                             <thead>
-                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-700 dark:bg-slate-700/30 dark:text-slate-400">
+                                <tr class="border-b border-gray-800 bg-gray-950/70 text-gray-400">
                                     <th scope="col" class="whitespace-nowrap px-5 py-4 font-semibold lg:px-6">
                                         {{ __('شماره فاکتور') }}
                                     </th>
-
                                     <th scope="col" class="px-5 py-4 font-semibold lg:px-6">
                                         {{ __('اقلام خریداری‌شده') }}
                                     </th>
-
                                     <th scope="col" class="whitespace-nowrap px-5 py-4 font-semibold lg:px-6">
                                         {{ __('مبلغ نهایی') }}
                                     </th>
-
                                     <th scope="col" class="whitespace-nowrap px-5 py-4 text-center font-semibold lg:px-6">
                                         {{ __('تاریخ ثبت') }}
                                     </th>
-
                                     <th scope="col" class="whitespace-nowrap px-5 py-4 text-center font-semibold lg:px-6">
                                         {{ __('وضعیت') }}
                                     </th>
-
                                     <th scope="col" class="whitespace-nowrap px-5 py-4 text-center font-semibold lg:px-6">
                                         {{ __('عملیات') }}
                                     </th>
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60">
+                            <tbody class="divide-y divide-gray-800/80">
                                 @foreach($orders as $order)
-
-                                    <tr class="transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-700/20">
-
+                                    <tr class="transition duration-300 hover:bg-white/[0.02]">
                                         {{-- شماره فاکتور --}}
-                                        <td class="whitespace-nowrap px-5 py-4 font-mono font-semibold text-slate-800 dark:text-slate-200 lg:px-6">
+                                        <td class="whitespace-nowrap px-5 py-4 font-mono font-semibold text-gray-200 lg:px-6">
                                             #{{ $order->order_number ?? $order->id }}
                                         </td>
 
-                                        {{-- اقلام خریداری‌شده --}}
+                                        {{-- اقلام --}}
                                         <td class="px-5 py-4 lg:px-6">
                                             <div class="flex max-w-xs flex-col gap-2">
                                                 @forelse($order->items as $item)
-                                                    <span class="break-words font-medium leading-6 text-slate-700 dark:text-slate-300">
+                                                    <span class="break-words font-medium leading-6 text-gray-300">
                                                         <span class="text-blue-500">•</span>
                                                         {{ $item->title }}
 
                                                         @if($item->quantity > 1)
-                                                            <span class="text-xs text-slate-400">
+                                                            <span class="text-xs text-gray-500">
                                                                 ({{ $item->quantity }} {{ __('عدد') }})
                                                             </span>
                                                         @endif
                                                     </span>
                                                 @empty
-                                                    <span class="text-xs text-slate-400">
+                                                    <span class="text-xs text-gray-500">
                                                         {{ __('بدون آیتم') }}
                                                     </span>
                                                 @endforelse
@@ -296,16 +315,15 @@
                                         </td>
 
                                         {{-- مبلغ --}}
-                                        <td class="whitespace-nowrap px-5 py-4 font-bold text-slate-900 dark:text-white lg:px-6">
+                                        <td class="whitespace-nowrap px-5 py-4 font-bold text-white lg:px-6">
                                             {{ $order->formatted_payable_amount }}
-
-                                            <span class="mr-1 text-xs font-normal text-slate-500 dark:text-slate-400">
+                                            <span class="mr-1 text-xs font-normal text-gray-500">
                                                 {{ $order->currency === 'IRT' ? __('تومان') : __('ریال') }}
                                             </span>
                                         </td>
 
                                         {{-- تاریخ --}}
-                                        <td class="whitespace-nowrap px-5 py-4 text-center text-xs text-slate-500 dark:text-slate-400 lg:px-6">
+                                        <td class="whitespace-nowrap px-5 py-4 text-center text-xs text-gray-400 lg:px-6">
                                             @if(function_exists('jdate'))
                                                 {{ jdate($order->created_at)->format('Y/m/d - H:i') }}
                                             @elseif(function_exists('verta'))
@@ -315,23 +333,21 @@
                                             @endif
                                         </td>
 
-                                        {{-- وضعیت پرداخت --}}
+                                        {{-- وضعیت --}}
                                         <td class="whitespace-nowrap px-5 py-4 text-center lg:px-6">
                                             @php
                                                 $badgeClasses = match($order->status) {
-                                                    \App\Models\Order::STATUS_PAID => 'bg-emerald-100 text-emerald-800 ring-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:ring-emerald-500/30',
-                                                    \App\Models\Order::STATUS_PENDING => 'bg-amber-100 text-amber-800 ring-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/30',
-                                                    \App\Models\Order::STATUS_EXPIRED => 'bg-slate-100 text-slate-700 ring-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600',
-                                                    default => ($order->status_badge_classes ?? 'bg-rose-100 text-rose-800 ring-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:ring-rose-500/30')
+                                                    \App\Models\Order::STATUS_PAID => 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
+                                                    \App\Models\Order::STATUS_PENDING => 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
+                                                    \App\Models\Order::STATUS_EXPIRED => 'bg-slate-500/15 text-slate-200 ring-slate-500/30',
+                                                    default => ($order->status_badge_classes ?? 'bg-rose-500/15 text-rose-300 ring-rose-500/30')
                                                 };
                                             @endphp
 
                                             <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold ring-1 ring-inset {{ $badgeClasses }}">
                                                 @if($order->status === \App\Models\Order::STATUS_PAID)
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                              d="M5 13l4 4L19 7">
-                                                        </path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                                                     </svg>
                                                 @elseif($order->status === \App\Models\Order::STATUS_PENDING)
                                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -359,7 +375,7 @@
                                         {{-- عملیات --}}
                                         <td class="whitespace-nowrap px-5 py-4 text-center lg:px-6">
                                             <a href="{{ route('user.invoices.show', $order) }}"
-                                               class="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3.5 py-2 text-xs font-semibold text-blue-700 transition-colors hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-300 dark:hover:border-blue-600 dark:hover:bg-blue-600 dark:hover:text-white">
+                                               class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60">
 
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -373,7 +389,6 @@
                                                 {{ __('مشاهده فاکتور') }}
                                             </a>
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -382,16 +397,14 @@
 
                     {{-- صفحه‌بندی --}}
                     @if($orders->hasPages())
-                        <div class="border-t border-slate-200 px-3 py-4 dark:border-slate-700 sm:px-6 sm:py-5">
+                        <div class="border-t border-gray-800 px-4 py-5 sm:px-6">
                             {{ $orders->links() }}
                         </div>
                     @endif
-
                 @else
-
                     {{-- حالت خالی --}}
-                    <div class="px-4 py-14 text-center sm:py-20">
-                        <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 dark:bg-slate-700/50 dark:text-slate-500">
+                    <div class="px-4 py-16 text-center sm:py-20">
+                        <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-gray-800 bg-gray-900 text-gray-500">
                             <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2 3.5-2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z">
@@ -399,24 +412,22 @@
                             </svg>
                         </div>
 
-                        <h3 class="text-base font-bold text-slate-700 dark:text-slate-200">
+                        <h3 class="text-base font-bold text-white">
                             {{ __('هیچ فاکتوری یافت نشد') }}
                         </h3>
 
-                        <p class="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500 dark:text-slate-400">
+                        <p class="mx-auto mt-2 max-w-sm text-sm leading-6 text-gray-400">
                             {{ __('در حال حاضر هیچ سفارش یا فاکتوری در این وضعیت ثبت نشده است.') }}
                         </p>
 
                         @if(!is_null($status))
                             <a href="{{ route('user.invoices.index') }}"
-                               class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700">
+                               class="mt-5 inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/30">
                                 {{ __('مشاهده همه فاکتورها') }}
                             </a>
                         @endif
                     </div>
-
                 @endif
-
             </div>
 
         </div>
