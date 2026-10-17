@@ -1,4 +1,3 @@
-
 @extends('admin.layout.app')
 
 @section('title', 'مقالات وبلاگ')
@@ -6,35 +5,37 @@
 @section('content')
 <div dir="rtl" class="min-h-screen space-y-7 pb-8">
 
-    {{-- هدر صفحه --}}
-    <div class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-gray-900 via-gray-900 to-slate-950 p-6 shadow-2xl shadow-black/10 sm:p-8">
-        <div class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-blue-600/10 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-28 left-10 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    {{-- هدر صفحه با هاله نوری آبی، نیلی و بنفش --}}
+    <div class="relative overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-6 shadow-2xl shadow-black/50 backdrop-blur-2xl sm:p-8">
+
+        {{-- هاله مرکزی گرادینتی --}}
+        <div class="pointer-events-none absolute -top-20 left-1/2 h-40 w-[min(90%,550px)] -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-600/20 via-indigo-600/25 to-purple-600/20 blur-[85px] opacity-75"></div>
+
+        {{-- هاله‌های کناری --}}
+        <div class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-500/15 blur-[60px]"></div>
+        <div class="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-blue-500/10 blur-[55px]"></div>
+        <div class="pointer-events-none absolute -bottom-20 right-1/3 h-40 w-40 rounded-full bg-purple-500/10 blur-[55px]"></div>
 
         <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <div class="mb-3 flex items-center gap-2 text-xs font-medium text-blue-400">
-                    <span class="h-2 w-2 animate-pulse rounded-full bg-blue-400"></span>
-                    <span>AVAPARK / CONTENT MANAGEMENT</span>
-                </div>
-
-                <h1 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                    مدیریت مقالات
+                <h1 class="flex items-center gap-3 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                    <span class="h-8 w-1.5 rounded-full bg-gradient-to-b from-blue-400 to-purple-500 shadow-[0_0_14px_rgba(99,102,241,0.45)]"></span>
+                    <span>مدیریت مقالات</span>
                 </h1>
 
                 <p class="mt-3 max-w-xl text-sm leading-7 text-gray-400">
                     مقالات وبلاگ را مدیریت کنید، وضعیت انتشار را بررسی کنید و محتوای جدید بسازید.
                 </p>
 
-                <div class="mt-5 flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-gray-700/70 bg-gray-800/50 px-3 py-2">
+                <div class="mt-5 flex flex-wrap items-center gap-3 text-xs text-gray-400">
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-gray-700/70 bg-gray-900/60 px-3 py-2 backdrop-blur-sm">
                         <svg class="h-4 w-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v12m6-6H6"/>
                         </svg>
                         فضای مدیریت محتوا
                     </span>
 
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-gray-700/70 bg-gray-800/50 px-3 py-2">
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-gray-700/70 bg-gray-900/60 px-3 py-2 backdrop-blur-sm">
                         <svg class="h-4 w-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -44,16 +45,20 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row">
-                <a href="{{ route('admin.categories.index') }}"
-                   class="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-700 bg-gray-800/80 px-5 py-3 text-sm font-semibold text-gray-200 transition duration-300 hover:border-gray-600 hover:bg-gray-700 hover:text-white">
+                <a
+                    href="{{ route('admin.categories.index') }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-700/80 bg-gray-900/70 px-5 py-3 text-sm font-semibold text-gray-200 shadow-lg transition duration-300 hover:-translate-y-0.5 hover:border-gray-600 hover:bg-gray-800 hover:text-white"
+                >
                     <svg class="h-5 w-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h10"/>
                     </svg>
                     دسته‌بندی‌ها
                 </a>
 
-                <a href="{{ route('admin.posts.create') }}"
-                   class="group inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-400/30 bg-gradient-to-l from-blue-600 to-blue-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-900/20 transition duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:to-cyan-500 hover:shadow-blue-900/40">
+                <a
+                    href="{{ route('admin.posts.create') }}"
+                    class="group inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-400/30 bg-gradient-to-l from-blue-600 to-blue-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-900/30 transition duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:to-cyan-500 hover:shadow-blue-900/50"
+                >
                     <svg class="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-7-7h14"/>
                     </svg>
@@ -65,9 +70,11 @@
 
     {{-- پیام موفقیت --}}
     @if(session('success'))
-        <div class="relative overflow-hidden rounded-2xl border border-emerald-700/40 bg-emerald-950/30 p-4 shadow-lg shadow-emerald-950/10">
-            <div class="flex items-start gap-3">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-700/40 bg-emerald-500/10">
+        <div class="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-emerald-950/30 p-4 shadow-lg shadow-emerald-950/20 backdrop-blur-xl">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-l from-emerald-500/[0.06] to-transparent"></div>
+
+            <div class="relative flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10">
                     <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
@@ -82,8 +89,8 @@
     @endif
 
     {{-- فیلتر و جستجو --}}
-    <section class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 shadow-xl shadow-black/10">
-        <div class="flex flex-col gap-3 border-b border-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <section class="overflow-hidden rounded-3xl border border-gray-800/80 bg-gray-900/60 shadow-xl shadow-black/20 backdrop-blur-xl">
+        <div class="flex flex-col gap-3 border-b border-gray-800/80 bg-gradient-to-l from-blue-950/15 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div class="flex items-center gap-3">
                 <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-blue-700/30 bg-blue-600/10">
                     <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +104,7 @@
                 </div>
             </div>
 
-            <span class="w-fit rounded-xl border border-gray-700 bg-gray-800/70 px-3 py-2 text-xs text-gray-400">
+            <span class="w-fit rounded-xl border border-gray-700/80 bg-gray-800/70 px-3 py-2 text-xs text-gray-400">
                 فیلتر پیشرفته
             </span>
         </div>
@@ -122,7 +129,7 @@
                             name="search"
                             value="{{ request('search') }}"
                             placeholder="عنوان مقاله را وارد کنید..."
-                            class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/50 py-3 pr-11 pl-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
+                            class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/60 py-3 pr-11 pl-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
                         >
                     </div>
                 </div>
@@ -136,7 +143,7 @@
                     <select
                         id="post-category"
                         name="category_id"
-                        class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/50 px-3 py-3 text-sm text-gray-200 outline-none transition focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
+                        class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/60 px-3 py-3 text-sm text-gray-200 outline-none transition focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
                     >
                         <option value="" class="bg-gray-900">همه دسته‌بندی‌ها</option>
 
@@ -161,7 +168,7 @@
                     <select
                         id="post-status"
                         name="status"
-                        class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/50 px-3 py-3 text-sm text-gray-200 outline-none transition focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
+                        class="w-full rounded-2xl border border-gray-700/80 bg-gray-950/60 px-3 py-3 text-sm text-gray-200 outline-none transition focus:border-blue-500/70 focus:ring-4 focus:ring-blue-500/10"
                     >
                         <option value="" class="bg-gray-900">همه وضعیت‌ها</option>
                         <option value="draft" @selected(request('status') === 'draft') class="bg-gray-900">پیش‌نویس</option>
@@ -174,7 +181,7 @@
             <div class="flex flex-col gap-3 border-t border-gray-800/80 pt-5 sm:flex-row sm:items-center">
                 <button
                     type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-950/20 transition duration-300 hover:bg-blue-500"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-950/30 transition duration-300 hover:bg-blue-500"
                 >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18l-7 8v7l-4-2v-5L3 4z"/>
@@ -196,10 +203,10 @@
     </section>
 
     {{-- جدول مقالات --}}
-    <section class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/70 shadow-xl shadow-black/10">
+    <section class="overflow-hidden rounded-3xl border border-gray-800/80 bg-gray-900/60 shadow-xl shadow-black/20 backdrop-blur-xl">
 
         {{-- عنوان جدول --}}
-        <div class="flex flex-col gap-3 border-b border-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div class="flex flex-col gap-3 border-b border-gray-800/80 bg-gradient-to-l from-cyan-950/10 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div class="flex items-center gap-3">
                 <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-700/30 bg-cyan-500/10">
                     <svg class="h-5 w-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +221,7 @@
             </div>
 
             <div class="flex items-center gap-2 text-xs text-gray-400">
-                <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                <span class="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span>
                 <span>مدیریت محتوا</span>
             </div>
         </div>
@@ -222,7 +229,7 @@
         <div class="overflow-x-auto">
             <table class="w-full min-w-[850px] text-right">
                 <thead>
-                    <tr class="border-b border-gray-800 bg-gray-950/40">
+                    <tr class="border-b border-gray-800/80 bg-gray-950/60">
                         <th class="px-5 py-4 text-xs font-bold text-gray-400">عنوان مقاله</th>
                         <th class="px-5 py-4 text-xs font-bold text-gray-400">دسته‌بندی</th>
                         <th class="px-5 py-4 text-xs font-bold text-gray-400">نویسنده</th>
@@ -232,7 +239,7 @@
                     </tr>
                 </thead>
 
-                <tbody class="divide-y divide-gray-800/70">
+                <tbody class="divide-y divide-gray-800/60">
                     @forelse($posts as $post)
                         @php
                             $badge = match($post->status) {
@@ -393,7 +400,7 @@
 
         {{-- صفحه‌بندی --}}
         @if($posts->hasPages())
-            <div class="flex flex-col gap-4 border-t border-gray-800 bg-gray-950/20 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div class="flex flex-col gap-4 border-t border-gray-800/80 bg-gray-950/30 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <p class="text-xs text-gray-500">
                     برای مشاهده مقالات بیشتر از صفحه‌بندی استفاده کنید.
                 </p>
