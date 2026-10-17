@@ -38,14 +38,14 @@
 
     {{-- اشتراک‌ها --}}
     <a href="{{ route('admin.subscriptions.index') }}"
-       title="اشتراک‌ها"
+       title="اشتراک‌ها و پشتیبانی ها"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <rect x="3" y="5" width="18" height="14" rx="2.5"/>
             <path d="M3 10h18M7 15h4"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">اشتراک‌ها</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">اشتراک‌ها و پشتیبانی ها</span>
     </a>
 
     {{-- فروشگاه --}}
