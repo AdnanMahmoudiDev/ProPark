@@ -18,6 +18,7 @@ use App\Http\Controllers\User\InvoiceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\LicenseCreationController;
 use App\Http\Controllers\Admin\DatabaseBackupController;
@@ -163,6 +164,24 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::delete('/subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])
             ->name('subscriptions.destroy');
+
+        // مدیریت پشتیبانی‌ها (جدید)
+        Route::prefix('supports')
+            ->name('supports.')
+            ->controller(SupportController::class)
+            ->group(function () {
+                Route::get('/', 'index')
+                    ->name('index');
+
+                Route::patch('/{support}/status', 'updateStatus')
+                    ->name('update-status');
+
+                Route::post('/{support}/renew', 'renew')
+                    ->name('renew');
+
+                Route::delete('/{support}', 'destroy')
+                    ->name('destroy');
+            });
 
         // مدیریت فروشگاه
         Route::get('/store', [StoreController::class, 'index'])
