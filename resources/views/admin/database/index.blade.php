@@ -3,28 +3,40 @@
 @section('content')
 <div class="space-y-6">
 
-    {{-- هدر صفحه --}}
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-5">
-        <div>
-            <h1 class="text-xl font-bold text-white flex items-center gap-2">
-                <div class="p-2 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    {{-- هدر صفحه با هاله نوری و استایل یکپارچه --}}
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-gray-900/90 to-gray-950 p-6 md:p-8 border border-gray-800/80 shadow-2xl backdrop-blur-xl">
+        {{-- هاله‌های نور پس‌زمینه نئونی --}}
+        <div class="absolute -top-16 -left-16 w-56 h-56 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -right-16 w-56 h-56 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-2xl text-blue-400 border border-blue-500/30 shadow-inner">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                     </svg>
                 </div>
-                مرکز داده و مدیریت پشتیبان‌گیری
-            </h1>
-            <p class="text-xs text-gray-400 mt-1">مانیتورینگ وضعیت جداول، داده‌های آماری و عملیات تخلیه و بارگذاری داده‌ها</p>
-        </div>
+                <div>
+                    <h1 class="text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                        مرکز داده و مدیریت پشتیبان‌گیری
+                    </h1>
+                    <p class="text-xs md:text-sm text-gray-400 mt-1">مانیتورینگ وضعیت جداول، داده‌های آماری و عملیات تخلیه و بارگذاری داده‌ها</p>
+                </div>
+            </div>
 
-        <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                وضعیت اتصال: متصل
-            </span>
-            <span class="px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-gray-800 text-gray-300 border border-gray-700">
-                {{ $stats['mysql_version'] }}
-            </span>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    وضعیت اتصال: متصل
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium bg-gray-800/80 text-gray-300 border border-gray-700/80 backdrop-blur-md">
+                    <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    {{ $stats['mysql_version'] }}
+                </span>
+            </div>
         </div>
     </div>
 
@@ -58,7 +70,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             
             {{-- کارت کاربران --}}
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-blue-500/40 transition">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-blue-500/40 transition">
                 <div class="flex items-center justify-between">
                     <div class="text-xs font-medium text-gray-400">کل کاربران ثبت‌نامی</div>
                     <div class="p-2 bg-blue-500/10 rounded-lg text-blue-400">
@@ -72,7 +84,7 @@
             </div>
 
             {{-- کارت اشتراک‌ها --}}
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-indigo-500/40 transition">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-indigo-500/40 transition">
                 <div class="flex items-center justify-between">
                     <div class="text-xs font-medium text-gray-400">اشتراک‌ها / پلن‌ها</div>
                     <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
@@ -97,19 +109,19 @@
             مشخصات فنی پایگاه داده
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg">
                 <div class="text-xs font-medium text-gray-400">نام دیتابیس فعال</div>
                 <div class="mt-2 text-xl font-bold text-white tracking-wide font-mono">{{ $stats['database'] }}</div>
             </div>
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg">
                 <div class="text-xs font-medium text-gray-400">تعداد جداول</div>
                 <div class="mt-2 text-xl font-bold text-blue-400 font-mono">{{ number_format($stats['tables_count']) }}</div>
             </div>
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg">
                 <div class="text-xs font-medium text-gray-400">کل رکوردهای داده</div>
                 <div class="mt-2 text-xl font-bold text-indigo-400 font-mono">{{ number_format($stats['total_rows']) }}</div>
             </div>
-            <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-5 shadow-lg">
+            <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-5 shadow-lg">
                 <div class="text-xs font-medium text-gray-400">حجم کلی دیتابیس</div>
                 <div class="mt-2 text-xl font-bold text-emerald-400 font-mono">{{ $stats['size_mb'] }} <span class="text-xs font-normal text-gray-400">مگابایت</span></div>
             </div>
@@ -120,7 +132,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {{-- بخش خروجی و دانلود --}}
-        <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
+        <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
             <div>
                 <div class="flex items-center gap-3 text-lg font-semibold text-white mb-2">
                     <div class="p-2 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20">
@@ -145,7 +157,7 @@
         </div>
 
         {{-- بخش بازگردانی و آپلود --}}
-        <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
+        <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
             <div>
                 <div class="flex items-center gap-3 text-lg font-semibold text-white mb-2">
                     <div class="p-2 bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/20">
@@ -179,7 +191,7 @@
     </div>
 
     {{-- لیست و جزئیات جدول‌ها --}}
-    <div class="bg-gray-900/60 backdrop-blur border border-gray-800 rounded-2xl shadow-lg overflow-hidden">
+    <div class="bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl shadow-lg overflow-hidden">
         <div class="p-5 border-b border-gray-800 flex items-center justify-between">
             <h3 class="font-semibold text-white text-base flex items-center gap-2">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

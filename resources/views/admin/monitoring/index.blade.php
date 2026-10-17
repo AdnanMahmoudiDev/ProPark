@@ -1,4 +1,3 @@
-
 @extends('admin.layout.app')
 
 @section('title', 'مانیتورینگ سیستم')
@@ -29,15 +28,15 @@
 
 <div class="space-y-6 pb-8">
 
-    {{-- هدر اصلی --}}
-    <section class="relative isolate overflow-hidden rounded-3xl border border-gray-800 bg-gray-900 shadow-2xl shadow-black/10">
-        <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            <div class="absolute -right-20 -top-32 h-72 w-72 rounded-full bg-blue-600/10 blur-3xl"></div>
-            <div class="absolute -bottom-32 left-1/4 h-64 w-64 rounded-full bg-violet-600/10 blur-3xl"></div>
-            <div class="absolute inset-0 bg-gradient-to-l from-blue-500/[0.04] via-transparent to-violet-500/[0.04]"></div>
-        </div>
+    {{-- ================= هدر اصلی (هماهنگ با استایل جدید ProPark) ================= --}}
+    <section class="relative isolate overflow-hidden rounded-3xl border border-gray-800/80 bg-gradient-to-b from-gray-900/90 via-gray-950/80 to-gray-950/95 p-5 sm:p-7 shadow-2xl shadow-black/50 backdrop-blur-2xl">
+        
+        {{-- افکت‌های هاله نوری درخشان با ته‌رنگ نیلی، آبی و بنفش نئونی --}}
+        <div class="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 h-36 w-[550px] rounded-full bg-gradient-to-r from-blue-600/20 via-indigo-600/25 to-purple-600/20 blur-[85px] opacity-75"></div>
+        <div class="pointer-events-none absolute -top-12 -right-8 h-40 w-40 rounded-full bg-indigo-500/15 blur-[55px] opacity-50"></div>
+        <div class="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-blue-500/10 blur-[45px] opacity-40"></div>
 
-        <div class="flex flex-col gap-6 p-5 sm:p-7 lg:flex-row lg:items-center lg:justify-between">
+        <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="flex items-start gap-4">
                 <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10 text-blue-400 shadow-lg shadow-blue-950/20">
                     <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +82,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3 lg:justify-end">
-                <div class="inline-flex items-center gap-2 rounded-xl border {{ $dbIsHealthy ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-red-500/20 bg-red-500/10 text-red-300' }} px-3 py-2 text-xs font-semibold">
+                <div class="inline-flex items-center gap-2 rounded-xl border {{ $dbIsHealthy ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-red-500/20 bg-red-500/10 text-red-300' }} px-3 py-2 text-xs font-semibold backdrop-blur-sm">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         @if($dbIsHealthy)
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -97,7 +96,7 @@
                 <button
                     type="button"
                     onclick="window.location.reload()"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-500 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-500 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 cursor-pointer"
                 >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4v5h5M20 20v-5h-5M5.6 9a7 7 0 0111.8-2L20 9M4 15l2.6 2a7 7 0 0011.8-2"/>
@@ -119,7 +118,7 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
             {{-- بازدید صفحات --}}
-            <div class="group relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-blue-500/30 hover:bg-gray-900">
+            <div class="group relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-blue-500/30 hover:bg-gray-900 shadow-xl backdrop-blur-xl">
                 <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-blue-500/[0.06] blur-2xl transition group-hover:bg-blue-500/10"></div>
 
                 <div class="relative flex items-start justify-between gap-3">
@@ -138,7 +137,7 @@
 
                 <div class="relative mt-5 flex items-end justify-between gap-3">
                     <div>
-                        <p class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                        <p class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl font-mono">
                             {{ number_format($totalVisits) }}
                         </p>
                         <p class="mt-2 text-xs text-gray-500">مجموع بازدیدهای ثبت‌شده</p>
@@ -154,7 +153,7 @@
             </div>
 
             {{-- کاربران یکتا --}}
-            <div class="group relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-violet-500/30 hover:bg-gray-900">
+            <div class="group relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-violet-500/30 hover:bg-gray-900 shadow-xl backdrop-blur-xl">
                 <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-violet-500/[0.06] blur-2xl transition group-hover:bg-violet-500/10"></div>
 
                 <div class="relative flex items-start justify-between gap-3">
@@ -172,7 +171,7 @@
 
                 <div class="relative mt-5 flex items-end justify-between gap-3">
                     <div>
-                        <p class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                        <p class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl font-mono">
                             {{ number_format($uniqueVisitors) }}
                         </p>
                         <p class="mt-2 text-xs text-gray-500">بر اساس IPهای ثبت‌شده</p>
@@ -205,7 +204,7 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
             {{-- RAM --}}
-            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-blue-500/30">
+            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-blue-500/30 shadow-xl backdrop-blur-xl">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
@@ -227,10 +226,10 @@
                 </div>
 
                 <div class="mt-6 flex items-end justify-between gap-2">
-                    <p class="text-3xl font-extrabold text-white">
+                    <p class="text-3xl font-extrabold text-white font-mono">
                         {{ number_format($ramPercentage, 1) }}<span class="text-lg text-gray-400">%</span>
                     </p>
-                    <p class="pb-1 text-xs text-gray-500">
+                    <p class="pb-1 text-xs text-gray-500 font-mono">
                         {{ $ram['used'] ?? 0 }} / {{ $ram['total'] ?? 0 }} GB
                     </p>
                 </div>
@@ -256,7 +255,7 @@
             </div>
 
             {{-- Disk --}}
-            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-indigo-500/30">
+            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-indigo-500/30 shadow-xl backdrop-blur-xl">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400">
@@ -278,10 +277,10 @@
                 </div>
 
                 <div class="mt-6 flex items-end justify-between gap-2">
-                    <p class="text-3xl font-extrabold text-white">
+                    <p class="text-3xl font-extrabold text-white font-mono">
                         {{ number_format($diskPercentage, 1) }}<span class="text-lg text-gray-400">%</span>
                     </p>
-                    <p class="pb-1 text-xs text-gray-500">
+                    <p class="pb-1 text-xs text-gray-500 font-mono">
                         {{ $disk['used'] ?? 0 }} / {{ $disk['total'] ?? 0 }} GB
                     </p>
                 </div>
@@ -307,7 +306,7 @@
             </div>
 
             {{-- Database --}}
-            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-emerald-500/30">
+            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-emerald-500/30 shadow-xl backdrop-blur-xl">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl
@@ -344,7 +343,7 @@
             </div>
 
             {{-- Response Time --}}
-            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-violet-500/30">
+            <div class="rounded-2xl border border-gray-800 bg-gray-900/80 p-5 transition duration-300 hover:border-violet-500/30 shadow-xl backdrop-blur-xl">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
@@ -365,7 +364,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <p class="text-3xl font-extrabold text-white">
+                    <p class="text-3xl font-extrabold text-white font-mono">
                         {{ number_format((float) ($responseTime ?? 0), 2) }}
                         <span class="text-base font-semibold text-gray-400">ms</span>
                     </p>
@@ -385,7 +384,7 @@
     </section>
 
     {{-- نمودار بازدیدها --}}
-    <section class="overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 shadow-xl shadow-black/10">
+    <section class="overflow-hidden rounded-3xl border border-gray-800 bg-gray-900/80 shadow-2xl backdrop-blur-xl">
         <div class="flex flex-col gap-4 border-b border-gray-800 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div class="flex items-start gap-3">
                 <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-500/15 bg-blue-500/10 text-blue-400">
@@ -406,7 +405,7 @@
 
             <div class="rounded-xl border border-gray-800 bg-gray-950/60 px-4 py-3">
                 <p class="text-[11px] text-gray-500">کل بازدید در دوره نمایش‌داده‌شده</p>
-                <p class="mt-1 text-lg font-extrabold text-blue-400">
+                <p class="mt-1 text-lg font-extrabold text-blue-400 font-mono">
                     {{ number_format(array_sum($monthlyVisits['views'] ?? [])) }}
                     <span class="text-xs font-medium text-gray-500">بازدید</span>
                 </p>
@@ -441,7 +440,7 @@
     </section>
 
     {{-- خلاصه وضعیت --}}
-    <section class="rounded-2xl border border-gray-800 bg-gradient-to-l from-gray-900 via-gray-900 to-gray-950 p-5 sm:p-6">
+    <section class="rounded-3xl border border-gray-800 bg-gradient-to-l from-gray-900 via-gray-900 to-gray-950 p-5 sm:p-6 shadow-xl backdrop-blur-xl">
         <div class="flex items-start gap-3">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
                 {{ $dbIsHealthy && $ramPercentage <= 85 && $diskPercentage <= 85 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400' }}">
