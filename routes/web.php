@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\SupportPackagePriceController;
+use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 
 // صفحه اصلی
 Route::get('/', function () {
@@ -148,6 +149,16 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
             ->name('users.update-role');
+
+        // امور مالی و مدیریت فاکتورها
+        Route::prefix('invoices')
+            ->name('invoices.')
+            ->controller(AdminInvoiceController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/analytics', 'analytics')->name('analytics');
+                Route::get('/{order}', 'show')->name('show');
+            });
 
         // مدیریت اشتراک‌ها
         Route::get('/subscriptions', [SubscriptionController::class, 'index'])
