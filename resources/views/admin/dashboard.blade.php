@@ -82,16 +82,56 @@
 
         <div class="relative flex flex-col justify-between gap-6 p-6 sm:p-8 lg:flex-row lg:items-center">
             <div class="flex items-start gap-4">
-                <div class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl
-                            border border-blue-400/20 bg-gradient-to-br
-                            from-blue-500/25 to-indigo-500/10 text-blue-300">
-                    <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="1.6">
-                        <path d="M12 3v3m0 12v3M3 12h3m12 0h3"/>
-                        <circle cx="12" cy="12" r="7"/>
-                        <path d="m9 12 2 2 4-4"/>
-                    </svg>
-                </div>
+
+<div class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl
+            border border-blue-400/20
+            bg-gradient-to-br from-blue-500/15 to-indigo-500/10
+            text-blue-300 shadow-lg shadow-blue-500/5">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-7 w-7"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.6"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+
+        <!-- ساختار اصلی داشبورد -->
+        <rect x="3" y="3.5" width="18" height="17" rx="2.5"/>
+
+        <!-- نوار بالایی پنل -->
+        <path d="M3 8h18"/>
+
+        <!-- کنترل‌های پنجره -->
+        <circle cx="6" cy="5.8" r=".55"
+                fill="currentColor" stroke="none"/>
+        <circle cx="8" cy="5.8" r=".55"
+                fill="currentColor" stroke="none"/>
+
+        <!-- کارت آماری -->
+        <rect x="5.5" y="10.5" width="5.5" height="3.5" rx="1"/>
+
+        <!-- نمودار میله‌ای -->
+        <path d="M6.8 12.8v-.8"/>
+        <path d="M8.25 12.8v-1.4"/>
+        <path d="M9.7 12.8v-2"/>
+
+        <!-- کارت اطلاعات -->
+        <rect x="13" y="10.5" width="5.5" height="7" rx="1"/>
+
+        <!-- نمودار روند صعودی -->
+        <path d="m14.2 15.5 1.5-1.6 1.3.9 1.3-2"/>
+
+        <!-- خطوط اطلاعات -->
+        <path d="M5.8 16.5h4.9"/>
+        <path d="M5.8 18.2h3.2"/>
+
+    </svg>
+</div>
+
+
 
                 <div>
                     <h3 class="text-lg font-bold text-white sm:text-xl">
