@@ -336,9 +336,6 @@
                             <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500 print:py-2 print:px-2 print:text-slate-700" title="{{ $payment->authority }}">
                                 {{ $payment->authority ? \Illuminate\Support\Str::limit($payment->authority, 16) : '-' }}
                             </td>
-                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-700 dark:text-slate-300 dir-ltr print:py-2 print:px-2 print:text-slate-900">
-                                {{ $payment->card_pan ?? '-' }}
-                            </td>
                             <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-600 dark:text-slate-400 print:py-2 print:px-2 print:text-slate-800">
                                 @php
                                     $paymentTime = $payment->paid_at ?? $payment->created_at;
@@ -348,7 +345,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-8 text-center text-sm text-slate-400 print:py-4">
+                            <td colspan="6" class="py-8 text-center text-sm text-slate-400 print:py-4">
                                 {{ __('هیچ تراکنش پرداخت بانکی برای این فاکتور ثبت نشده است.') }}
                             </td>
                         </tr>
