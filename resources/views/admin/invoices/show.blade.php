@@ -333,9 +333,16 @@
                             <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-700 dark:text-slate-300 print:py-2 print:px-2 print:text-slate-900">
                                 {{ $payment->reference_id ?? '-' }}
                             </td>
-                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500 print:py-2 print:px-2 print:text-slate-700" title="{{ $payment->authority }}">
-                                {{ $payment->authority ? \Illuminate\Support\Str::limit($payment->authority, 16) : '-' }}
+                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500 dark:text-slate-400 print:py-2 print:px-2 print:text-slate-700" title="{{ $payment->authority }}">
+                                @if($payment->authority)
+                                    <span class="break-all select-all inline-block max-w-[220px]">
+                                        {{ $payment->authority }}
+                                    </span>
+                                @else
+                                    <span>-</span>
+                                @endif
                             </td>
+
                             <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-600 dark:text-slate-400 print:py-2 print:px-2 print:text-slate-800">
                                 @php
                                     $paymentTime = $payment->paid_at ?? $payment->created_at;
