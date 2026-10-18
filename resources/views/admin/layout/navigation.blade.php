@@ -1,9 +1,8 @@
-
 <nav class="space-y-1.5" aria-label="ناوبری مدیریت">
 
     {{-- داشبورد --}}
     <a href="{{ route('admin.dashboard') }}"
-       title="داشبورد"
+       title="{{ __('داشبورد') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -12,7 +11,7 @@
             <rect x="14" y="14" width="7" height="7" rx="1.5"/>
             <rect x="3" y="14" width="7" height="7" rx="1.5"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">داشبورد</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('داشبورد') }}</span>
         @if(request()->routeIs('admin.dashboard'))
             <span x-show="!sidebarCollapsed" class="h-1.5 w-1.5 rounded-full bg-blue-400"></span>
         @endif
@@ -20,12 +19,12 @@
 
     <div x-show="!sidebarCollapsed"
          class="px-3 pb-1 pt-5 text-[10px] font-bold tracking-wider text-slate-600">
-        مدیریت کاربران و خدمات
+        {{ __('مدیریت کاربران و خدمات') }}
     </div>
 
     {{-- کاربران --}}
     <a href="{{ route('admin.users.index') }}"
-       title="کاربران"
+       title="{{ __('کاربران') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -33,24 +32,24 @@
             <circle cx="10" cy="7" r="4"/>
             <path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">کاربران</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('کاربران') }}</span>
     </a>
 
     {{-- اشتراک‌ها --}}
     <a href="{{ route('admin.subscriptions.index') }}"
-       title="اشتراک‌ها و پشتیبانی ها"
+       title="{{ __('اشتراک‌ها و پشتیبانی‌ها') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <rect x="3" y="5" width="18" height="14" rx="2.5"/>
             <path d="M3 10h18M7 15h4"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">اشتراک‌ها و پشتیبانی ها</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('اشتراک‌ها و پشتیبانی‌ها') }}</span>
     </a>
 
     {{-- فروشگاه --}}
     <a href="{{ route('admin.store.index') }}"
-       title="فروشگاه"
+       title="{{ __('فروشگاه') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.store.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -58,19 +57,32 @@
             <circle cx="10" cy="20" r="1"/>
             <circle cx="18" cy="20" r="1"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">فروشگاه</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('فروشگاه') }}</span>
+    </a>
+
+    {{-- امور مالی و فاکتورها (آیکون پول / اسکناس) --}}
+    <a href="{{ route('admin.invoices.index') }}"
+       title="{{ __('امور مالی و فاکتورها') }}"
+       @click="sidebarOpen = false"
+       class="pp-nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0">
+            <rect width="20" height="12" x="2" y="6" rx="2"/>
+            <circle cx="12" cy="12" r="2.5"/>
+            <path d="M6 12h.01M18 12h.01"/>
+        </svg>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('امور مالی و فاکتورها') }}</span>
     </a>
 
     {{-- مقالات --}}
     <a href="{{ route('admin.posts.index') }}"
-       title="مقالات"
+       title="{{ __('مقالات') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <path d="M5 3h11l4 4v14H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
             <path d="M15 3v5h5M8 12h8M8 16h8"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">مقالات</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('مقالات') }}</span>
     </a>
 
     {{-- لایسنس‌ها --}}
@@ -79,24 +91,22 @@
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.licenses.create') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0">
-            {{-- برگه گواهی یا کارت لایسنس --}}
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
             <path d="M14 2v6h6" />
-            {{-- علامت مثبت برای ایجاد / صدور جدید --}}
             <path d="M12 18v-6" />
             <path d="M9 15h6" />
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">ایجاد لایسنس</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('ایجاد لایسنس') }}</span>
     </a>
 
     <div x-show="!sidebarCollapsed"
          class="px-3 pb-1 pt-5 text-[10px] font-bold tracking-wider text-slate-600">
-        ابزارها و زیرساخت
+        {{ __('ابزارها و زیرساخت') }}
     </div>
 
     {{-- دیتابیس --}}
     <a href="{{ route('admin.database.index') }}"
-       title="دیتابیس"
+       title="{{ __('دیتابیس') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.database.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -104,19 +114,19 @@
             <path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>
             <path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">دیتابیس</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('دیتابیس') }}</span>
     </a>
 
     {{-- مانیتورینگ --}}
     <a href="{{ route('admin.monitoring.index') }}"
-       title="مانیتورینگ سایت و سرور"
+       title="{{ __('مانیتورینگ سایت و سرور') }}"
        @click="sidebarOpen = false"
        class="pp-nav-link {{ request()->routeIs('admin.monitoring.*') ? 'active' : '' }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <rect x="3" y="4" width="18" height="13" rx="2"/>
             <path d="M8 21h8M12 17v4M6 11h3l2-4 3 8 2-4h2"/>
         </svg>
-        <span x-show="!sidebarCollapsed" class="flex-1">مانیتورینگ</span>
+        <span x-show="!sidebarCollapsed" class="flex-1">{{ __('مانیتورینگ') }}</span>
     </a>
 
     {{-- خروج از حساب --}}
@@ -125,14 +135,14 @@
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit"
-                title="خروج از حساب کاربری"
-                @click="if (!confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خارج شوید؟')) $event.preventDefault()"
+                title="{{ __('خروج از حساب کاربری') }}"
+                @click="if (!confirm('{{ __('آیا مطمئن هستید که می‌خواهید از حساب کاربری خارج شوید؟') }}')) $event.preventDefault()"
                 class="pp-nav-link w-full text-right text-rose-300 hover:border-rose-400/15 hover:bg-rose-400/[.06] hover:text-rose-200">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                 <path d="M10 17l5-5-5-5M15 12H3"/>
                 <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
             </svg>
-            <span x-show="!sidebarCollapsed" class="flex-1">خروج از حساب</span>
+            <span x-show="!sidebarCollapsed" class="flex-1">{{ __('خروج از حساب') }}</span>
         </button>
     </form>
 
