@@ -75,12 +75,16 @@
 
     {{-- لایسنس‌ها --}}
     <a href="{{ route('admin.licenses.create') }}"
-       title="ایجاد لایسنس"
+       title="{{ __('ایجاد لایسنس') }}"
        @click="sidebarOpen = false"
-       class="pp-nav-link {{ request()->routeIs('admin.licenses.*') ? 'active' : '' }}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-            <circle cx="8" cy="15" r="4"/>
-            <path d="m11 12 8-8 3 3-8 8M17 7l3 3"/>
+       class="pp-nav-link {{ request()->routeIs('admin.licenses.create') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0">
+            {{-- برگه گواهی یا کارت لایسنس --}}
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <path d="M14 2v6h6" />
+            {{-- علامت مثبت برای ایجاد / صدور جدید --}}
+            <path d="M12 18v-6" />
+            <path d="M9 15h6" />
         </svg>
         <span x-show="!sidebarCollapsed" class="flex-1">ایجاد لایسنس</span>
     </a>
