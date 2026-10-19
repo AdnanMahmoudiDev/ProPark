@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="h-full">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 - صفحه پیدا نشد | Page Not Found - {{ config('app.name', 'AvaPark') }}</title>
+
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="h-full bg-slate-950 text-slate-100 font-sans antialiased overflow-x-hidden relative flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    {{-- پس‌زمینه نئونی و گرید هماهنگ با صفحه Welcome --}}
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-35 [background-size:28px_28px] bg-[radial-gradient(#1e293b_1px,transparent_1px)]"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 h-[350px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/15 blur-[90px] md:h-[500px] md:w-[1200px] md:blur-[140px]"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -right-40 top-1/3 h-[400px] w-[400px] rounded-full bg-indigo-600/10 blur-[100px] md:blur-[130px]"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -left-40 bottom-1/4 h-[400px] w-[400px] rounded-full bg-sky-600/10 blur-[100px] md:blur-[130px]"></div>
+
+    {{-- هدر ساده و مینیمال بدون کادر دور لوگو --}}
+    <header class="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+        <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+            <div class="h-10 flex items-center justify-center transition-transform group-hover:scale-105">
+                <img src="{{ asset('images/ProPark.png') }}" alt="{{ config('app.name', 'AvaPark') }}" class="h-10 w-auto object-contain filter brightness-200" onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}'; if(!this.complete) this.style.display='none';">
+            </div>
+            <span class="text-lg font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors">
+                {{ config('app.name', 'AvaPark') }}
+            </span>
+        </a>
+
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-gray-400 bg-gray-900/80 border border-gray-800 px-3.5 py-1.5 rounded-xl backdrop-blur shadow-inner">
+                STATUS: <span class="text-blue-400 font-bold">404_NOT_FOUND</span>
+            </span>
+        </div>
+    </header>
+
+    {{-- بخش اصلی محتوا --}}
+    <main class="relative z-10 flex-grow flex items-center justify-center px-5 py-10">
+        <div class="w-full max-w-2xl relative">
+
+            {{-- کارت اصلی شیشه‌ای (Glassmorphism) --}}
+            <div class="relative overflow-hidden rounded-[2.2rem] border border-gray-800/90 bg-gradient-to-b from-gray-900/85 via-gray-950/90 to-gray-950/95 p-8 md:p-12 shadow-2xl backdrop-blur-2xl text-center group">
+
+                {{-- هاله نوری در گوشه کارت --}}
+                <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-blue-600/20 blur-3xl transition-all duration-500 group-hover:bg-blue-600/30"></div>
+                <div aria-hidden="true" class="pointer-events-none absolute -left-24 -bottom-24 h-48 w-48 rounded-full bg-indigo-600/10 blur-3xl"></div>
+
+                {{-- شماره ارور بزرگ و چشم‌نواز --}}
+                <div class="relative inline-flex mb-4">
+                    <span class="font-mono font-black text-7xl md:text-9xl tracking-tight bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent select-none drop-shadow-sm">
+                        404
+                    </span>
+                </div>
+
+                {{-- بج شناور دوزبانه --}}
+                <div class="mb-6 flex items-center justify-center">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-bold font-mono uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                        خطای مسیر / Route Not Found
+                    </span>
+                </div>
+
+                {{-- تیتر دوزبانه (فارسی و انگلیسی) --}}
+                <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-2 leading-snug">
+                    صفحه مورد نظر پیدا نشد
+                </h1>
+                <h2 dir="ltr" class="text-base md:text-lg font-bold text-gray-300 tracking-normal mb-5 font-mono">
+                    The requested page could not be found
+                </h2>
+
+                {{-- توضیحات دوزبانه تفکیک‌شده و منظم --}}
+                <div class="space-y-3 mb-9 max-w-lg mx-auto">
+                    <p class="text-sm md:text-base text-gray-400 leading-relaxed">
+                        آدرس وارد شده اشتباه است، صفحه تغییر نام داده یا ممکن است به طور موقت از دسترس خارج شده باشد.
+                    </p>
+                    <p dir="ltr" class="text-xs md:text-sm text-gray-500 leading-relaxed border-t border-gray-800/70 pt-3">
+                        The link you followed may be broken, or the page has been removed. Check the URL or return to home.
+                    </p>
+                </div>
+
+                {{-- دکمه‌های اکشن دوزبانه --}}
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+                    <a href="{{ url('/') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 hover:from-blue-500 hover:to-sky-400 rounded-2xl transition-all shadow-xl shadow-blue-600/25 active:scale-[0.98]">
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        صفحه اصلی / Home Page
+                    </a>
+
+                    <a href="{{ url()->previous() }}" class="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-gray-300 bg-gray-900/90 hover:bg-gray-800 border border-gray-700/80 hover:border-gray-600 rounded-2xl transition-all active:scale-[0.98]">
+                        <svg class="w-4 h-4 ml-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        بازگشت / Go Back
+                    </a>
+                </div>
+
+                {{-- متادیتا انتهای کارت --}}
+                <div class="mt-10 pt-6 border-t border-gray-800/80 flex items-center justify-center gap-2 text-xs font-mono text-gray-500">
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        AvaPark Gateway Active
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    {{-- فوتر دوزبانه --}}
+    <footer class="relative z-10 w-full text-center py-6 text-xs text-gray-500 border-t border-gray-900/80">
+        &copy; {{ date('Y') }} {{ config('app.name', 'AvaPark') }}. کلیه حقوق محفوظ است / All rights reserved.
+    </footer>
+
+</body>
+</html>
