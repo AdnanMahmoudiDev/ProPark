@@ -1,9 +1,9 @@
-# ProPark
+# AvaPark
 
 **A Laravel-based subscription, software licensing, and parking management platform.**
 
 <p align="center">
-  <img src="public/images/ProPark.png" width="220" alt="ProPark Logo">
+  <img src="public/images/ProPark.png" width="220" alt="AvaPark Logo">
 </p>
 
 <p align="center">
@@ -11,242 +11,231 @@
   <img src="https://img.shields.io/badge/PHP-%E2%89%A58.2-777BB4?logo=php&logoColor=white" alt="PHP 8.2+">
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
   <img src="https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite&logoColor=white" alt="Vite">
+  <a href="https://www.sep.ir">
+    <img src="https://img.shields.io/badge/Payment-SEP%20IPG-28A745" alt="SEP Payment Gateway">
+  </a>
 </p>
+
+<p align="center">
+  <strong>Production:</strong> <a href="https://www.avapark.ir">www.avapark.ir</a>
+</p>
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Project Highlights](#project-highlights)
+- [Main Features](#main-features)
+- [Architecture](#architecture)
+- [Data Model](#data-model)
+- [Purchase Flow](#purchase-flow)
+- [Client REST API](#client-rest-api)
+- [API Response Signing](#api-response-signing)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Creating an Administrator](#creating-an-administrator)
+- [Seed Data](#seed-data)
+- [Testing and Development](#testing-and-development)
+- [Roadmap](#roadmap)
+- [License](#license)
 
 ---
 
 ## Overview
 
-**ProPark** is a Laravel-based web platform developed to manage subscriptions, software licenses, registered devices, users, and the infrastructure surrounding a Windows parking management application.
+**AvaPark** is a Laravel-based web platform that manages subscriptions, software licenses, payments, support services, and the infrastructure surrounding the AvaPark Windows parking management application.
 
-The platform provides a complete subscription and licensing workflow, including:
+The platform connects three main areas:
 
-* Subscription purchasing and renewal
-* Plan upgrades and downgrades
-* Software license generation
-* Device registration and management
-* User and administration panels
-* REST API for the Windows client
-* RSA-signed API responses
-* Database backup and restore
-* Blog and content management
-* Persian and English localization
-* RTL and LTR interface support
+- **Customer experience:** A bilingual storefront, user dashboard, blog, and account management.
+- **Software licensing:** A secure REST API for license validation, device activation, and support-status checks.
+- **Business operations:** An administration panel for managing customers, subscriptions, orders, payments, invoices, content, and system monitoring.
 
-A production deployment of ProPark is currently used under the **AvaPark** brand.
+Unlike a conventional subscription platform, AvaPark uses a lifetime licensing model: purchasing a plan grants a license that does not expire. Technical support is managed separately through time-limited support periods.
 
-### Live Deployment
+The platform brings together the complete commercial workflow, from selecting a plan to payment verification, license issuance, device registration, and support management.
 
-**https://www.avapark.ir**
+**Live deployment:** [https://www.avapark.ir](https://www.avapark.ir)
+
+### Commercial Model
+
+AvaPark separates software ownership rights under its commercial licensing model from the duration of technical support.
+
+| Component | Description |
+| --- | --- |
+| Software license | Lifetime validity |
+| Initial support | Six months of support included |
+| Support extension | Available through purchasable support packages |
+| Device activation | Subject to the device limit of the selected plan |
+| Payment processing | SEP (SAMAN) Internet Payment Gateway by default |
+
+The support period can expire without the lifetime software license itself expiring.
 
 ---
 
 ## Project Highlights
 
-This project focuses on implementing real-world backend and application architecture rather than a simple CRUD application.
+### Lifetime Software Licensing
 
-### Subscription Management
+AvaPark provides three lifetime plans:
 
-The application supports a complete subscription lifecycle:
+- **Eco**
+- **Pro**
+- **Sazmani (Enterprise)**
 
-* Multiple subscription plans
-* Multiple subscription durations
-* New purchases
-* Subscription renewals
-* Plan upgrades
-* Plan downgrades
-* Automatic subscription validity calculation
-* Device limits based on the selected plan
-* Transaction-safe checkout
+Each plan has its own device limit. Once purchased, the plan does not expire; support duration is managed independently.
 
-Upgrade and downgrade operations also contain business rules for handling remaining subscription time and registered devices.
+### Subscription and Support Management
 
-### Software Licensing
+The platform handles purchases, plan changes, and support extensions through a unified checkout workflow.
 
-Each subscription can have an associated software license.
+Its business logic distinguishes between purchasing a plan, upgrading or downgrading an existing plan, and extending a support period.
 
-License keys follow this format:
+### Payment Processing
 
-```text
-PRPK-XXXX-XXXX-XXXX-XXXX
-```
+The platform integrates with the SEP (SAMAN) payment gateway.
 
-The licensing system supports:
+Payment processing includes server-side verification, callback handling, and protection against settling the same order more than once. Orders with a zero payable amount can be finalized without redirecting the customer to a payment gateway.
 
-* Unique license generation
-* License-to-subscription association
-* Machine fingerprint-based device registration
-* Automatic seat allocation
-* Device limits
-* Device activation and deactivation
-* License validation
-* Subscription validity checks
-* API-based device deactivation
+### Secure Software Licensing
 
-### API Security
+License activation is tied to registered devices identified by machine fingerprints.
 
-The licensing API uses **RSA/SHA-256 digital signatures**.
+The licensing API uses RSA/SHA-256 digital signatures so that the Windows client can verify the authenticity and integrity of server responses.
 
-API responses are signed on the server and can be verified by the Windows client using the corresponding public key.
+### Administration and Monitoring
 
-This provides a mechanism for the client to verify that a response was generated by the expected server and has not been modified after signing.
-
-The private signing key is kept on the server and is not included in the repository.
+The administration panel combines commerce management, customer administration, invoice and revenue reporting, content management, database backup and restore, and server monitoring.
 
 ---
 
 ## Main Features
 
-### Store & Subscriptions
+### Store and Checkout
 
-* Eco, Pro, and Enterprise plans
-* 1, 3, 6, and 12-month durations
-* Different device limits per plan
-* Discounted and original prices
-* Automatic transaction type detection
-* Purchase, renewal, upgrade, and downgrade workflows
-* Transaction-safe checkout using database transactions
-* Row locking with `lockForUpdate()` where required
-* Automatic device adjustment after plan changes
+- Three lifetime plans with configurable prices and device limits.
+- Purchasable support packages for six months and one year.
+- Automatic detection of purchase types.
+- Purchase, upgrade, downgrade, and support-extension workflows.
+- Automatic discount handling for supported support-package purchases.
+- Transaction-safe order settlement.
+- Database transactions and row locking for consistency.
+- Server-side payment verification.
+- Idempotent payment callback handling.
+- Automatic expiration of abandoned pending orders through a scheduled command.
+- Immediate settlement of zero-amount orders without a gateway redirect.
 
-> The current payment process is simulated and does not yet use a production payment gateway.
+The payment gateway is configurable, with SEP as the default driver.
 
 ### User Dashboard
 
 Users can:
 
-* View their active subscription
-* View subscription details
-* Access their software license
-* Check remaining subscription time
-* View registered devices
-* Deactivate devices
-* Update profile information
-* Manage their phone number
-* Change their password
-* Delete their account
-
-Authentication is implemented using **Laravel Breeze** with a customized email verification flow.
+- View their plan and lifetime subscription details.
+- Check their support period and remaining support time.
+- View their software license key.
+- Manage registered devices.
+- Review purchase history and invoice details.
+- Add plans or support packages to their cart.
+- Cancel pending cart operations and proceed to checkout.
+- Manage profile information.
+- Complete email verification.
 
 ### Administration Panel
 
-Administrators can:
+Administrators have access to the following tools:
 
-* View system statistics
-* Manage users
-* Manage user roles
-* Manage subscriptions
-* Change subscription status
-* Change subscription plans
-* Manually renew subscriptions
-* Manually issue subscriptions and licenses
-* Manage store pricing
-* Perform bulk price updates
-* View subscriptions approaching expiration
-* Create database backups
-* Restore SQL database backups
-* Manage blog categories
-* Manage blog posts
-* Upload blog images
-* Edit content using TinyMCE
+- System dashboard and commerce statistics.
+- User management and role assignment.
+- Subscription and license management.
+- Support-package management.
+- Store pricing management and bulk price updates.
+- Order and invoice management.
+- Revenue analytics and a 12-month revenue chart.
+- Server monitoring, including memory, disk, database latency, and traffic statistics.
+- Blog category and post management.
+- Rich-text content editing and SEO fields.
+- Database backup and restore utilities.
 
-### Blog & Content Management
+### Blog and Content Management
 
-The platform includes a built-in blog system with:
+The platform includes a built-in content management system with category and post management, a rich-text editor, and SEO-related fields.
 
-* Categories
-* Search
-* Category filtering
-* Featured posts
-* Pagination
-* View counting
-* Session-based duplicate view prevention
-* Reading time calculation
-* Related posts
-* SEO titles
-* SEO descriptions
-* Canonical URLs
-* Open Graph images
-* Soft deletes
+### Localization and Interface
 
-### Localization
-
-The application currently supports:
-
-* Persian
-* English
-
-Translations are stored in:
-
-```text
-lang/fa.json
-lang/en.json
-```
-
-The interface supports both:
-
-```text
-RTL
-LTR
-```
-
-The selected locale is stored in the session and the interface automatically adapts to the selected language.
+- Persian and English localization.
+- Automatic right-to-left (RTL) and left-to-right (LTR) layout support.
+- Jalali (Solar Hijri) date formatting.
+- Custom bilingual error pages for HTTP status codes 401–503.
+- Page-visit analytics integrated with the monitoring dashboard.
 
 ---
 
 ## Architecture
 
-The application separates a significant portion of its business logic from controllers through dedicated service classes.
+AvaPark separates business logic from HTTP controllers through a dedicated service layer.
 
-A simplified structure:
+Controllers handle incoming requests, while service classes manage operations such as checkout, order settlement, payment verification, subscription management, device activation, and API response signing.
+
+### Application Structure
 
 ```text
 app/
+├── Console/
+│   └── Commands/
+│       └── ExpirePendingOrdersCommand.php
+│
 ├── Http/
 │   ├── Controllers/
 │   │   ├── Admin/
-│   │   │   ├── DashboardController
-│   │   │   ├── UserController
-│   │   │   ├── SubscriptionController
-│   │   │   ├── StoreController
-│   │   │   ├── LicenseCreationController
-│   │   │   ├── DatabaseBackupController
-│   │   │   ├── CategoryController
-│   │   │   └── PostController
+│   │   │   ├── Dashboard
+│   │   │   ├── Users
+│   │   │   ├── Subscriptions
+│   │   │   ├── Supports
+│   │   │   ├── Store
+│   │   │   ├── Licenses
+│   │   │   ├── Invoices
+│   │   │   ├── Database
+│   │   │   ├── Monitoring
+│   │   │   ├── Categories
+│   │   │   └── Posts
 │   │   │
 │   │   ├── Api/
-│   │   │   └── LicenseController
-│   │   │
+│   │   │   └── LicenseController.php
 │   │   ├── Auth/
-│   │   │
-│   │   └── User/
-│   │       ├── CartController
-│   │       ├── SubscriptionDetailsController
-│   │       └── UserDeviceController
+│   │   ├── User/
+│   │   ├── BlogController.php
+│   │   ├── LocaleController.php
+│   │   ├── PageController.php
+│   │   ├── ProfileController.php
+│   │   └── ShopController.php
 │   │
 │   ├── Middleware/
-│   │   ├── AdminMiddleware
-│   │   └── SetLocale
-│   │
 │   └── Requests/
 │
 ├── Models/
 │   ├── User
 │   ├── Plan
-│   ├── PlanPrice
 │   ├── Subscription
+│   ├── Support*
 │   ├── Cart
+│   ├── Order
+│   ├── OrderItem
+│   ├── Payment
 │   ├── License
 │   ├── LicenseDevice
 │   ├── Post
 │   └── Category
 │
 ├── Notifications/
-│   └── CustomVerifyEmail
+│   └── CustomVerifyEmail.php
 │
 ├── Services/
 │   ├── CartService.php
 │   ├── CheckoutService.php
+│   ├── OrderService.php
+│   ├── PaymentService.php
 │   ├── SubscriptionService.php
 │   ├── LicenseService.php
 │   ├── LicenseValidatorService.php
@@ -259,147 +248,141 @@ app/
     └── Components/
 ```
 
-The service layer is primarily used for operations such as:
+### Service Layer
 
-* Checkout processing
-* Subscription lifecycle management
-* License generation and validation
-* Device management
-* API signature generation
-* Database backup operations
+The service layer is responsible for the main business operations:
+
+| Service | Responsibility |
+| --- | --- |
+| `CartService` | Pending-cart lifecycle |
+| `CheckoutService` | Purchase-type detection and checkout settlement |
+| `OrderService` | Converting carts into orders |
+| `PaymentService` | Payment initiation and verification |
+| `SubscriptionService` | Lifetime subscriptions and support renewal |
+| `LicenseService` | License issuance |
+| `LicenseValidatorService` | License validation and client API logic |
+| `DeviceService` | Device fingerprints, activation, and seat limits |
+| `DatabaseBackupService` | SQL database export and import |
+| `SignatureService` | Digital signing of API responses |
 
 ---
 
 ## Data Model
 
-| Table                    | Description                                |
-| ------------------------ | ------------------------------------------ |
-| `users`                  | Application users and roles                |
-| `plans`                  | Subscription plan definitions              |
-| `plan_prices`            | Plan prices based on subscription duration |
-| `subscriptions`          | User subscriptions                         |
-| `carts`                  | Purchase and plan-change transactions      |
-| `licenses`               | Generated software licenses                |
-| `license_devices`        | Devices registered to licenses             |
-| `categories`             | Blog categories                            |
-| `posts`                  | Blog posts                                 |
-| `personal_access_tokens` | Laravel Sanctum tokens                     |
+The following tables represent the main data entities described by the application's architecture.
+
+| Table | Purpose |
+| --- | --- |
+| `users` | User accounts, roles, and email verification |
+| `plans` | Plan definitions, prices, discounts, and device limits |
+| `subscriptions` | Lifetime subscriptions and their status |
+| `subscription_supports` | Support periods with start and expiration timestamps |
+| `support_packages` | Purchasable support durations |
+| `carts` | Pending purchase operations |
+| `orders` | Orders, amounts, currency, and payment status |
+| `order_items` | Order line items for plans and support packages |
+| `payments` | Payment gateway transactions and references |
+| `licenses` | Generated software license keys |
+| `license_devices` | Devices activated against licenses |
+| `demo_license_devices` | Device-specific trial registrations |
+| `categories` | Blog categories |
+| `posts` | Blog posts |
+| `page_visits` | Page-visit statistics |
 
 ---
 
-## Subscription Flow
+## Purchase Flow
+
+AvaPark processes purchases through a cart, order, payment-verification, and settlement workflow.
 
 ```text
-Select Plan
-    |
-    v
-Create Cart
-    |
-    v
-Checkout
-    |
-    +-- No existing subscription
-    |       |
-    |       +-- Purchase
-    |              |
-    |              +-- New Subscription + License
-    |
-    +-- Higher-level plan
-    |       |
-    |       +-- Upgrade
-    |              |
-    |              +-- Upgrade + Remaining Time Bonus
-    |
-    +-- Lower-level plan
-    |       |
-    |       +-- Downgrade
-    |              |
-    |              +-- Preserve Remaining Time + Device Adjustment
-    |
-    +-- Same plan
-            |
-            +-- Renew
-                   |
-                   +-- Extend Subscription
+Select a Plan or Support Package
+              |
+              v
+         Create Cart
+              |
+              v
+         Create Order
+              |
+              v
+      Initiate Payment
+         (SEP IPG)
+              |
+              v
+      Payment Callback
+              |
+              v
+    Server-side Verification
+              |
+              v
+       Confirm Payment
+              |
+              v
+      Settle Checkout
+    (Database Transaction)
+              |
+       +------+------+
+       |             |
+       v             v
+  Plan Purchase   Existing Plan
+       |             |
+       v        +----+----+---------+
+  Issue License |         |         |
+                v         v         v
+             Upgrade   Downgrade  Support
+                                  Extension
 ```
 
-The checkout process uses database transactions to keep related subscription, license, and device changes consistent.
+### Checkout Integrity
+
+The checkout workflow uses database transactions and pessimistic locking to maintain consistency during settlement.
+
+Payment callbacks are processed idempotently so that an already-settled order is not settled a second time. Zero-amount orders bypass the payment gateway and are finalized directly.
+
+Purchase handling distinguishes between new purchases, same-plan operations, plan upgrades, plan downgrades, and support extensions.
 
 ---
 
-## REST API
+## Client REST API
 
-The Windows desktop client communicates with ProPark through the licensing API.
+The Windows desktop application communicates with AvaPark through a REST API responsible for license validation, device activation, and support information.
 
-| Method | Endpoint                          | Description                              |
-| ------ | --------------------------------- | ---------------------------------------- |
-| `POST` | `/api/license/validate`           | Validate a license and register a device |
-| `POST` | `/api/license/remaining-validity` | Retrieve remaining subscription validity |
-| `POST` | `/api/license/deactivate-device`  | Deactivate a registered device           |
-| `POST` | `/api/license/info`               | Retrieve license information             |
+### Available Endpoints
 
-### Example Request
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/api/license/validate` | Validate a license and activate the calling device |
+| `POST` | `/api/license/support-status` | Retrieve the current support period and remaining time |
+| `POST` | `/api/license/deactivate-device` | Deactivate a registered device and release its seat |
+| `POST` | `/api/license/info` | Retrieve license, plan, device, and support information |
 
-```json
-{
-    "license_key": "PRPK-XXXX-XXXX-XXXX-XXXX",
-    "machine_fingerprint": "unique-machine-id"
-}
-```
+### API Security
 
-### Example Response
+The licensing API uses RSA/SHA-256 digital signatures.
 
-```json
-{
-    "valid": true,
-    "message": "Access granted",
-    "data": {
-        "license_key": "PRPK-XXXX-XXXX-XXXX-XXXX",
-        "subscription": {
-            "status": "active",
-            "effective_status": "active"
-        },
-        "plan": {
-            "slug": "pro"
-        },
-        "device": {
-            "seat_number": 1
-        },
-        "expires_at": "2026-12-31 23:59:59",
-        "remaining": {
-            "total_seconds": 8640000,
-            "days": 100,
-            "hours": 0,
-            "minutes": 0,
-            "seconds": 0,
-            "text": "100 days"
-        },
-        "remaining_days": 100
-    },
-    "signature": "base64-encoded-rsa-signature"
-}
-```
+- API responses are digitally signed by the server.
+- The Windows client can verify response authenticity and integrity using the corresponding public key.
+- Error responses use the signed response format.
+- Device activation, deactivation, seat limits, and trial eligibility are enforced server-side.
+- A per-device demo trial allows prospective customers to evaluate the software before purchasing.
 
-Possible API errors include:
-
-```text
-Invalid or inactive license
-Subscription expired
-Device limit reached
-This device is not registered for this license
-```
+Detailed request and response contracts are maintained in the project's internal API documentation.
 
 ---
 
 ## API Response Signing
 
-The licensing API signs responses using **RSA/SHA-256**.
+AvaPark uses asymmetric cryptography to sign licensing API responses.
 
-The Windows client can use the corresponding public key to verify the response signature.
+The server signs responses with its private key, while the Windows client uses the corresponding public key to verify signatures.
 
-The private key must remain on the server and should never be committed to Git.
+This provides a mechanism for detecting response tampering and verifying that a response was signed by the holder of the corresponding private key.
 
-Generate a key pair with:
+The private signing key must remain on the server and must never be committed to the repository.
+
+### Generate a Key Pair
+
+The following commands illustrate RSA key-pair generation using OpenSSL:
 
 ```bash
 openssl genrsa -out storage/app/license_private.pem 2048
@@ -410,7 +393,31 @@ openssl rsa \
     -out license_public.pem
 ```
 
-The public key can then be distributed with the Windows client for response verification.
+The public key can be distributed with the Windows client for response verification. Keep the private key secure and configure its storage according to the application's deployment requirements.
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| Backend framework | Laravel 11 |
+| Programming language | PHP 8.2+ |
+| Authentication | Laravel Breeze |
+| API authentication | Laravel Sanctum |
+| API response security | RSA/SHA-256 digital signatures |
+| Frontend | Blade |
+| JavaScript | Alpine.js 3 |
+| CSS framework | Tailwind CSS 3 |
+| Build tool | Vite 6 |
+| Rich-text editor | TinyMCE 6 |
+| Payment integration | `shetabit/payment` — SEP / SAMAN IPG |
+| Calendar | `morilog/jalali` |
+| Database | MySQL 8+ / MariaDB 10.4+ |
+| Local testing database | SQLite |
+| Testing | PHPUnit 11 |
+| Mocking | Mockery |
+| Code formatting | Laravel Pint |
 
 ---
 
@@ -418,14 +425,13 @@ The public key can then be distributed with the Windows client for response veri
 
 ### Requirements
 
-* PHP 8.2 or later
-* Composer
-* Node.js 20 or later
-* npm
-* MySQL or MariaDB
-* OpenSSL
+Make sure the following tools and services are available:
 
-SQLite can also be used for testing.
+- PHP 8.2 or later with the OpenSSL extension.
+- Composer.
+- Node.js 20 or later.
+- npm.
+- MySQL 8+, MariaDB 10.4+, or SQLite for supported local testing scenarios.
 
 ### 1. Clone the Repository
 
@@ -435,68 +441,106 @@ git clone https://github.com/AdnanMahmoudiDev/ProPark.git
 cd ProPark
 ```
 
-### 2. Install PHP Dependencies
+### 2. Install Dependencies
+
+Install PHP dependencies:
 
 ```bash
 composer install
 ```
 
-### 3. Install Frontend Dependencies
+Install frontend dependencies:
 
 ```bash
 npm install
 ```
 
-### 4. Create the Environment File
+### 3. Configure the Environment
+
+Create the environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-### 5. Generate the Application Key
+Generate the Laravel application key:
 
 ```bash
 php artisan key:generate
 ```
 
-### 6. Configure the Database
+### 4. Configure the Database
 
-Configure the database connection in `.env`:
+Update the database settings in `.env` to match your local environment:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=ProPark
+DB_DATABASE=avapark
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 7. Run Migrations and Seeders
+Create the database before running migrations.
+
+### 5. Run Migrations and Seeders
 
 ```bash
 php artisan migrate --seed
 ```
 
-### 8. Create the Storage Link
+Create the public storage link:
 
 ```bash
 php artisan storage:link
 ```
 
-### 9. Start the Frontend Development Server
+### 6. Configure the Payment Gateway
+
+SEP (SAMAN) is the default payment gateway. Configure the appropriate merchant credentials and callback URL in `.env`:
+
+```env
+PAYMENT_DEFAULT=sep
+SEP_TERMINAL_ID=your-terminal-id
+SEP_CALLBACK_URL=https://your-domain.com/payment/callback
+SEP_DESCRIPTION="AvaPark order payment"
+SEP_CURRENCY=T
+```
+
+Replace the example values with the actual credentials and settings supplied for your payment-gateway account.
+
+Additional gateway drivers, such as Zarinpal, may be configured through `config/payment.php`, subject to the application's implementation and gateway credentials.
+
+**Security:** Never commit production credentials, private keys, or other secrets to Git.
+
+### 7. Configure the Scheduler
+
+The application uses Laravel's scheduler to expire pending orders.
+
+For local development, run:
+
+```bash
+php artisan schedule:work
+```
+
+Alternatively, configure the standard scheduler cron entry in production:
+
+```cron
+* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+Replace `/path-to-project` with the absolute path to the application.
+
+### 8. Start the Application
+
+Start the frontend development server:
 
 ```bash
 npm run dev
 ```
 
-For production assets:
-
-```bash
-npm run build
-```
-
-### 10. Start Laravel
+In another terminal, start Laravel:
 
 ```bash
 php artisan serve
@@ -508,82 +552,87 @@ The application will normally be available at:
 http://127.0.0.1:8000
 ```
 
+For production frontend assets, run:
+
+```bash
+npm run build
+```
+
 ---
 
 ## Creating an Administrator
 
-There is currently no dedicated administrator seeder.
+The project does not seed an administrator account by default.
 
-Create a regular account first and then update its role using Laravel Tinker:
+First, register a normal account. Then open Laravel Tinker:
 
 ```bash
 php artisan tinker
 ```
 
-Then:
+Promote the account by updating its role:
 
 ```php
 \App\Models\User::where('email', 'you@example.com')
     ->update(['role' => 'admin']);
 ```
 
+Replace `you@example.com` with the registered account's email address.
+
+The administration panel is available under `/admin` and is restricted to administrator accounts.
+
 ---
 
 ## Seed Data
 
-The project seeder creates three default subscription plans:
+### Subscription Plans
 
-| Plan       | Level | Device Limit |
-| ---------- | ----: | -----------: |
-| Eco        |     1 |            2 |
-| Pro        |     2 |            4 |
-| Enterprise |     3 |            8 |
+The seed data defines three plans with different device limits.
 
-Seeded prices are initial application data and can be changed through the administration panel.
+| Plan | Slug | Level | Device Limit |
+| --- | --- | ---: | ---: |
+| Eco | `eco` | 1 | 2 |
+| Pro | `pro` | 2 | 4 |
+| Sazmani | `sazmani` | 3 | 8 |
+
+Plan prices are managed through the administration panel. Seeded plans start without configured prices.
+
+### Support Packages
+
+The documented support-package configuration includes:
+
+| Package | Duration | Price |
+| --- | --- | ---: |
+| Six-month support | 6 months | 1,500,000 Toman |
+| Annual support | 12 months | 2,600,000 Toman |
+
+These are the values described by the project's current README. Verify them against the active application configuration before using them as published commercial prices.
 
 ---
 
-## Testing
+## Testing and Development
 
-Run the test suite:
+### Run Tests
 
 ```bash
 php artisan test
 ```
 
-Format PHP code using Laravel Pint:
+### Format PHP Code
 
 ```bash
 ./vendor/bin/pint
 ```
 
-The project also includes a Composer development script:
+### Run the Development Environment
+
+The project includes a Composer development script:
 
 ```bash
 composer dev
 ```
 
----
-
-## Tech Stack
-
-| Category           | Technology      |
-| ------------------ | --------------- |
-| Backend            | Laravel 11      |
-| Language           | PHP 8.2+        |
-| Authentication     | Laravel Breeze  |
-| API Authentication | Laravel Sanctum |
-| Frontend           | Blade           |
-| CSS                | Tailwind CSS 3  |
-| JavaScript         | Alpine.js 3     |
-| Build Tool         | Vite 6          |
-| HTTP Client        | Axios           |
-| Rich Text Editor   | TinyMCE 6       |
-| Database           | MySQL / MariaDB |
-| Persian Dates      | morilog/jalali  |
-| Testing            | PHPUnit 11      |
-| Mocking            | Mockery         |
-| Test Data          | Faker           |
+This script runs the configured development processes concurrently, including the application server, queue processing, logs, and Vite.
 
 ---
 
@@ -591,21 +640,20 @@ composer dev
 
 Planned improvements include:
 
-* [ ] Production payment gateway integration
-* [ ] Subscription expiration notifications
-* [ ] Email and SMS notifications
-* [ ] Extended Queue and Job usage
-* [ ] Advanced role and permission management
-* [ ] Swagger/OpenAPI documentation
-* [ ] Discount code support
-* [ ] Extended payment infrastructure
+- [ ] Email and SMS notifications for relevant renewal and expiration events.
+- [ ] Discount codes and coupon support.
+- [ ] Queue-backed processing for resource-intensive tasks, such as backups and notifications.
+- [ ] Fine-grained role and permission management.
+- [ ] OpenAPI specification for the client API.
+- [ ] Two-factor authentication for administrators.
+- [ ] Payment webhooks for downstream integrations.
 
 ---
 
-## Project Status
+## License
 
-ProPark is under active development.
+This repository is released under the **MIT License**, as indicated by the project's `composer.json`.
 
-A production deployment is currently operating under the **AvaPark** brand.
+See the repository's license files and notices for the applicable terms.
 
-The project demonstrates a real-world Laravel application architecture involving subscription management, software licensing, device-based access control, REST API communication, administration tools, localization, database transactions, and digitally signed API responses.
+**Important:** The repository's software license and AvaPark's commercial terms for lifetime software licenses and paid support are separate matters. The MIT notice describes the repository's stated source-code licensing; it does not, by itself, document the complete commercial agreement offered to AvaPark customers.
