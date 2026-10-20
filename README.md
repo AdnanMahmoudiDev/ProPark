@@ -1,6 +1,14 @@
 # AvaPark
 
-**A Laravel-based subscription, software licensing, and parking management platform.**
+**A web-based licensing, sales, and management platform for Windows parking management software.**
+
+AvaPark is the web platform behind the commercial operation of the AvaPark Windows parking management application. It provides the infrastructure required to sell the software, issue and validate licenses, manage device activations, process online payments, and deliver technical support.
+
+Instead of handling sales, licensing, and customer support separately, AvaPark brings these operations together in one centralized platform. Customers can purchase software plans, activate their licenses, manage registered devices, view invoices, and purchase support extensions. Administrators can manage customers, licenses, pricing, payments, support packages, and other business operations through a dedicated administration panel.
+
+AvaPark also provides a secure REST API that connects the Windows application to the web platform, allowing the desktop software to validate licenses, check device authorization, and retrieve license and support information.
+
+**In short, AvaPark is the web-based commercial and licensing infrastructure that connects the AvaPark Windows application with its customers, payments, licenses, devices, and support services.**
 
 <p align="center">
   <img src="public/images/ProPark.png" width="220" alt="AvaPark Logo">
@@ -15,645 +23,540 @@
     <img src="https://img.shields.io/badge/Payment-SEP%20IPG-28A745" alt="SEP Payment Gateway">
   </a>
 </p>
-
 <p align="center">
   <strong>Production:</strong> <a href="https://www.avapark.ir">www.avapark.ir</a>
 </p>
+
+ **Live Website:** [https://www.avapark.ir](https://www.avapark.ir)
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Project Highlights](#project-highlights)
-- [Main Features](#main-features)
-- [Architecture](#architecture)
-- [Data Model](#data-model)
-- [Purchase Flow](#purchase-flow)
-- [Client REST API](#client-rest-api)
+- [Key Features](#key-features)
+- [How AvaPark Works](#how-avapark-works)
+- [License and Support Model](#license-and-support-model)
+- [Software Plans](#software-plans)
+- [Customer Dashboard](#customer-dashboard)
+- [Administration Panel](#administration-panel)
+- [Windows Client API](#windows-client-api)
 - [API Response Signing](#api-response-signing)
-- [Tech Stack](#tech-stack)
+- [Technology Stack](#technology-stack)
+- [Requirements](#requirements)
 - [Installation](#installation)
-- [Creating an Administrator](#creating-an-administrator)
-- [Seed Data](#seed-data)
-- [Testing and Development](#testing-and-development)
+- [Configuration](#configuration)
+- [Database Seeding](#database-seeding)
+- [Development and Testing](#development-and-testing)
+- [Security Considerations](#security-considerations)
 - [Roadmap](#roadmap)
 - [License](#license)
 
 ---
 
-## Overview
+## Key Features
 
-**AvaPark** is a Laravel-based web platform that manages subscriptions, software licenses, payments, support services, and the infrastructure surrounding the AvaPark Windows parking management application.
+### Software Licensing and Device Management
 
-The platform connects three main areas:
+- Issue and manage software licenses.
+- Support lifetime software licenses.
+- Activate licenses on authorized devices.
+- Enforce device limits according to the purchased plan.
+- Associate activations with device fingerprints.
+- Validate licenses through the Windows client API.
+- Deactivate registered devices when permitted.
+- Manage license and device information through the customer dashboard.
 
-- **Customer experience:** A bilingual storefront, user dashboard, blog, and account management.
-- **Software licensing:** A secure REST API for license validation, device activation, and support-status checks.
-- **Business operations:** An administration panel for managing customers, subscriptions, orders, payments, invoices, content, and system monitoring.
+### Online Sales and Payments
 
-Unlike a conventional subscription platform, AvaPark uses a lifetime licensing model: purchasing a plan grants a license that does not expire. Technical support is managed separately through time-limited support periods.
+- Display software plans and their pricing.
+- Support the complete purchase and checkout flow.
+- Integrate with the SEP (Saman Electronic Payment) gateway.
+- Verify payment results on the server.
+- Process payment callbacks with duplicate-processing protection.
+- Maintain order and payment records.
+- Generate and display invoices.
+- Support plan changes and additional support purchases.
 
-The platform brings together the complete commercial workflow, from selecting a plan to payment verification, license issuance, device registration, and support management.
+### Technical Support Management
 
-**Live deployment:** [https://www.avapark.ir](https://www.avapark.ir)
+- Include an initial technical support period with a license purchase.
+- Offer paid support extensions.
+- Support six-month and twelve-month support packages.
+- Track support validity independently of the lifetime license.
+- Display support status to customers and administrators.
 
-### Commercial Model
+### Customer Experience
 
-AvaPark separates software ownership rights under its commercial licensing model from the duration of technical support.
+- User registration and authentication.
+- Dedicated customer dashboard.
+- License and device management.
+- Purchase history and order details.
+- Invoice access.
+- Support status and extension options.
+- Persian and English interfaces.
+- Jalali date support.
 
-| Component | Description |
-| --- | --- |
-| Software license | Lifetime validity |
-| Initial support | Six months of support included |
-| Support extension | Available through purchasable support packages |
-| Device activation | Subject to the device limit of the selected plan |
-| Payment processing | SEP (SAMAN) Internet Payment Gateway by default |
+### Administration and Website Management
 
-The support period can expire without the lifetime software license itself expiring.
-
----
-
-## Project Highlights
-
-### Lifetime Software Licensing
-
-AvaPark provides three lifetime plans:
-
-- **Eco**
-- **Pro**
-- **Sazmani (Enterprise)**
-
-Each plan has its own device limit. Once purchased, the plan does not expire; support duration is managed independently.
-
-### Subscription and Support Management
-
-The platform handles purchases, plan changes, and support extensions through a unified checkout workflow.
-
-Its business logic distinguishes between purchasing a plan, upgrading or downgrading an existing plan, and extending a support period.
-
-### Payment Processing
-
-The platform integrates with the SEP (SAMAN) payment gateway.
-
-Payment processing includes server-side verification, callback handling, and protection against settling the same order more than once. Orders with a zero payable amount can be finalized without redirecting the customer to a payment gateway.
-
-### Secure Software Licensing
-
-License activation is tied to registered devices identified by machine fingerprints.
-
-The licensing API uses RSA/SHA-256 digital signatures so that the Windows client can verify the authenticity and integrity of server responses.
-
-### Administration and Monitoring
-
-The administration panel combines commerce management, customer administration, invoice and revenue reporting, content management, database backup and restore, and server monitoring.
+- Administrative dashboard and business overview.
+- Customer and account management.
+- License and device management.
+- Software plan and pricing management.
+- Order and payment management.
+- Technical support package management.
+- Blog and website content management.
+- Backup functionality.
+- Monitoring and page analytics.
 
 ---
 
-## Main Features
+## How AvaPark Works
 
-### Store and Checkout
+The platform connects the customer, the web application, the payment gateway, and the Windows software.
 
-- Three lifetime plans with configurable prices and device limits.
-- Purchasable support packages for six months and one year.
-- Automatic detection of purchase types.
-- Purchase, upgrade, downgrade, and support-extension workflows.
-- Automatic discount handling for supported support-package purchases.
-- Transaction-safe order settlement.
-- Database transactions and row locking for consistency.
-- Server-side payment verification.
-- Idempotent payment callback handling.
-- Automatic expiration of abandoned pending orders through a scheduled command.
-- Immediate settlement of zero-amount orders without a gateway redirect.
+1. **Plan selection:** A customer selects a software plan from the website.
+2. **Checkout:** AvaPark creates an order and directs the customer through the payment process.
+3. **Payment verification:** The server verifies the payment result through the payment integration.
+4. **License issuance:** After successful payment processing, the platform issues the corresponding license.
+5. **Device activation:** The Windows application communicates with the API to validate the license and check device authorization.
+6. **Customer management:** The customer can review their license, registered devices, invoices, purchases, and support status.
+7. **Ongoing support:** When the included support period expires, the customer can purchase an eligible support extension.
 
-The payment gateway is configurable, with SEP as the default driver.
+The software license and technical support period are managed separately. A lifetime license does not automatically mean lifetime technical support.
 
-### User Dashboard
+---
 
-Users can:
+## License and Support Model
 
-- View their plan and lifetime subscription details.
-- Check their support period and remaining support time.
-- View their software license key.
+AvaPark separates software ownership rights represented by a license from access to technical support services.
+
+| Item | Description |
+|---|---|
+| Software license | Lifetime validity, according to the applicable license terms |
+| Technical support | Time-limited service |
+| Initial support | Six months included with the license, according to the current business model |
+| Support extension | Available through paid support packages |
+| Device activation | Subject to the device limit of the purchased plan |
+
+**Important:** The license remains lifetime-valid under the applicable terms, while technical support may expire and require renewal. License validity does not remove device limits or other applicable licensing conditions.
+
+---
+
+## Software Plans
+
+AvaPark supports three software plan levels:
+
+| Plan | Level | Maximum Devices |
+|---|---:|---:|
+| Eco | 1 | 2 |
+| Pro | 2 | 4 |
+| Sazmani (Enterprise) | 3 | 8 |
+
+Plan pricing is configurable through the administration panel.
+
+### Support Packages
+
+The current configured support packages are:
+
+| Package | Duration | Price |
+|---|---|---:|
+| Six-month support | 6 months | 1,500,000 Toman |
+| Twelve-month support | 12 months | 2,600,000 Toman |
+
+Prices and available packages should be verified against the live application and administration settings before publication, as they may change.
+
+---
+
+## Customer Dashboard
+
+The customer dashboard provides a central place to manage purchases and software access.
+
+Depending on the user's account and the available features, customers can:
+
+- View their software licenses.
+- Review license details and status.
 - Manage registered devices.
-- Review purchase history and invoice details.
-- Add plans or support packages to their cart.
-- Cancel pending cart operations and proceed to checkout.
-- Manage profile information.
-- Complete email verification.
-
-### Administration Panel
-
-Administrators have access to the following tools:
-
-- System dashboard and commerce statistics.
-- User management and role assignment.
-- Subscription and license management.
-- Support-package management.
-- Store pricing management and bulk price updates.
-- Order and invoice management.
-- Revenue analytics and a 12-month revenue chart.
-- Server monitoring, including memory, disk, database latency, and traffic statistics.
-- Blog category and post management.
-- Rich-text content editing and SEO fields.
-- Database backup and restore utilities.
-
-### Blog and Content Management
-
-The platform includes a built-in content management system with category and post management, a rich-text editor, and SEO-related fields.
-
-### Localization and Interface
-
-- Persian and English localization.
-- Automatic right-to-left (RTL) and left-to-right (LTR) layout support.
-- Jalali (Solar Hijri) date formatting.
-- Custom bilingual error pages for HTTP status codes 401–503.
-- Page-visit analytics integrated with the monitoring dashboard.
+- Review orders and purchase history.
+- Access invoices.
+- Check technical support validity.
+- Purchase available support extensions.
+- Access account-related features.
 
 ---
 
-## Architecture
+## Administration Panel
 
-AvaPark separates business logic from HTTP controllers through a dedicated service layer.
+AvaPark includes a dedicated administration panel for managing the platform's commercial and operational activities.
 
-Controllers handle incoming requests, while service classes manage operations such as checkout, order settlement, payment verification, subscription management, device activation, and API response signing.
+Administrative features include:
 
-### Application Structure
+- Customer and user management.
+- License and device administration.
+- Software plan and pricing configuration.
+- Order and payment management.
+- Support package configuration.
+- Website and blog content management.
+- Dashboard statistics and financial reporting.
+- Backup and monitoring functionality.
 
-```text
-app/
-├── Console/
-│   └── Commands/
-│       └── ExpirePendingOrdersCommand.php
-│
-├── Http/
-│   ├── Controllers/
-│   │   ├── Admin/
-│   │   │   ├── Dashboard
-│   │   │   ├── Users
-│   │   │   ├── Subscriptions
-│   │   │   ├── Supports
-│   │   │   ├── Store
-│   │   │   ├── Licenses
-│   │   │   ├── Invoices
-│   │   │   ├── Database
-│   │   │   ├── Monitoring
-│   │   │   ├── Categories
-│   │   │   └── Posts
-│   │   │
-│   │   ├── Api/
-│   │   │   └── LicenseController.php
-│   │   ├── Auth/
-│   │   ├── User/
-│   │   ├── BlogController.php
-│   │   ├── LocaleController.php
-│   │   ├── PageController.php
-│   │   ├── ProfileController.php
-│   │   └── ShopController.php
-│   │
-│   ├── Middleware/
-│   └── Requests/
-│
-├── Models/
-│   ├── User
-│   ├── Plan
-│   ├── Subscription
-│   ├── Support*
-│   ├── Cart
-│   ├── Order
-│   ├── OrderItem
-│   ├── Payment
-│   ├── License
-│   ├── LicenseDevice
-│   ├── Post
-│   └── Category
-│
-├── Notifications/
-│   └── CustomVerifyEmail.php
-│
-├── Services/
-│   ├── CartService.php
-│   ├── CheckoutService.php
-│   ├── OrderService.php
-│   ├── PaymentService.php
-│   ├── SubscriptionService.php
-│   ├── LicenseService.php
-│   ├── LicenseValidatorService.php
-│   ├── DeviceService.php
-│   ├── DatabaseBackupService.php
-│   └── License/
-│       └── SignatureService.php
-│
-└── View/
-    └── Components/
-```
-
-### Service Layer
-
-The service layer is responsible for the main business operations:
-
-| Service | Responsibility |
-| --- | --- |
-| `CartService` | Pending-cart lifecycle |
-| `CheckoutService` | Purchase-type detection and checkout settlement |
-| `OrderService` | Converting carts into orders |
-| `PaymentService` | Payment initiation and verification |
-| `SubscriptionService` | Lifetime subscriptions and support renewal |
-| `LicenseService` | License issuance |
-| `LicenseValidatorService` | License validation and client API logic |
-| `DeviceService` | Device fingerprints, activation, and seat limits |
-| `DatabaseBackupService` | SQL database export and import |
-| `SignatureService` | Digital signing of API responses |
+Access to administrative functionality should be restricted to authorized users.
 
 ---
 
-## Data Model
+## Windows Client API
 
-The following tables represent the main data entities described by the application's architecture.
+AvaPark exposes REST API endpoints for communication between the Windows application and the web platform.
 
-| Table | Purpose |
-| --- | --- |
-| `users` | User accounts, roles, and email verification |
-| `plans` | Plan definitions, prices, discounts, and device limits |
-| `subscriptions` | Lifetime subscriptions and their status |
-| `subscription_supports` | Support periods with start and expiration timestamps |
-| `support_packages` | Purchasable support durations |
-| `carts` | Pending purchase operations |
-| `orders` | Orders, amounts, currency, and payment status |
-| `order_items` | Order line items for plans and support packages |
-| `payments` | Payment gateway transactions and references |
-| `licenses` | Generated software license keys |
-| `license_devices` | Devices activated against licenses |
-| `demo_license_devices` | Device-specific trial registrations |
-| `categories` | Blog categories |
-| `posts` | Blog posts |
-| `page_visits` | Page-visit statistics |
-
----
-
-## Purchase Flow
-
-AvaPark processes purchases through a cart, order, payment-verification, and settlement workflow.
-
-```text
-Select a Plan or Support Package
-              |
-              v
-         Create Cart
-              |
-              v
-         Create Order
-              |
-              v
-      Initiate Payment
-         (SEP IPG)
-              |
-              v
-      Payment Callback
-              |
-              v
-    Server-side Verification
-              |
-              v
-       Confirm Payment
-              |
-              v
-      Settle Checkout
-    (Database Transaction)
-              |
-       +------+------+
-       |             |
-       v             v
-  Plan Purchase   Existing Plan
-       |             |
-       v        +----+----+---------+
-  Issue License |         |         |
-                v         v         v
-             Upgrade   Downgrade  Support
-                                  Extension
-```
-
-### Checkout Integrity
-
-The checkout workflow uses database transactions and pessimistic locking to maintain consistency during settlement.
-
-Payment callbacks are processed idempotently so that an already-settled order is not settled a second time. Zero-amount orders bypass the payment gateway and are finalized directly.
-
-Purchase handling distinguishes between new purchases, same-plan operations, plan upgrades, plan downgrades, and support extensions.
-
----
-
-## Client REST API
-
-The Windows desktop application communicates with AvaPark through a REST API responsible for license validation, device activation, and support information.
+The API supports license validation, support-status checks, device deactivation, and license information retrieval.
 
 ### Available Endpoints
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/api/license/validate` | Validate a license and activate the calling device |
-| `POST` | `/api/license/support-status` | Retrieve the current support period and remaining time |
-| `POST` | `/api/license/deactivate-device` | Deactivate a registered device and release its seat |
-| `POST` | `/api/license/info` | Retrieve license, plan, device, and support information |
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/license/validate` | Validate a license and check its authorization |
+| `POST` | `/api/license/support-status` | Retrieve technical support status |
+| `POST` | `/api/license/deactivate-device` | Request device deactivation |
+| `POST` | `/api/license/info` | Retrieve license information |
 
-### API Security
+Requests should include the parameters required by the relevant endpoint, such as license identifiers and device information.
 
-The licensing API uses RSA/SHA-256 digital signatures.
+The exact request fields, validation rules, and response schemas are defined by the API implementation. Consult the corresponding routes and controllers before integrating a client.
 
-- API responses are digitally signed by the server.
-- The Windows client can verify response authenticity and integrity using the corresponding public key.
-- Error responses use the signed response format.
-- Device activation, deactivation, seat limits, and trial eligibility are enforced server-side.
-- A per-device demo trial allows prospective customers to evaluate the software before purchasing.
+### License Validation
 
-Detailed request and response contracts are maintained in the project's internal API documentation.
+The Windows application uses the validation endpoint to communicate with the server and check whether a license can be used on a device.
+
+The platform enforces device limits on the server side rather than relying exclusively on client-side checks.
+
+### Support Status
+
+The support-status endpoint allows the desktop application to retrieve information about the license's technical support period.
+
+Support expiration is independent of lifetime license validity.
+
+### Device Deactivation
+
+The deactivation endpoint allows the client to request the removal of a device activation, subject to the platform's validation and authorization rules.
+
+### License Information
+
+The license-information endpoint provides the license details supported by the API implementation.
+
+### Trial Access
+
+The platform also supports a demo trial associated with a device. The precise trial eligibility and enforcement rules depend on the current implementation.
 
 ---
 
 ## API Response Signing
 
-AvaPark uses asymmetric cryptography to sign licensing API responses.
+AvaPark uses cryptographic signing for API responses to help the Windows application verify that responses originated from the expected server and have not been modified.
 
-The server signs responses with its private key, while the Windows client uses the corresponding public key to verify signatures.
+The documented implementation uses:
 
-This provides a mechanism for detecting response tampering and verifying that a response was signed by the holder of the corresponding private key.
+- RSA digital signatures.
+- SHA-256 as the signature hash algorithm.
+- Server-side signing.
+- Client-side signature verification using the corresponding public key.
 
-The private signing key must remain on the server and must never be committed to the repository.
+The Windows application must verify signed responses before trusting the protected data.
 
-### Generate a Key Pair
-
-The following commands illustrate RSA key-pair generation using OpenSSL:
-
-```bash
-openssl genrsa -out storage/app/license_private.pem 2048
-
-openssl rsa \
-    -in storage/app/license_private.pem \
-    -pubout \
-    -out license_public.pem
-```
-
-The public key can be distributed with the Windows client for response verification. Keep the private key secure and configure its storage according to the application's deployment requirements.
+**Security note:** Private signing keys must remain secret and must never be embedded in the distributed Windows application. Only the public key required for signature verification should be distributed to the client.
 
 ---
 
-## Tech Stack
+## Technology Stack
 
-| Category | Technology |
-| --- | --- |
-| Backend framework | Laravel 11 |
-| Programming language | PHP 8.2+ |
-| Authentication | Laravel Breeze |
-| API authentication | Laravel Sanctum |
-| API response security | RSA/SHA-256 digital signatures |
-| Frontend | Blade |
-| JavaScript | Alpine.js 3 |
-| CSS framework | Tailwind CSS 3 |
-| Build tool | Vite 6 |
-| Rich-text editor | TinyMCE 6 |
-| Payment integration | `shetabit/payment` — SEP / SAMAN IPG |
-| Calendar | `morilog/jalali` |
-| Database | MySQL 8+ / MariaDB 10.4+ |
-| Local testing database | SQLite |
-| Testing | PHPUnit 11 |
-| Mocking | Mockery |
-| Code formatting | Laravel Pint |
+AvaPark is built with the following technologies and libraries.
+
+| Technology | Purpose |
+|---|---|
+| PHP 8.2+ | Backend runtime |
+| Laravel 11 | Web application framework |
+| Laravel Breeze | Authentication scaffolding |
+| Laravel Sanctum | API authentication capabilities |
+| Blade | Server-rendered templates |
+| Alpine.js | Lightweight frontend interactions |
+| Tailwind CSS | Styling and responsive UI |
+| Vite | Frontend asset compilation |
+| TinyMCE | Rich-text content editing |
+| SEP payment integration | Online payment processing |
+| Morilog Jalali | Jalali date support |
+| MySQL / MariaDB | Production database options |
+| SQLite | Lightweight testing database |
+| PHPUnit 11 | Automated testing |
+
+---
+
+## Requirements
+
+Before installing AvaPark, ensure that your environment includes:
+
+- PHP 8.2 or later.
+- Composer.
+- Node.js and npm.
+- A supported database, such as MySQL or MariaDB.
+- A web server compatible with Laravel.
+- The PHP extensions required by Laravel and the project's dependencies.
+
+A valid SEP merchant configuration is required to process real payments.
 
 ---
 
 ## Installation
 
-### Requirements
-
-Make sure the following tools and services are available:
-
-- PHP 8.2 or later with the OpenSSL extension.
-- Composer.
-- Node.js 20 or later.
-- npm.
-- MySQL 8+, MariaDB 10.4+, or SQLite for supported local testing scenarios.
-
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/AdnanMahmoudiDev/ProPark.git
-
 cd ProPark
 ```
 
 ### 2. Install Dependencies
 
-Install PHP dependencies:
-
 ```bash
 composer install
-```
-
-Install frontend dependencies:
-
-```bash
 npm install
 ```
 
-### 3. Configure the Environment
+### 3. Configure Environment Variables
 
-Create the environment file:
+Create your environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Generate the Laravel application key:
+On Windows, you can copy `.env.example` to `.env` manually or run:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+### 4. Generate the Application Key
 
 ```bash
 php artisan key:generate
 ```
 
-### 4. Configure the Database
+### 5. Configure the Database
 
-Update the database settings in `.env` to match your local environment:
+Update the database settings in `.env` to match your local environment.
 
-```env
+For example:
+
+```dotenv
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=avapark
-DB_USERNAME=root
-DB_PASSWORD=
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 ```
 
 Create the database before running migrations.
 
-### 5. Run Migrations and Seeders
+### 6. Run Migrations
 
 ```bash
-php artisan migrate --seed
+php artisan migrate
 ```
 
-Create the public storage link:
+If the project provides seeders and you want to populate the database with development data, see [Database Seeding](#database-seeding).
 
-```bash
-php artisan storage:link
-```
+### 7. Build Frontend Assets
 
-### 6. Configure the Payment Gateway
-
-SEP (SAMAN) is the default payment gateway. Configure the appropriate merchant credentials and callback URL in `.env`:
-
-```env
-PAYMENT_DEFAULT=sep
-SEP_TERMINAL_ID=your-terminal-id
-SEP_CALLBACK_URL=https://your-domain.com/payment/callback
-SEP_DESCRIPTION="AvaPark order payment"
-SEP_CURRENCY=T
-```
-
-Replace the example values with the actual credentials and settings supplied for your payment-gateway account.
-
-Additional gateway drivers, such as Zarinpal, may be configured through `config/payment.php`, subject to the application's implementation and gateway credentials.
-
-**Security:** Never commit production credentials, private keys, or other secrets to Git.
-
-### 7. Configure the Scheduler
-
-The application uses Laravel's scheduler to expire pending orders.
-
-For local development, run:
-
-```bash
-php artisan schedule:work
-```
-
-Alternatively, configure the standard scheduler cron entry in production:
-
-```cron
-* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1
-```
-
-Replace `/path-to-project` with the absolute path to the application.
-
-### 8. Start the Application
-
-Start the frontend development server:
+For development:
 
 ```bash
 npm run dev
 ```
 
-In another terminal, start Laravel:
-
-```bash
-php artisan serve
-```
-
-The application will normally be available at:
-
-```text
-http://127.0.0.1:8000
-```
-
-For production frontend assets, run:
+For production:
 
 ```bash
 npm run build
 ```
 
----
-
-## Creating an Administrator
-
-The project does not seed an administrator account by default.
-
-First, register a normal account. Then open Laravel Tinker:
+### 8. Start the Development Server
 
 ```bash
-php artisan tinker
+php artisan serve
 ```
 
-Promote the account by updating its role:
+Open the local URL displayed by Artisan in your browser.
 
-```php
-\App\Models\User::where('email', 'you@example.com')
-    ->update(['role' => 'admin']);
-```
-
-Replace `you@example.com` with the registered account's email address.
-
-The administration panel is available under `/admin` and is restricted to administrator accounts.
+For a production deployment, configure the web server's document root to point to Laravel's `public` directory and follow Laravel's deployment recommendations.
 
 ---
 
-## Seed Data
+## Configuration
 
-### Subscription Plans
+### Payment Gateway
 
-The seed data defines three plans with different device limits.
+Configure the SEP payment integration using the environment variables and application settings required by the current implementation.
 
-| Plan | Slug | Level | Device Limit |
-| --- | --- | ---: | ---: |
-| Eco | `eco` | 1 | 2 |
-| Pro | `pro` | 2 | 4 |
-| Sazmani | `sazmani` | 3 | 8 |
+Before enabling real transactions:
 
-Plan prices are managed through the administration panel. Seeded plans start without configured prices.
+- Use the correct merchant credentials.
+- Configure the payment gateway's callback URL.
+- Verify successful and unsuccessful payment flows.
+- Confirm that payment verification is performed server-side.
+- Test callback handling and duplicate-processing protection.
+- Never commit production credentials to version control.
 
-### Support Packages
+The exact environment variable names should be taken from the project's configuration files and payment integration code.
 
-The documented support-package configuration includes:
+### Application Environment
 
-| Package | Duration | Price |
-| --- | --- | ---: |
-| Six-month support | 6 months | 1,500,000 Toman |
-| Annual support | 12 months | 2,600,000 Toman |
+For production, configure the appropriate application URL, environment, database credentials, logging, caching, and other deployment settings in `.env`.
 
-These are the values described by the project's current README. Verify them against the active application configuration before using them as published commercial prices.
+Do not commit `.env` or other files containing secrets to the repository.
+
+### Storage and Cache
+
+After deployment or configuration changes, the following commands may be useful:
+
+```bash
+php artisan optimize:clear
+php artisan storage:link
+```
+
+Run only the commands applicable to your deployment and storage configuration.
 
 ---
 
-## Testing and Development
+## Database Seeding
 
-### Run Tests
+The project includes plan seed data for development and initial setup.
+
+The documented default plan structure is:
+
+| Plan | Level | Device Limit |
+|---|---:|---:|
+| Eco | 1 | 2 |
+| Pro | 2 | 4 |
+| Sazmani | 3 | 8 |
+
+Plan prices are configured through the administration panel.
+
+The documented support packages are:
+
+- Six months: 1,500,000 Toman.
+- Twelve months: 2,600,000 Toman.
+
+To inspect the available seeders:
+
+```bash
+php artisan db:seed --help
+```
+
+To run the project's seeders:
+
+```bash
+php artisan db:seed
+```
+
+**Warning:** Running seeders against an existing database may create or modify data, depending on their implementation. Review the seeders before running them in production.
+
+---
+
+## Development and Testing
+
+### Run the Application
+
+```bash
+php artisan serve
+```
+
+### Compile Frontend Assets
+
+```bash
+npm run dev
+```
+
+### Run Automated Tests
 
 ```bash
 php artisan test
 ```
 
-### Format PHP Code
+The project uses PHPUnit 11 for automated testing.
+
+For reliable test results, configure a dedicated testing database and review the test environment settings before running the test suite.
+
+### Useful Artisan Commands
+
+Clear cached application configuration and data:
 
 ```bash
-./vendor/bin/pint
+php artisan optimize:clear
 ```
 
-### Run the Development Environment
-
-The project includes a Composer development script:
+Inspect registered routes:
 
 ```bash
-composer dev
+php artisan route:list
 ```
 
-This script runs the configured development processes concurrently, including the application server, queue processing, logs, and Vite.
+Run database migrations:
+
+```bash
+php artisan migrate
+```
+
+---
+
+## Security Considerations
+
+Because AvaPark manages commercial transactions and software licenses, security is an important part of its design and operation.
+
+Recommended practices include:
+
+- Keep production credentials and private keys out of version control.
+- Enforce authorization on protected dashboard and administrative actions.
+- Validate API requests on the server.
+- Enforce device limits and license rules server-side.
+- Verify payment results on the server rather than trusting browser redirects.
+- Handle payment callbacks safely and prevent duplicate order settlement.
+- Verify API response signatures in the Windows client.
+- Keep private signing keys on the server.
+- Use HTTPS in production.
+- Keep PHP, Laravel, and third-party dependencies updated.
+- Restrict administrative access to authorized personnel.
+
+These are operational recommendations; the security of a deployed system also depends on its actual configuration, implementation, and maintenance.
 
 ---
 
 ## Roadmap
 
-Planned improvements include:
+Potential areas for future development include:
 
-- [ ] Email and SMS notifications for relevant renewal and expiration events.
-- [ ] Discount codes and coupon support.
-- [ ] Queue-backed processing for resource-intensive tasks, such as backups and notifications.
-- [ ] Fine-grained role and permission management.
-- [ ] OpenAPI specification for the client API.
-- [ ] Two-factor authentication for administrators.
-- [ ] Payment webhooks for downstream integrations.
+- Customer and transaction notifications.
+- Discount coupons and promotional codes.
+- Queue-based processing for background tasks.
+- More granular role and permission management.
+- OpenAPI documentation for the REST API.
+- Two-factor authentication.
+- Expanded payment webhook support.
+
+Roadmap items represent potential improvements and should not be interpreted as currently implemented features.
 
 ---
 
 ## License
 
-This repository is released under the **MIT License**, as indicated by the project's `composer.json`.
+AvaPark is proprietary software.
 
-See the repository's license files and notices for the applicable terms.
+Copyright (c) 2026 Adnan Mahmoudi. All rights reserved.
 
-**Important:** The repository's software license and AvaPark's commercial terms for lifetime software licenses and paid support are separate matters. The MIT notice describes the repository's stated source-code licensing; it does not, by itself, document the complete commercial agreement offered to AvaPark customers.
+Use, copying, modification, redistribution, sublicensing, and the creation of derivative works are not permitted except where expressly authorized by the copyright holder through a separate written license or agreement.
+
+Commercial licenses and technical support services are subject to their applicable terms and agreements.
+
+Third-party dependencies remain subject to their respective licenses.
+
+---
+
+**AvaPark — The web platform for selling, licensing, and managing Windows parking management software.**
