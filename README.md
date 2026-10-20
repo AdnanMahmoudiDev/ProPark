@@ -710,14 +710,13 @@ These items represent planned improvements and should not be interpreted as curr
 
 ## License
 
-AvaPark's source-code license must be determined by the actual `LICENSE` file and the licensing declaration in the repository.
+AvaPark is open-source software licensed under the [MIT License](LICENSE).
 
-If the project is distributed under a proprietary license, replace this section with the applicable proprietary license terms. If it is distributed under MIT, retain the MIT license notice and its terms.
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject to the terms and conditions of the MIT License.
 
-The commercial terms governing customer software licenses and paid technical support are separate from the source-code license.
+The MIT License applies to the project's source code. Commercial licenses sold to customers for the AvaPark Windows application, as well as paid technical support services, are governed by their respective terms and are separate from this source-code license.
 
 Third-party dependencies remain subject to their respective licenses.
-
 ---
 
 **AvaPark — The online sales and licensing platform for intelligent urban parking management software.**
