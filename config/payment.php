@@ -304,15 +304,14 @@ return [
         ],
 
         'sep' => [
-            'apiGetToken' => 'https://sep.shaparak.ir/onlinepg/onlinepg',
-            'apiPaymentUrl' => 'https://sep.shaparak.ir/OnlinePG/SendToken',
-            'apiVerificationUrl' => 'https://sep.shaparak.ir/verifyTxnRandomSessionkey/ipg/VerifyTransaction',
+            'apiGetToken' => 'https://sep.shaparak.ir/v1/onlinepg/en/token',
+            'apiPaymentUrl' => 'https://sep.shaparak.ir/v1/onlinepg/en/payment',
+            'apiVerificationUrl' => 'https://sep.shaparak.ir/v1/onlinepg/en/verify',
             'terminalId' => env('SEP_TERMINAL_ID', '15857460'),
             'callbackUrl' => env('SEP_CALLBACK_URL', ''),
             'description' => env('SEP_DESCRIPTION', 'پرداخت سفارش سامانه ProPark از طریق درگاه سپ'),
             'currency' => env('SEP_CURRENCY', 'T'),
         ],
-
 
         'sepehr' => [
             'apiGetToken' => 'https://sepehr.shaparak.ir:8081/V1/PeymentApi/GetToken',
@@ -342,30 +341,18 @@ return [
         */
 
         'zarinpal' => [
-            /*
-            | API اصلی
-            */
             'apiPurchaseUrl' => 'https://api.zarinpal.com/pg/v4/payment/request.json',
             'apiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/',
             'apiVerificationUrl' => 'https://api.zarinpal.com/pg/v4/payment/verify.json',
 
-            /*
-            | API سندباکس
-            */
             'sandboxApiPurchaseUrl' => 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
             'sandboxApiPaymentUrl' => 'https://sandbox.zarinpal.com/pg/StartPay/',
             'sandboxApiVerificationUrl' => 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
 
-            /*
-            | ZarinGate
-            */
             'zaringateApiPurchaseUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
             'zaringateApiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/:authority/ZarinGate',
             'zaringateApiVerificationUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
 
-            /*
-            | مقادیر اصلی قابل تنظیم از طریق .env
-            */
             'mode' => env('ZARINPAL_MODE', 'sandbox'),
 
             'merchantId' => env(
@@ -383,10 +370,6 @@ return [
                 'پرداخت سفارش در سامانه ProPark'
             ),
 
-            /*
-            | T = تومان
-            | R = ریال
-            */
             'currency' => env('ZARINPAL_CURRENCY', 'T'),
         ],
 
