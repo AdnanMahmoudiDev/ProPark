@@ -306,7 +306,7 @@ return [
         'sep' => [
             'apiGetToken' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
             'apiPaymentUrl' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
-            'apiVerificationUrl' => 'https://sep.shaparak.ir/OnlinePG/VerifyTransaction',
+            'apiVerificationUrl' => 'https://sep.shaparak.ir/verifyTxnRandomSessionkey/ipg/VerifyTransaction',
             'terminalId' => env('SEP_TERMINAL_ID', '15857460'),
             'callbackUrl' => env('SEP_CALLBACK_URL', ''),
             'description' => env('SEP_DESCRIPTION', 'پرداخت سفارش سامانه ProPark از طریق درگاه سپ'),
@@ -533,7 +533,7 @@ return [
 
         'stripe' => [
             'name' => 'Stripe',
-            'secret' => 'STRIPE_SECRET',
+            'secret' => 'sk_test_XXXXX',
             'currency' => 'usd',
             'success_url' => 'http://yoursite.com/path/success',
             'cancel_url' => 'http://yoursite.com/path/fail',
