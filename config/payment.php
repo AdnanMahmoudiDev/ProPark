@@ -304,7 +304,7 @@ return [
         ],
 
         'sep' => [
-            'apiGetToken' => 'https://sep.shaparak.ir/OnlinePG/SendToken',
+            'apiGetToken' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
             'apiPaymentUrl' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
             'apiVerificationUrl' => 'https://sep.shaparak.ir/OnlinePG/VerifyTransaction',
             'terminalId' => env('SEP_TERMINAL_ID', '15857460'),
