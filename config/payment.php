@@ -304,9 +304,9 @@ return [
         ],
 
         'sep' => [
-            'apiGetToken' => 'https://sep.shaparak.ir/v1/onlinepg/en/token',
-            'apiPaymentUrl' => 'https://sep.shaparak.ir/v1/onlinepg/en/payment',
-            'apiVerificationUrl' => 'https://sep.shaparak.ir/v1/onlinepg/en/verify',
+            'apiGetToken' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
+            'apiPaymentUrl' => 'https://sep.shaparak.ir/OnlinePG/OnlinePG',
+            'apiVerificationUrl' => 'https://sep.shaparak.ir/OnlinePG/verifyTx.json',
             'terminalId' => env('SEP_TERMINAL_ID', '15857460'),
             'callbackUrl' => env('SEP_CALLBACK_URL', ''),
             'description' => env('SEP_DESCRIPTION', 'پرداخت سفارش سامانه ProPark از طریق درگاه سپ'),
@@ -346,7 +346,7 @@ return [
             'apiVerificationUrl' => 'https://api.zarinpal.com/pg/v4/payment/verify.json',
 
             'sandboxApiPurchaseUrl' => 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
-            'sandboxApiPaymentUrl' => 'https://sandbox.zarinpal.com/pg/StartPay/',
+            'sandboxApiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/',
             'sandboxApiVerificationUrl' => 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
 
             'zaringateApiPurchaseUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
